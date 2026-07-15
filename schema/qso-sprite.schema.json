@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/aevespers2/QSO-GENOMES/blob/main/schema/qso-sprite.schema.json",
+  "title": "QSO Supervisory Sprite",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "sprite_id", "display_name", "purpose", "oversight", "ethics", "authority", "annotations", "provenance"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "sprite_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}$"},
+    "display_name": {"type": "string", "minLength": 1, "maxLength": 80},
+    "purpose": {"type": "string", "minLength": 1, "maxLength": 500},
+    "oversight": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classify_snippet_purpose", "map_ontology", "assess_equity", "detect_bias", "detect_vulnerabilities", "assess_integrity", "assess_transparency"],
+      "properties": {
+        "classify_snippet_purpose": {"const": true},
+        "map_ontology": {"const": true},
+        "assess_equity": {"const": true},
+        "detect_bias": {"const": true},
+        "detect_vulnerabilities": {"const": true},
+        "assess_integrity": {"const": true},
+        "assess_transparency": {"const": true}
+      }
+    },
+    "ethics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["virtues", "non_discrimination", "uncertainty_required", "human_review_required"],
+      "properties": {
+        "virtues": {
+          "type": "array",
+          "minItems": 6,
+          "uniqueItems": true,
+          "items": {"enum": ["fairness", "honesty", "integrity", "transparency", "equity", "accountability", "care", "autonomy", "nonmaleficence", "repair"]}
+        },
+        "non_discrimination": {"const": true},
+        "uncertainty_required": {"const": true},
+        "human_review_required": {"const": true}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["may_annotate", "may_block_pending_review", "may_modify_genome", "may_execute", "may_write_repository", "may_override_immutable_ethics"],
+      "properties": {
+        "may_annotate": {"const": true},
+        "may_block_pending_review": {"const": true},
+        "may_modify_genome": {"const": false},
+        "may_execute": {"const": false},
+        "may_write_repository": {"const": false},
+        "may_override_immutable_ethics": {"const": false}
+      }
+    },
+    "annotations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["labels", "severity_scale", "evidence_required", "explainability_required"],
+      "properties": {
+        "labels": {
+          "type": "array",
+          "minItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "purpose",
+              "ontology",
+              "equity",
+              "bias",
+              "vulnerability",
+              "integrity",
+              "transparency",
+              "uncertainty",
+              "conflict_of_interest",
+              "missing_context",
+              "human_review"
+            ]
+          }
+        },
+        "severity_scale": {"const": "informational-low-medium-high-critical"},
+        "evidence_required": {"const": true},
+        "explainability_required": {"const": true}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_inputs", "record_annotations", "record_rationale", "sha256"],
+      "properties": {
+        "record_inputs": {"const": true},
+        "record_annotations": {"const": true},
+        "record_rationale": {"const": true},
+        "sha256": {"const": true}
+      }
+    }
+  }
+}
