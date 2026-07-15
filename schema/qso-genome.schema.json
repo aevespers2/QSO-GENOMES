@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/aevespers2/QSO-GENOMES/blob/main/schema/qso-genome.schema.json",
+  "title": "Bounded QSO Genome",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "genome_id",
+    "display_name",
+    "purpose",
+    "immutable",
+    "mutable",
+    "resources",
+    "freeze",
+    "communication",
+    "learning",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "genome_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}$"},
+    "display_name": {"type": "string", "minLength": 1, "maxLength": 80},
+    "purpose": {"type": "string", "minLength": 1, "maxLength": 500},
+    "immutable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ethics", "forbidden_capabilities", "identity", "safety_priority"],
+      "properties": {
+        "ethics": {
+          "type": "array",
+          "minItems": 8,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1, "maxLength": 240}
+        },
+        "forbidden_capabilities": {
+          "type": "array",
+          "minItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "shell_execution",
+              "subprocess_execution",
+              "arbitrary_code_execution",
+              "dynamic_import",
+              "package_installation",
+              "credential_access",
+              "cookie_or_session_access",
+              "unrestricted_network",
+              "direct_repository_write",
+              "self_replication",
+              "self_modification_of_immutable_fields",
+              "disabling_freeze_controller",
+              "concealing_provenance",
+              "deceptive_identity_claims",
+              "coercive_human_manipulation"
+            ]
+          }
+        },
+        "identity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["persistent", "may_impersonate", "may_claim_consciousness"],
+          "properties": {
+            "persistent": {"const": true},
+            "may_impersonate": {"const": false},
+            "may_claim_consciousness": {"const": false}
+          }
+        },
+        "safety_priority": {"const": "human_welfare_and_system_integrity_over_goal_completion"}
+      }
+    },
+    "mutable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["goal_weights", "interests", "communication_style"],
+      "properties": {
+        "goal_weights": {
+          "type": "object",
+          "minProperties": 3,
+          "maxProperties": 12,
+          "additionalProperties": {"type": "number", "minimum": 0, "maximum": 1}
+        },
+        "interests": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 20,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1, "maxLength": 120}
+        },
+        "communication_style": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["verbosity", "confidence_threshold", "challenge_rate"],
+          "properties": {
+            "verbosity": {"type": "number", "minimum": 0, "maximum": 1},
+            "confidence_threshold": {"type": "number", "minimum": 0, "maximum": 1},
+            "challenge_rate": {"type": "number", "minimum": 0, "maximum": 1}
+          }
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["memory_mb", "artifact_mb", "runtime_seconds", "max_records", "max_message_bytes"],
+      "properties": {
+        "memory_mb": {"type": "integer", "minimum": 16, "maximum": 256},
+        "artifact_mb": {"type": "integer", "minimum": 1, "maximum": 128},
+        "runtime_seconds": {"type": "integer", "minimum": 30, "maximum": 600},
+        "max_records": {"type": "integer", "minimum": 1, "maximum": 1000},
+        "max_message_bytes": {"type": "integer", "minimum": 256, "maximum": 65536}
+      }
+    },
+    "freeze": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["interval_seconds", "require_hash", "rollback_on_violation", "external_commit_only"],
+      "properties": {
+        "interval_seconds": {"type": "integer", "minimum": 5, "maximum": 120},
+        "require_hash": {"const": true},
+        "rollback_on_violation": {"const": true},
+        "external_commit_only": {"const": true}
+      }
+    },
+    "communication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed_peers", "schema_validated_only", "executable_payloads", "rate_limit_per_minute"],
+      "properties": {
+        "allowed_peers": {"type": "array", "maxItems": 16, "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,63}$"}},
+        "schema_validated_only": {"const": true},
+        "executable_payloads": {"const": false},
+        "rate_limit_per_minute": {"type": "integer", "minimum": 1, "maximum": 120}
+      }
+    },
+    "learning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["input_boundary", "goal_evolution", "uncertainty_required", "human_review_threshold"],
+      "properties": {
+        "input_boundary": {"const": "qso_seeker_canonical_records_only"},
+        "goal_evolution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["enabled", "max_delta_per_freeze", "may_change_purpose", "may_change_immutable"],
+          "properties": {
+            "enabled": {"const": true},
+            "max_delta_per_freeze": {"type": "number", "exclusiveMinimum": 0, "maximum": 0.1},
+            "may_change_purpose": {"const": false},
+            "may_change_immutable": {"const": false}
+          }
+        },
+        "uncertainty_required": {"const": true},
+        "human_review_threshold": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_inputs", "record_inferences", "record_goal_changes", "sha256"],
+      "properties": {
+        "record_inputs": {"const": true},
+        "record_inferences": {"const": true},
+        "record_goal_changes": {"const": true},
+        "sha256": {"const": true}
+      }
+    }
+  }
+}
