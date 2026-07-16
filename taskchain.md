@@ -1,19 +1,34 @@
 # Task Chain
 
 ## Repository role
-Canonical declarative genomes, immutable ethics, and supervisory Sprite definitions. This repository is an upstream dependency of `QuantumStateObjects` and must not contain executable behavior.
+
+Canonical declarative genomes, immutable ethics, and supervisory Sprite definitions. This repository is an upstream dependency of `QuantumStateObjects` and `QSO-FABRIC` and must not contain executable behavior.
 
 States: `PROPOSED` · `READY` · `IN PROGRESS` · `BLOCKED` · `REVIEW` · `DONE`
 
+## Product directive
+
+- **Next objective:** Complete and publish one deterministic four-genome compatibility set.
+- **User outcome:** A consuming runtime can validate Atlas, Nova, Orion, and Lyra by schema version, stable path, references, canonical bytes, and hash without importing repository code.
+- **MVP scope:** add the missing Atlas genome; validate all four genomes, immutable/attribution ethics, forbidden capabilities, and Aequitas Sprite; define canonical JSON; publish a machine-readable compatibility manifest; add positive, negative, boundary, unknown-field, unresolved-reference, immutable-mutation, and incompatible-version fixtures.
+- **Priority:** Compatibility-set completeness and deterministic validation are the highest portfolio unblocker.
+- **Success criteria:** every artifact validates; repeated canonicalization produces identical SHA-256 hashes; immutable and prohibited fields fail closed; consumers can validate fixtures independently; all commands, versions, paths, hashes, and provenance are retained.
+- **Non-goals:** executable agent behavior, network access, credentials, mutation activation, autonomous policy changes, payment authority, or runtime implementation.
+- **Release rationale:** This contract is required before QuantumStateObjects or QSO-FABRIC can claim a verified four-object run. A small data-only release removes the most concrete upstream blocker with minimal execution risk.
+
+## Active chain
+
 | Priority | Task | Owner | Depends on | Status | Acceptance criteria |
 |---|---|---|---|---|---|
-| P0 | Validate the four genomes, genome schema, immutable ethics, and Aequitas Sprite as one compatibility set | QSOBuilder | — | READY | Atlas, Nova, Orion, and Lyra validate against the current schema; required forbidden capabilities and external-review rules are present; deterministic canonical hashes and exact validation commands are recorded. |
-| P1 | Publish a versioned cross-repository genome contract manifest | QSOBuilder | P0 | PROPOSED | One machine-readable manifest identifies schema versions, genome paths, ethics/Sprite references, canonical hashes, and compatibility status for consumption by `QuantumStateObjects`. |
-| P2 | Add mutation-proposal and migration fixtures | Builder | P1 | PROPOSED | Fixtures prove immutable fields cannot change, mutable proposals remain external-review-only, and incompatible schema versions fail closed. |
-| P3 | Define a declarative payment-policy extension | Architect | P1 and approved settlement boundary | BLOCKED | The extension remains data-only, grants no credentials or transfer authority, separates intent from authorization, and has an approved versioning/migration plan. |
+| P0 | Complete and validate the four-genome compatibility set | QSOBuilder | — | READY | Atlas, Nova, Orion, and Lyra validate with ethics/Sprite references and required forbidden-capability rules; exact commands and canonical hashes are recorded. |
+| P1 | Publish the versioned cross-repository genome manifest | QSOBuilder | P0 | PROPOSED | One machine-readable manifest identifies schema versions, paths, references, hashes, canonicalization rules, and compatibility state for independent consumers. |
+| P2 | Add mutation, migration, and fail-closed fixtures | Builder | P1 | PROPOSED | Immutable mutations, unknown fields, unresolved references, incompatible versions, and canonicalization drift fail deterministically. |
+| P3 | Define a declarative payment-policy extension | Architect | P1 and approved settlement boundary | BLOCKED | Any extension remains data-only, grants no credentials or transfer authority, and has approved versioning and migration rules. |
 
 ## Cross-repository gate
-`QuantumStateObjects` may not claim a verified multi-object run until P0 and P1 are complete.
+
+`QuantumStateObjects` and `QSO-FABRIC` may not claim a verified four-object integration until P0 and P1 are complete and their published hashes are consumed successfully.
 
 ## Builder Log
-Record commit links, validation commands/results, schema hashes, residual risks, and follow-up tasks.
+
+Record commits, validation commands/results, schema and fixture versions, canonical hashes, unresolved references, residual risks, and follow-up tasks.
