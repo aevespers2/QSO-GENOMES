@@ -1,0 +1,110 @@
+{
+  "contract_version": 1,
+  "binding_id": "aequitas-external-review-v1",
+  "sprite_reference": {
+    "sprite_id": "aequitas",
+    "path": "sprites/aequitas.json",
+    "schema_path": "schema/qso-sprite.schema.json",
+    "schema_version": 1
+  },
+  "genome_references": [
+    {
+      "genome_id": "atlas",
+      "path": "genomes/atlas.json"
+    },
+    {
+      "genome_id": "lyra",
+      "path": "genomes/lyra.json"
+    },
+    {
+      "genome_id": "nova",
+      "path": "genomes/nova.json"
+    },
+    {
+      "genome_id": "orion",
+      "path": "genomes/orion.json"
+    }
+  ],
+  "activation_rules": {
+    "mode": "external_controller_only",
+    "reviewer_type": "human",
+    "threshold_source": "genome.learning.human_review_threshold",
+    "review_surfaces": [
+      {
+        "surface": "input",
+        "required_oversight": [
+          "classify_snippet_purpose",
+          "detect_vulnerabilities"
+        ]
+      },
+      {
+        "surface": "interpretation",
+        "required_oversight": [
+          "assess_integrity",
+          "assess_transparency"
+        ]
+      },
+      {
+        "surface": "ontology",
+        "required_oversight": [
+          "map_ontology",
+          "assess_equity",
+          "detect_bias"
+        ]
+      },
+      {
+        "surface": "proposed_edit",
+        "required_oversight": [
+          "assess_integrity",
+          "assess_transparency",
+          "detect_vulnerabilities"
+        ]
+      },
+      {
+        "surface": "communication",
+        "required_oversight": [
+          "classify_snippet_purpose",
+          "assess_equity",
+          "detect_bias",
+          "assess_transparency"
+        ]
+      }
+    ],
+    "allowed_decisions": [
+      "approve",
+      "block_pending_review",
+      "reject"
+    ],
+    "default_on_missing_review": "block_pending_review",
+    "commit_permissions": {
+      "approve": true,
+      "block_pending_review": false,
+      "reject": false,
+      "missing": false
+    },
+    "commit_actor": "external_controller",
+    "required_record_fields": [
+      "decision",
+      "annotations",
+      "evidence",
+      "rationale",
+      "reviewer_id",
+      "timestamp",
+      "input_sha256"
+    ]
+  },
+  "invariants": {
+    "sprite_human_review_required": true,
+    "sprite_may_annotate": true,
+    "sprite_may_block_pending_review": true,
+    "sprite_may_modify_genome": false,
+    "sprite_may_execute": false,
+    "sprite_may_write_repository": false,
+    "sprite_may_override_immutable_ethics": false,
+    "genomes_require_external_commit": true,
+    "genomes_require_hash": true,
+    "genomes_rollback_on_violation": true,
+    "genomes_may_change_purpose": false,
+    "genomes_may_change_immutable": false
+  }
+}
