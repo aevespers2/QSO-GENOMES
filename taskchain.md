@@ -32,3 +32,4 @@ States: `PROPOSED` · `READY` · `IN PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 ## Builder Log
 
 - 2026-07-16 — Claimed P0's first unblocked item. Added `genomes/atlas.json`; validated Atlas, Lyra, Nova, and Orion against the Draft 2020-12 schema with `jsonschema 4.26.0`; all four passed. Evidence: `reports/p0-four-genome-schema-validation.md`. Remaining P0 work: immutable-ethics/forbidden-capability equivalence, Aequitas Sprite references, and canonical hash recording.
+- 2026-07-16 — Completed P0's immutable-contract item. Added `contracts/immutable-baseline.json` and `tests/test_immutable_contracts.py`; five standard-library tests passed for the exact four-genome set, shared ethics slots, approved ethics variants, ordered forbidden capabilities, identity, safety priority, uniqueness, and immutable object shape. Evidence: `reports/p0-immutable-contract-validation.md`. Remaining P0 work: Aequitas Sprite references/external-review rules and canonical hash recording.
