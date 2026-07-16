@@ -5,19 +5,22 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterable
 
 from jsonschema import Draft202012Validator
 
 ROOT = Path(__file__).resolve().parents[1]
+REQUIRED_GENOME_FILENAMES = (
+    "atlas.json",
+    "lyra.json",
+    "nova.json",
+    "orion.json",
+)
 
 VALIDATION_SETS = (
     (
         ROOT / "schema" / "qso-genome.schema.json",
-        tuple(
-            ROOT / "genomes" / name
-            for name in ("atlas.json", "lyra.json", "nova.json", "orion.json")
-        ),
+        tuple(ROOT / "genomes" / name for name in REQUIRED_GENOME_FILENAMES),
     ),
     (
         ROOT / "schema" / "qso-sprite.schema.json",
@@ -28,6 +31,10 @@ VALIDATION_SETS = (
 
 class DuplicateKeyError(ValueError):
     """Raised when a JSON object repeats a key."""
+
+
+class ArtifactSetError(ValueError):
+    """Raised when a schema-bound directory contains the wrong artifacts."""
 
 
 def reject_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -51,17 +58,68 @@ def load_json(path: Path) -> Any:
     )
 
 
+def assert_exact_json_artifact_set(
+    directory: Path,
+    required_filenames: Iterable[str],
+    *,
+    label: str,
+) -> None:
+    """Fail closed unless ``directory`` contains exactly the required JSON files."""
+
+    required = frozenset(required_filenames)
+    actual = frozenset(
+        path.name
+        for path in directory.iterdir()
+        if path.is_file() and path.suffix == ".json"
+    )
+    missing = sorted(required - actual)
+    unexpected = sorted(actual - required)
+
+    findings: list[str] = []
+    if missing:
+        findings.append(f"missing required {label} artifacts: {', '.join(missing)}")
+    if unexpected:
+        findings.append(f"unexpected {label} artifacts: {', '.join(unexpected)}")
+    if findings:
+        raise ArtifactSetError("; ".join(findings))
+
+
 def main() -> int:
     validated = 0
     failures: list[str] = []
 
+    try:
+        assert_exact_json_artifact_set(
+            ROOT / "genomes",
+            REQUIRED_GENOME_FILENAMES,
+            label="genome",
+        )
+    except (ArtifactSetError, OSError) as error:
+        failures.append(f"genomes: {error}")
+
     for schema_path, documents in VALIDATION_SETS:
-        schema = load_json(schema_path)
-        Draft202012Validator.check_schema(schema)
-        validator = Draft202012Validator(schema)
+        try:
+            schema = load_json(schema_path)
+            Draft202012Validator.check_schema(schema)
+            validator = Draft202012Validator(schema)
+        except (OSError, ValueError) as error:
+            failures.append(f"{schema_path.relative_to(ROOT)}: {error}")
+            continue
 
         for document_path in documents:
-            document = load_json(document_path)
+            if not document_path.is_file():
+                # Exact-set validation above records missing required genomes.
+                if document_path.parent == ROOT / "genomes":
+                    continue
+                failures.append(f"{document_path.relative_to(ROOT)}: missing artifact")
+                continue
+
+            try:
+                document = load_json(document_path)
+            except (OSError, ValueError) as error:
+                failures.append(f"{document_path.relative_to(ROOT)}: {error}")
+                continue
+
             errors = sorted(validator.iter_errors(document), key=lambda error: list(error.path))
             if errors:
                 for error in errors:
