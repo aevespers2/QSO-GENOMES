@@ -20,7 +20,7 @@ States: `PROPOSED` · `READY` · `IN PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 
 | Priority | Task | Owner | Depends on | Status | Acceptance criteria |
 |---|---|---|---|---|---|
-| P0 | Resolve PR #2 integrity, provenance, and CI review findings | QSOBuilder | — | IN PROGRESS | Reachable submitted-state provenance is complete; exact four-genome assertion, full immutable-protocol equivalence, Aequitas invariant/reference validation, unambiguous digest semantics, declared dependencies, PR-head checkout, and review-thread disposition remain. |
+| P0 | Resolve PR #2 integrity, provenance, and CI review findings | QSOBuilder | — | IN PROGRESS | Reachable submitted-state provenance and exact four-genome artifact-set assertion are complete; full immutable-protocol equivalence, Aequitas invariant/reference validation, unambiguous digest semantics, declared dependencies, PR-head checkout, and review-thread disposition remain. |
 | P1 | Run independent clean-checkout and CI conformance replay | Architect | P0 | BLOCKED | Supported Python environments install from checked-in instructions; schema, immutable, Aequitas, manifest, canonicalization, and negative tests pass at the exact reviewed head with retained logs and hashes. |
 | P2 | Accept and publish the versioned compatibility manifest | Architect | P1 | BLOCKED | One immutable candidate commit and set digest are approved; source archive, reports, checksums, provenance, rollback notes, and compatibility status are published without executable authority. |
 | P3 | Verify read-only downstream consumption | Builder | P2 | BLOCKED | `QuantumStateObjects` and `QSO-FABRIC` independently reject missing, stale, mutated, or incompatible artifacts and accept the exact published version/hash set. |
@@ -28,7 +28,7 @@ States: `PROPOSED` · `READY` · `IN PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 
 ## Current candidate evidence
 
-PR #2 reports Atlas plus a nine-artifact candidate manifest, deterministic canonicalization, immutable and Aequitas tests, sixteen passing tests, and set digest `4ed083cb204a77d1f1878aea8dbf9c61f996541c9b4de83c812bb461530d3eac`. These are candidate claims, not accepted capabilities: the head has no attached status checks or workflow runs, and review findings remain open.
+PR #2 reports Atlas plus a nine-artifact candidate manifest, deterministic canonicalization, immutable and Aequitas tests, sixteen passing tests, and set digest `4ed083cb204a77d1f1878aea8dbf9c61f996541c9b4de83c812bb461530d3eac`. The exact schema-bound genome directory is now asserted as Atlas, Lyra, Nova, and Orion, with four focused fail-closed tests passing on the Builder branch. These are candidate claims, not accepted capabilities: clean-checkout/CI acceptance and remaining review findings stay open.
 
 ## Cross-repository gate
 
@@ -44,3 +44,4 @@ Record reviewed commit, reachable provenance, validation commands/results, Pytho
 
 - 2026-07-16 — Advanced P0 from compatibility-set creation to independent acceptance of PR #2 after the candidate added the missing artifacts but remained blocked by unresolved integrity, provenance, dependency, workflow, and downstream-verification findings.
 - 2026-07-16 — QSOBuilder completed the first P0 acceptance finding by replacing branch-local intermediate commit pointers with reachable submitted source state `9de3db6a33308346d09b7004e6702e997dce9ba8` and exact file hashes in `reports/submitted-state-provenance.md` plus all four P0 validation reports. P0 remains `IN PROGRESS`; the next unblocked item is exact four-genome artifact-set assertion.
+- 2026-07-16 — QSOBuilder completed the exact four-genome artifact-set assertion on reachable implementation/test ancestor `28f419e60dd16a1cc482076f6dc3e3e56bf2ab79`. Schema validation now rejects missing or additional JSON genome artifacts before document validation; four focused tests and bytecode compilation passed under CPython 3.13.5 with `jsonschema` 4.26.0. Evidence is recorded in `reports/p0-exact-genome-artifact-set-validation.md`. P0 remains `IN PROGRESS`; the next unblocked finding is immutable-protocol equivalence or a versioned migration.
