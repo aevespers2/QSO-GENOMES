@@ -20,7 +20,7 @@ States: `PROPOSED` · `READY` · `IN PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 
 | Priority | Task | Owner | Depends on | Status | Acceptance criteria |
 |---|---|---|---|---|---|
-| P0 | Complete and validate the four-genome compatibility set | QSOBuilder | — | READY | Atlas, Nova, Orion, and Lyra validate with ethics/Sprite references and required forbidden-capability rules; exact commands and canonical hashes are recorded. |
+| P0 | Complete and validate the four-genome compatibility set | QSOBuilder | — | IN PROGRESS | Atlas, Nova, Orion, and Lyra validate with ethics/Sprite references and required forbidden-capability rules; exact commands and canonical hashes are recorded. |
 | P1 | Publish the versioned cross-repository genome manifest | QSOBuilder | P0 | PROPOSED | One machine-readable manifest identifies schema versions, paths, references, hashes, canonicalization rules, and compatibility state for independent consumers. |
 | P2 | Add mutation, migration, and fail-closed fixtures | Builder | P1 | PROPOSED | Immutable mutations, unknown fields, unresolved references, incompatible versions, and canonicalization drift fail deterministically. |
 | P3 | Define a declarative payment-policy extension | Architect | P1 and approved settlement boundary | BLOCKED | Any extension remains data-only, grants no credentials or transfer authority, and has approved versioning and migration rules. |
@@ -31,4 +31,4 @@ States: `PROPOSED` · `READY` · `IN PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 
 ## Builder Log
 
-Record commits, validation commands/results, schema and fixture versions, canonical hashes, unresolved references, residual risks, and follow-up tasks.
+- 2026-07-16 — Claimed P0's first unblocked item. Added `genomes/atlas.json`; validated Atlas, Lyra, Nova, and Orion against the Draft 2020-12 schema with `jsonschema 4.26.0`; all four passed. Evidence: `reports/p0-four-genome-schema-validation.md`. Remaining P0 work: immutable-ethics/forbidden-capability equivalence, Aequitas Sprite references, and canonical hash recording.
