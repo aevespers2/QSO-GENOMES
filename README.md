@@ -4,6 +4,14 @@ Canonical, reviewable genome definitions for bounded Quantum State Objects.
 
 A genome is a declarative configuration, not executable code. It defines identity, purpose, learning tendencies, immutable ethics, resource limits, communication limits, freeze behavior, and the narrow conditions under which goals may evolve.
 
+## Documentation
+
+- [Project guide and release boundaries](docs/index.md)
+- [Cross-repository compatibility contract](docs/contract.md)
+- [Task chain](taskchain.md)
+- [Release plan](release.md)
+- [Changelog](changelog.md)
+
 ## Design principles
 
 - Genomes are data only and must never contain executable instructions.
