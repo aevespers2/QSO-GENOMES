@@ -53,10 +53,10 @@ OK
 
 Direct cloning was unavailable in the verification runner, so the command was replayed in a repository-shaped local tree populated from the fetched branch artifacts and preserving every field inspected by the test. A clean-checkout rerun or CI run remains a release gate; this task does not claim repository-wide CI evidence.
 
-## Commit evidence
+## Reachable submitted-state evidence
 
-- binding commit: `c952ac0d993db83309312ed20895e18b5b26e9b6`
-- test commit: `454db0855e843395f5244e2fc98f92b2945f1ce4`
+- submitted source state: `9de3db6a33308346d09b7004e6702e997dce9ba8`
+- provenance record: `reports/submitted-state-provenance.md`
 
 ## Git blob set
 
@@ -71,4 +71,4 @@ Direct cloning was unavailable in the verification runner, so the command was re
 
 ## Outcome
 
-`PASS` for the bounded Aequitas reference and external-review activation contract. P0 remains `IN PROGRESS` until deterministic canonical hashes are generated and recorded for the complete compatibility set.
+`PASS` for the bounded recorded run. Separate review findings for published invariant equivalence and duplicate/stale/path-inconsistent reference rejection remain open.
