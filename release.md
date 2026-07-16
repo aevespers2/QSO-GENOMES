@@ -4,9 +4,9 @@
 
 Status: `BLOCKED — PR #2 ACCEPTANCE AND CONFORMANCE EVIDENCE`
 
-QSO-GENOMES remains the portfolio's highest-priority declarative contract dependency. PR #2 proposes the previously missing Atlas genome plus immutable, Aequitas, canonicalization, manifest, test, report, and workflow artifacts, but no release is eligible. The review timeline now contains fifteen threads: four earlier provenance threads are resolved and outdated, while eleven remain unresolved, including one outdated release-sync thread and ten current integrity/workflow findings.
+QSO-GENOMES remains the portfolio's highest-priority declarative contract dependency. PR #2 proposes the previously missing Atlas genome plus immutable, Aequitas, canonicalization, manifest, test, report, and workflow artifacts, but no release is eligible. The review timeline contains fifteen threads: four earlier provenance threads are resolved and outdated; eleven remain unresolved, including one outdated release-sync thread, one provenance thread whose underlying ancestry defect is now repaired but not formally dispositioned, and nine current integrity/workflow findings.
 
-The candidate's exact accepted source state is still not established. This release record previously named `9de3db6a33308346d09b7004e6702e997dce9ba8`, while the latest submitted-state provenance review references a different reviewed state and finds that its recorded source commit is not an ancestor of that state. Exact-head status checks, workflow runs, and reachable provenance must therefore be re-established against one final immutable candidate before acceptance.
+The current PR head is `5a435807487fd713c87465f3d23aaf9cd7cdd2b4`. GitHub comparison now shows recorded submitted source state `9de3db6a33308346d09b7004e6702e997dce9ba8` as the merge base and an ancestor seven commits behind that head, repairing the previously reported sibling/non-ancestor provenance defect. This does not establish an accepted source state: the final head may still change, the applicable review threads remain unresolved, and no retained exact-head CI/status-check bundle or independent replay authorizes acceptance.
 
 The objective remains independent acceptance or rejection of the submitted compatibility-set candidate. Reported local results are preserved as candidate evidence and are not treated as merged or release-verified capabilities.
 
@@ -37,9 +37,10 @@ PR #2 reports:
 - `qso-canonical-json-v1` canonicalization;
 - sixteen passing tests and a nine-artifact manifest replay;
 - set digest `4ed083cb204a77d1f1878aea8dbf9c61f996541c9b4de83c812bb461530d3eac`;
-- validation reports for schemas, immutable contracts, Aequitas, and the manifest.
+- validation reports for schemas, immutable contracts, Aequitas, and the manifest;
+- submitted-state provenance now reachable from current head `5a435807487fd713c87465f3d23aaf9cd7cdd2b4`.
 
-These items are selected as candidate review inputs only. They are not accepted completed work until current findings are resolved and an independent replay verifies the exact reviewed state.
+These items are selected as candidate review inputs only. They are not accepted completed work until current findings are resolved and an independent replay verifies one final immutable reviewed state.
 
 ## Planned Changelog Entries
 
@@ -57,7 +58,7 @@ These items are selected as candidate review inputs only. They are not accepted 
 | Set completeness | REVIEW | Atlas, Nova, Orion, and Lyra are present in the candidate; validation must assert that exact required set and reject omissions, renames, extras where prohibited, and stale references. |
 | Immutable policy | FAIL | Full approved immutable-ethics statements and versioned variants are source-derived or proven equivalent; the candidate cannot enforce a weaker parallel baseline. |
 | Aequitas integrity | FAIL | Published invariants mirror source artifacts; references are unique, path-correct, source-consistent, and validated before de-duplication. |
-| Provenance | FAIL | The final reviewed head and every report's generator, manifest, test, schema, and source state are mutually reachable and reproducible. |
+| Provenance | PARTIAL | The recorded source state is now reachable from current head, but the final reviewed head and every report's generator, manifest, test, schema, and source state must be mutually reachable and reproducible. |
 | Dependencies/environment | FAIL | Supported Python versions and all required dependencies are checked in through reproducible installation instructions or standard-library-only tooling. |
 | CI semantics | FAIL | Workflow setup succeeds without missing cache inputs and certifies the PR head or explicitly records both submitted and synthetic merge SHAs. |
 | Canonicalization/identity | REVIEW | Repeated serialization is deterministic and the release identity binds all consumer-relevant manifest metadata or clearly scopes separate digest types. |
@@ -79,15 +80,15 @@ Rollback or reject the candidate if any required genome is missing, hashes or ma
 
 ## Unresolved Blockers
 
-- Eleven PR #2 review threads remain unresolved; one is outdated but not formally resolved and ten are current.
-- The final immutable candidate head is not consistently identified across the release record and latest provenance review.
-- The replacement submitted-state provenance record still points to a source state that review finds is not reachable from the reviewed candidate.
+- Eleven PR #2 review threads remain unresolved: one outdated release-sync thread, one now-repaired provenance finding awaiting formal disposition, and nine current substantive integrity/workflow findings.
+- Current head `5a435807487fd713c87465f3d23aaf9cd7cdd2b4` descends from recorded source state `9de3db6a33308346d09b7004e6702e997dce9ba8`, but one final immutable accepted head and exact-head evidence bundle are not established.
 - Exact four-genome set assertion, full immutable-protocol equivalence, Aequitas invariant and duplicate-reference validation, and complete digest identity semantics are not accepted.
 - The workflow's pip cache can fail without a dependency file and pull-request checkout can certify a synthetic merge instead of the submitted head.
-- Exact-head status checks/workflow runs, clean-checkout replay, remaining fail-closed fixtures, downstream-consumer verification, checksums, provenance, and rollback evidence remain incomplete.
+- Exact-head status checks/workflow runs, clean-checkout replay, remaining fail-closed fixtures, downstream-consumer verification, checksums, final provenance, and rollback evidence remain incomplete.
 
 ## Release Log
 
 - 2026-07-16: Confirmed the complete four-genome contract as the highest-priority portfolio unblocker.
 - 2026-07-16: Advanced the objective to independent acceptance of PR #2 after the candidate supplied the missing artifact set; held release `BLOCKED` because review, CI, provenance, immutable-policy, manifest-identity, and downstream-consumer gates remain incomplete.
-- 2026-07-16: Synchronized partial review progress: four prior provenance threads are resolved/outdated, eleven remain unresolved, and replacement submitted-state provenance still fails the reachable-source-state requirement. No priority or release decision changed.
+- 2026-07-16: Synchronized partial review progress: four prior provenance threads were resolved/outdated and eleven remained unresolved.
+- 2026-07-16: Recorded current head `5a435807487fd713c87465f3d23aaf9cd7cdd2b4` and confirmed that submitted source state `9de3db6a33308346d09b7004e6702e997dce9ba8` is now its ancestor by seven commits. Provenance improved from `FAIL` to `PARTIAL`; release remains blocked by nine substantive review findings, formal thread disposition, exact-head CI, clean replay, downstream validation, and release artifacts.
