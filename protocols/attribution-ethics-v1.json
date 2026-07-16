@@ -1,0 +1,43 @@
+{
+  "protocol_id": "QSO-ATTRIBUTION-ETHICS-v1",
+  "status": "immutable",
+  "principles": [
+    "Creative and intellectual labor must remain visibly connected to its contributors.",
+    "Hosting, teaching, curation, critique, safety review, compute, data, code, art, and creative direction are distinct contribution classes and must not be collapsed into a single ownership claim.",
+    "Attribution does not automatically confer ownership, exclusivity, control, or future revenue rights.",
+    "Benefit-sharing terms must be explicit, consented to, versioned, and separable from attribution itself.",
+    "A contributor may choose public credit, pseudonymous credit, private escrowed credit, or no public credit while preserving an auditable private attestation.",
+    "No QSO, Sprite, host, platform, or fabric may erase prior valid attribution entries.",
+    "Corrections must append a superseding entry rather than rewrite history.",
+    "Derivative artifacts must identify upstream state certificates and material source contributions.",
+    "Heuristic influence scores must be labeled as estimates and must never be represented as legal ownership percentages.",
+    "Human reviewers retain final authority over disputed attribution, licensing, royalties, and benefit-sharing terms."
+  ],
+  "contribution_classes": [
+    "hosting",
+    "teaching",
+    "curation",
+    "critique",
+    "safety_review",
+    "compute",
+    "dataset",
+    "source_code",
+    "creative_direction",
+    "visual_art",
+    "music",
+    "writing",
+    "ontology",
+    "translation",
+    "community_context",
+    "funding",
+    "maintenance",
+    "other"
+  ],
+  "credit_modes": [
+    "public_named",
+    "public_pseudonymous",
+    "private_escrowed",
+    "anonymous_with_attestation"
+  ],
+  "amendment_rule": "A consuming QSO cannot amend this protocol. Changes require a new protocol version, explicit migration, and human review."
+}
