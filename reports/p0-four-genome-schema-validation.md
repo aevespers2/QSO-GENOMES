@@ -14,8 +14,8 @@ This report does **not** complete P0. Immutable-ethics equivalence, Aequitas Spr
 - `jsonschema`: `4.26.0`
 - validator: `Draft202012Validator`
 - platform used for the recorded run: Linux x86_64
-- base repository commit: `c6c6ccdd61391da5fae5a268022c510069016b33`
-- Atlas implementation commit: `807261a1e1313b61cf7f877ae9afb675c2a4ec18`
+- reachable submitted source state: `9de3db6a33308346d09b7004e6702e997dce9ba8`
+- provenance record: `reports/submitted-state-provenance.md`
 
 ## Reproduction command
 
@@ -54,7 +54,7 @@ The schema itself passed `Draft202012Validator.check_schema`.
 
 ## Reviewed source hashes
 
-Exact Git blob identifiers at the validated source state:
+Exact Git blob identifiers at the submitted source state:
 
 | Artifact | Git blob SHA |
 |---|---|
@@ -77,4 +77,4 @@ These are raw-file evidence hashes, not the final P1 canonical compatibility has
 
 ## Result
 
-`PASS` for the first immediate punch-list item: all four current genome documents validate against the current schema. P0 remains `IN PROGRESS` pending the remaining immediate checks.
+`PASS` for the bounded recorded run: all four current genome documents validate against the current schema. The separate review finding requiring the reproduction command to assert the exact required four-artifact set remains open.
