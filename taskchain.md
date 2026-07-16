@@ -28,7 +28,9 @@ States: `PROPOSED` · `READY` · `IN PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 
 ## Current candidate evidence
 
-PR #2 reports Atlas plus a nine-artifact candidate manifest, deterministic canonicalization, immutable and Aequitas tests, sixteen passing tests, and set digest `4ed083cb204a77d1f1878aea8dbf9c61f996541c9b4de83c812bb461530d3eac`. These are candidate claims, not accepted capabilities: the head has no attached status checks or workflow runs, and review findings remain open.
+PR #2 reports Atlas plus a nine-artifact candidate manifest, deterministic canonicalization, immutable and Aequitas tests, sixteen passing tests, and set digest `4ed083cb204a77d1f1878aea8dbf9c61f996541c9b4de83c812bb461530d3eac`. These are candidate claims, not accepted capabilities.
+
+The review timeline currently contains fifteen threads: four earlier provenance threads are resolved and outdated, while eleven remain unresolved, including one outdated release-sync thread and ten current integrity/workflow findings. A replacement submitted-state provenance record was added, but review still finds that its recorded source commit is not reachable from the reviewed state. No accepted exact-head CI or downstream-consumer evidence has been established.
 
 ## Cross-repository gate
 
@@ -43,3 +45,4 @@ Work only on the highest-priority unresolved acceptance finding. Do not add runt
 Record reviewed commit, reachable provenance, validation commands/results, Python/tool versions, schema and fixture versions, canonical hashes, workflow URLs, unresolved review threads, residual risks, downstream replay results, and rollback evidence.
 
 - 2026-07-16 — Advanced P0 from compatibility-set creation to independent acceptance of PR #2 after the candidate added the missing artifacts but remained blocked by unresolved integrity, provenance, dependency, workflow, and downstream-verification findings.
+- 2026-07-16 — Synchronized review progress: four prior provenance threads are resolved/outdated, eleven threads remain unresolved, and the replacement submitted-state provenance still references a source state not reachable from the reviewed candidate. Priority remains unchanged.
