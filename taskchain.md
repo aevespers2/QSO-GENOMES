@@ -8,27 +8,38 @@ States: `PROPOSED` · `READY` · `IN PROGRESS` · `BLOCKED` · `REVIEW` · `DONE
 
 ## Product directive
 
-- **Next objective:** Complete and publish one deterministic four-genome compatibility set.
-- **User outcome:** A consuming runtime can validate Atlas, Nova, Orion, and Lyra by schema version, stable path, references, canonical bytes, and hash without importing repository code.
-- **MVP scope:** add the missing Atlas genome; validate all four genomes, immutable/attribution ethics, forbidden capabilities, and Aequitas Sprite; define canonical JSON; publish a machine-readable compatibility manifest; add positive, negative, boundary, unknown-field, unresolved-reference, immutable-mutation, and incompatible-version fixtures.
-- **Priority:** Compatibility-set completeness and deterministic validation are the highest portfolio unblocker.
-- **Success criteria:** every artifact validates; repeated canonicalization produces identical SHA-256 hashes; immutable and prohibited fields fail closed; consumers can validate fixtures independently; all commands, versions, paths, hashes, and provenance are retained.
-- **Non-goals:** executable agent behavior, network access, credentials, mutation activation, autonomous policy changes, payment authority, or runtime implementation.
-- **Release rationale:** This contract is required before QuantumStateObjects or QSO-FABRIC can claim a verified four-object run. A small data-only release removes the most concrete upstream blocker with minimal execution risk.
+- **Next objective:** Independently accept or reject PR #2 as the first deterministic four-genome compatibility-set candidate.
+- **User outcome:** A consuming runtime can retrieve one reviewed Atlas/Nova/Orion/Lyra contract set, verify exact paths, schema versions, immutable ethics, Aequitas references, canonical bytes, manifest metadata, and hashes, and fail closed without importing repository code.
+- **MVP scope:** review the candidate Atlas genome, immutable baseline, Aequitas binding, canonicalization profile, nine-artifact manifest, tests, reports, and conformance workflow; resolve integrity and provenance findings; replay from a clean checkout or CI; add remaining fail-closed fixtures; validate the accepted manifest in `QuantumStateObjects` and `QSO-FABRIC` as read-only data.
+- **Priority:** This acceptance remains the highest portfolio unblocker. The objective has advanced from creating the missing set to proving that the submitted candidate is complete, reproducible, internally consistent, and safe to consume.
+- **Success criteria:** all current review findings are resolved or explicitly dispositioned; CI checks out and certifies the submitted PR head; dependencies are declared; the exact required artifact set is asserted; immutable protections match the approved protocol; Aequitas references/invariants are unique and source-consistent; digest semantics cover all identity-bearing metadata or are explicitly scoped; clean replays produce identical canonical hashes; negative fixtures fail closed; downstream consumers validate the same accepted commit and digest.
+- **Non-goals:** executable agent behavior, network access, credentials, mutation activation, autonomous policy changes, payment authority, runtime implementation, or treating self-reported PR results as accepted release evidence.
+- **Release rationale:** QSO-GENOMES is the narrowest upstream contract needed by the runtime repositories. Accepting one evidence-backed data-only set removes a concrete dependency without granting execution authority or widening the product surface.
 
 ## Active chain
 
 | Priority | Task | Owner | Depends on | Status | Acceptance criteria |
 |---|---|---|---|---|---|
-| P0 | Complete and validate the four-genome compatibility set | QSOBuilder | — | READY | Atlas, Nova, Orion, and Lyra validate with ethics/Sprite references and required forbidden-capability rules; exact commands and canonical hashes are recorded. |
-| P1 | Publish the versioned cross-repository genome manifest | QSOBuilder | P0 | PROPOSED | One machine-readable manifest identifies schema versions, paths, references, hashes, canonicalization rules, and compatibility state for independent consumers. |
-| P2 | Add mutation, migration, and fail-closed fixtures | Builder | P1 | PROPOSED | Immutable mutations, unknown fields, unresolved references, incompatible versions, and canonicalization drift fail deterministically. |
-| P3 | Define a declarative payment-policy extension | Architect | P1 and approved settlement boundary | BLOCKED | Any extension remains data-only, grants no credentials or transfer authority, and has approved versioning and migration rules. |
+| P0 | Resolve PR #2 integrity, provenance, and CI review findings | QSOBuilder | — | REVIEW | Reachable submitted-state provenance; exact four-genome assertion; full immutable-protocol equivalence; Aequitas invariant/reference validation; unambiguous digest semantics; declared dependencies; PR-head checkout; all current review threads resolved or formally dispositioned. |
+| P1 | Run independent clean-checkout and CI conformance replay | Architect | P0 | BLOCKED | Supported Python environments install from checked-in instructions; schema, immutable, Aequitas, manifest, canonicalization, and negative tests pass at the exact reviewed head with retained logs and hashes. |
+| P2 | Accept and publish the versioned compatibility manifest | Architect | P1 | BLOCKED | One immutable candidate commit and set digest are approved; source archive, reports, checksums, provenance, rollback notes, and compatibility status are published without executable authority. |
+| P3 | Verify read-only downstream consumption | Builder | P2 | BLOCKED | `QuantumStateObjects` and `QSO-FABRIC` independently reject missing, stale, mutated, or incompatible artifacts and accept the exact published version/hash set. |
+| P4 | Define a declarative payment-policy extension | Architect | P2 and approved settlement boundary | BLOCKED | Any extension remains data-only, grants no credentials or transfer authority, and has approved versioning and migration rules. |
+
+## Current candidate evidence
+
+PR #2 reports Atlas plus a nine-artifact candidate manifest, deterministic canonicalization, immutable and Aequitas tests, sixteen passing tests, and set digest `4ed083cb204a77d1f1878aea8dbf9c61f996541c9b4de83c812bb461530d3eac`. These are candidate claims, not accepted capabilities: the head has no attached status checks or workflow runs, and review findings remain open.
 
 ## Cross-repository gate
 
-`QuantumStateObjects` and `QSO-FABRIC` may not claim a verified four-object integration until P0 and P1 are complete and their published hashes are consumed successfully.
+`QuantumStateObjects` and `QSO-FABRIC` may not claim a verified four-object integration until P0-P3 are complete and both consumers validate the same accepted commit, manifest version, canonicalization profile, and digest.
+
+## Builder rules
+
+Work only on the highest-priority unresolved acceptance finding. Do not add runtime behavior or new product scope while the candidate's provenance, immutable-policy equivalence, manifest identity, dependency, and CI semantics remain unresolved.
 
 ## Builder Log
 
-Record commits, validation commands/results, schema and fixture versions, canonical hashes, unresolved references, residual risks, and follow-up tasks.
+Record reviewed commit, reachable provenance, validation commands/results, Python/tool versions, schema and fixture versions, canonical hashes, workflow URLs, unresolved review threads, residual risks, downstream replay results, and rollback evidence.
+
+- 2026-07-16 — Advanced P0 from compatibility-set creation to independent acceptance of PR #2 after the candidate added the missing artifacts but remained blocked by unresolved integrity, provenance, dependency, workflow, and downstream-verification findings.
