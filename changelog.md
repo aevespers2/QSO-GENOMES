@@ -3,20 +3,22 @@
 All notable product, architecture, implementation, release, and deployment changes are recorded here.
 
 ## Unreleased
+
 ### Product
-- Product objectives, MVP scope, priorities, success criteria, and non-goals are maintained by the Product Manager.
+- 2026-07-16 — Defined the MVP as a complete, deterministic Atlas/Nova/Orion/Lyra compatibility set with immutable ethics, Aequitas references, canonical hashes, and an independent consumer manifest.
+- 2026-07-16 — Confirmed this repository remains declarative and data-only; executable behavior and payment authority are out of scope.
 
 ### Architecture
-- Architecture decisions and task sequencing are maintained through `taskchain.md`.
+- QSO-GENOMES is the highest upstream contract blocker for the four-QSO portfolio and must publish schema/version/hash boundaries before runtime integration proceeds.
 
 ### Implementation
-- Builder work is tracked through `punchlist.md` with verification evidence.
+- Existing schemas, three genomes, ethics protocols, and Sprite data remain candidate inputs; Atlas and validation evidence are still missing.
 
 ### Release
-- Release readiness, versioning, artifacts, and rollback criteria are tracked in `release.md`.
+- The candidate remains blocked until the four-genome set, canonicalization, fixtures, security-boundary checks, checksums, and provenance pass.
 
 ### Deployment
-- Deployment environments, health checks, validation, and rollback events are tracked in `deploy.md`.
+- No deployment surface is authorized; consumers retrieve versioned declarative artifacts only.
 
 ## Entry Format
 - Date
