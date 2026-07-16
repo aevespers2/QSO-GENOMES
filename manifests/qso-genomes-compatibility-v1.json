@@ -1,0 +1,90 @@
+{
+  "manifest_version": 1,
+  "compatibility_set_id": "qso-genomes-four-object-v1",
+  "status": "candidate",
+  "canonicalization": {
+    "profile": "qso-canonical-json-v1",
+    "encoding": "UTF-8",
+    "object_key_order": "lexicographic_unicode_code_point",
+    "array_order": "preserved",
+    "insignificant_whitespace": "removed",
+    "duplicate_object_keys": "rejected",
+    "non_finite_numbers": "rejected",
+    "trailing_bytes": "LF"
+  },
+  "artifacts": [
+    {
+      "artifact_id": "aequitas-external-review-v1",
+      "canonical_bytes": 1909,
+      "kind": "contract",
+      "path": "contracts/aequitas-review-binding.json",
+      "schema_version": 1,
+      "sha256": "f5673c24159098312a7c173048d4b6abf2f13cbb91530b863d484f91655d1843"
+    },
+    {
+      "artifact_id": "immutable-baseline-v1",
+      "canonical_bytes": 1549,
+      "kind": "contract",
+      "path": "contracts/immutable-baseline.json",
+      "schema_version": 1,
+      "sha256": "a7950e02a087fc8f1ff87ece00604ddb7f0e063e0d3a4656958147dcfef87ec6"
+    },
+    {
+      "artifact_id": "atlas",
+      "canonical_bytes": 2903,
+      "kind": "genome",
+      "path": "genomes/atlas.json",
+      "schema_version": 1,
+      "sha256": "6ad49dc872a50fe7f909062aaa805cec10477d34a73002475a34e47548a40a4c"
+    },
+    {
+      "artifact_id": "lyra",
+      "canonical_bytes": 2982,
+      "kind": "genome",
+      "path": "genomes/lyra.json",
+      "schema_version": 1,
+      "sha256": "1a9c59fdb9081af1c5e22787dd32b772242d6e7f9f0bbd44fe9cfabe5c821d4c"
+    },
+    {
+      "artifact_id": "nova",
+      "canonical_bytes": 2854,
+      "kind": "genome",
+      "path": "genomes/nova.json",
+      "schema_version": 1,
+      "sha256": "d7363b36b00f9ea763f17dd4f2d4ab743fe2ff7b3891faaac937726afb9206a1"
+    },
+    {
+      "artifact_id": "orion",
+      "canonical_bytes": 2905,
+      "kind": "genome",
+      "path": "genomes/orion.json",
+      "schema_version": 1,
+      "sha256": "ca64c19a20b45fbb8858ef11a1acddf42d478e6f37b75b1de90abee1180a5203"
+    },
+    {
+      "artifact_id": "qso-genome",
+      "canonical_bytes": 4619,
+      "kind": "schema",
+      "path": "schema/qso-genome.schema.json",
+      "schema_version": 1,
+      "sha256": "a2cb601d6d284f411903c972ae5e3574ca8faf6db28848e43cb91a697dbcb54b"
+    },
+    {
+      "artifact_id": "qso-sprite",
+      "canonical_bytes": 2775,
+      "kind": "schema",
+      "path": "schema/qso-sprite.schema.json",
+      "schema_version": 1,
+      "sha256": "16ca71249869c46e0e184c14b98bb0eada17d34774a361b38aba6efaddba12ba"
+    },
+    {
+      "artifact_id": "aequitas",
+      "canonical_bytes": 1327,
+      "kind": "sprite",
+      "path": "sprites/aequitas.json",
+      "schema_version": 1,
+      "sha256": "32752ebfa1ff1e9d60d9a94cd505bfcbc3a27724991e48a238e5261af9ac3d2a"
+    }
+  ],
+  "set_sha256": "4ed083cb204a77d1f1878aea8dbf9c61f996541c9b4de83c812bb461530d3eac"
+}
