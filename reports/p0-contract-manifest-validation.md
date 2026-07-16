@@ -4,7 +4,7 @@
 
 `PASS` for the bounded Builder item: generate a deterministic contract manifest with stable paths, schema versions, canonical byte counts, per-artifact SHA-256 hashes, and one compatibility-set digest.
 
-P0 is ready for review, not release. A clean-checkout or GitHub CI replay remains required before P0 can be accepted as `DONE` and P1 can be unlocked.
+P0 is ready for review, not release. A clean-checkout or GitHub CI replay remains required before the candidate can be accepted.
 
 ## Claimed item
 
@@ -16,11 +16,11 @@ Generate a deterministic contract manifest with paths, schema versions, and cano
 
 - Repository: `aevespers2/QSO-GENOMES`
 - Branch: `builder/p0-four-genome-validation-20260716`
-- Source-artifact head used to generate the manifest: `372c602380dbf4d775538d7b6b075578bb2c1843`
-- Generator commit: `5af944da48456b695d4cb53abd55bfc1f64ddd06`
-- Manifest commit: `73049e07188b00a0a4821f9bb5ce6a3675b40a5c`
-- Test commit: `4b69dfe3b38ce6859f03812d3c56e66b1952e51d`
+- Reachable submitted source state: `9de3db6a33308346d09b7004e6702e997dce9ba8`
+- Provenance record: `reports/submitted-state-provenance.md`
 - Runtime: CPython `3.13.5`
+
+The submitted source state contains the generator, candidate manifest, tests, and all nine referenced artifacts. Exact artifact identity is additionally bound by the Git blob and canonical SHA-256 values retained below and in the candidate manifest.
 
 ## Canonicalization profile
 
@@ -94,4 +94,4 @@ c3f067272dc268d9851b27ff7f51cca3259b7de0125af870f7546078e920672d  tests/test_con
 
 ## Verification limitation
 
-Direct GitHub cloning was unavailable in the execution runner because DNS resolution for `github.com` failed. The test run used a repository-shaped local tree populated from the branch artifacts fetched through the GitHub connector and the exact new generator, manifest, and test contents written to the branch. No GitHub Actions workflow or commit-status check is attached to the branch head, so clean-checkout or CI verification remains an explicit acceptance gate.
+Direct GitHub cloning was unavailable in the execution runner because DNS resolution for `github.com` failed. The test run used a repository-shaped local tree populated from the branch artifacts fetched through the GitHub connector. No GitHub Actions workflow or commit-status check is attached to the branch head, so clean-checkout or CI verification remains an explicit acceptance gate. The separate review finding about whether `set_sha256` covers artifact bytes only or all identity-bearing manifest metadata also remains open.
