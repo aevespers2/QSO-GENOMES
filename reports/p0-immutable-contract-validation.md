@@ -23,8 +23,8 @@ The normative data contract is `contracts/immutable-baseline.json`. The executab
 - test framework: `unittest` from the Python standard library
 - platform: Linux x86_64
 - branch: `builder/p0-four-genome-validation-20260716`
-- contract commit: `3536d5d4b49e4656f4dc406343eee1d686cfc90a`
-- test commit: `e11c4109fda7efd56ac2065bb236286b66a2ab71`
+- reachable submitted source state: `9de3db6a33308346d09b7004e6702e997dce9ba8`
+- provenance record: `reports/submitted-state-provenance.md`
 
 ## Reproduction command
 
@@ -62,6 +62,4 @@ The genome hashes are raw-file evidence hashes retained from the preceding schem
 
 ## Result
 
-`PASS` for the second immediate punch-list item. Immutable ethics are identical in the declared shared slots while approved specialization slots remain distinct; all four genomes have the same ordered fifteen-item forbidden-capability contract, identity contract, and safety priority.
-
-P0 remains `IN PROGRESS`. The next unblocked item is Aequitas Sprite reference and external-review activation validation.
+`PASS` for the bounded recorded run. The separate review finding requiring equivalence to the complete approved immutable-ethics protocol or an explicit versioned migration remains open.
