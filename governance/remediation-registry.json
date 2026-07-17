@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0.0",
+  "repairs": {
+    "canonical-manifest": {
+      "commands": [
+        "python scripts/generate_contract_manifest.py",
+        "python scripts/generate_contract_manifest.py --check",
+        "python -m unittest tests.test_contract_manifest -v"
+      ],
+      "paths": [
+        "contracts/compatibility-manifest.json",
+        "reports/p0-contract-manifest-validation.md",
+        "tests/test_contract_manifest.py"
+      ],
+      "safe_when": "All modified outputs are deterministic and verification exits zero."
+    },
+    "exact-head-certification": {
+      "commands": [
+        "python scripts/validate_pr_ontology.py"
+      ],
+      "paths": [
+        ".github/workflows/pr-ontology.yml"
+      ],
+      "safe_when": "Workflow continues to check out github.event.pull_request.head.sha explicitly."
+    },
+    "lifecycle-consistency": {
+      "commands": [],
+      "paths": [
+        "taskchain.md",
+        "punchlist.md",
+        "release.md",
+        "deploy.md",
+        "changelog.md"
+      ],
+      "safe_when": "Only contradictory status text is synchronized to the lowest evidenced lifecycle state."
+    }
+  }
+}
