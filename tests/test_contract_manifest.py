@@ -26,7 +26,36 @@ class ContractManifestTests(unittest.TestCase):
         expected = sorted(spec[2] for spec in manifest_tool.ARTIFACT_SPECS)
         self.assertEqual(expected, paths)
         self.assertEqual(len(paths), len(set(paths)))
-        self.assertEqual(9, len(paths))
+        self.assertEqual(11, len(paths))
+
+    def test_manifest_binds_immutable_protocol_and_migration(self) -> None:
+        manifest = manifest_tool.build_manifest(ROOT)
+        by_path = {item["path"]: item for item in manifest["artifacts"]}
+        protocol_path = "protocols/immutable-ethics-v1.json"
+        migration_path = "contracts/immutable-ethics-migration-v1.json"
+
+        self.assertIn(protocol_path, by_path)
+        self.assertIn(migration_path, by_path)
+        self.assertEqual(
+            "QSO-IMMUTABLE-ETHICS-v1",
+            by_path[protocol_path]["artifact_id"],
+        )
+        self.assertEqual(
+            "QSO-GENOME-IMMUTABLE-ETHICS-MIGRATION-v1",
+            by_path[migration_path]["artifact_id"],
+        )
+
+        migration = manifest_tool.load_json(ROOT / migration_path)
+        self.assertEqual(
+            migration["to_protocol"]["canonical_sha256"],
+            by_path[protocol_path]["sha256"],
+        )
+        self.assertEqual(
+            manifest_tool.sha256_hex(
+                manifest_tool.canonical_bytes(migration)
+            ),
+            by_path[migration_path]["sha256"],
+        )
 
     def test_each_hash_and_byte_count_matches_canonical_content(self) -> None:
         manifest = manifest_tool.build_manifest(ROOT)
@@ -63,7 +92,7 @@ class ContractManifestTests(unittest.TestCase):
         self.assertEqual(first, second)
         self.assertEqual(first["set_sha256"], committed["set_sha256"])
         self.assertEqual(
-            "4ed083cb204a77d1f1878aea8dbf9c61f996541c9b4de83c812bb461530d3eac",
+            "6d9b0ca8c6766fbb63b4613df5b2baee455f1e63c848d6f75e56726efbc57cac",
             first["set_sha256"],
         )
 
