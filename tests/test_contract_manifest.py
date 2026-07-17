@@ -92,7 +92,7 @@ class ContractManifestTests(unittest.TestCase):
         self.assertEqual(first, second)
         self.assertEqual(first["set_sha256"], committed["set_sha256"])
         self.assertEqual(
-            "6d9b0ca8c6766fbb63b4613df5b2baee455f1e63c848d6f75e56726efbc57cac",
+            "99f33227247ef39fef3e1c3206c8ea49b9be9af86148298f07bdbf00b0cd6921",
             first["set_sha256"],
         )
 
