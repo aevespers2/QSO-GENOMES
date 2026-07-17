@@ -12,6 +12,15 @@
     "non_finite_numbers": "rejected",
     "trailing_bytes": "LF"
   },
+  "set_digest": {
+    "algorithm": "sha256",
+    "profile": "qso-genomes-manifest-identity-v1",
+    "scope": "complete_identity_manifest",
+    "excluded_fields": [
+      "status",
+      "set_sha256"
+    ]
+  },
   "artifacts": [
     {
       "artifact_id": "aequitas-external-review-v1",
@@ -86,5 +95,5 @@
       "sha256": "32752ebfa1ff1e9d60d9a94cd505bfcbc3a27724991e48a238e5261af9ac3d2a"
     }
   ],
-  "set_sha256": "4ed083cb204a77d1f1878aea8dbf9c61f996541c9b4de83c812bb461530d3eac"
+  "set_sha256": "3583dd05506c8d2921554676f80140cd66efa23a83154dbf4536ed51e56d5ed6"
 }
