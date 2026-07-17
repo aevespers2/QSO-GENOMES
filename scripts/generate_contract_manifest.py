@@ -18,6 +18,15 @@ COMPATIBILITY_SET_ID = "qso-genomes-four-object-v1"
 IDENTITY_FROM_PATH_VERSION = "@path-version"
 IDENTITY_FROM_SCHEMA_ID = "@schema-id"
 VERSION_FROM_ID_PREFIX = "@id-version:"
+SET_DIGEST_EXCLUDED_TOP_LEVEL_FIELDS = ("set_sha256", "status")
+ARTIFACT_DESCRIPTOR_FIELDS = (
+    "artifact_id",
+    "canonical_bytes",
+    "kind",
+    "path",
+    "schema_version",
+    "sha256",
+)
 
 # kind, declared artifact id, relative path, source identity selector, source version selector
 ARTIFACT_SPECS = (
@@ -118,6 +127,64 @@ def canonical_bytes(value: Any) -> bytes:
 
 def sha256_hex(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
+
+
+def build_digest_semantics() -> dict[str, Any]:
+    """Return the normative digest contract embedded in the manifest identity."""
+    return {
+        "algorithm": "SHA-256",
+        "artifact_sha256": {
+            "input": "canonical_artifact_bytes",
+            "canonicalization_profile": PROFILE_ID,
+        },
+        "set_sha256": {
+            "input": "canonical_manifest_identity",
+            "canonicalization_profile": PROFILE_ID,
+            "top_level_field_rule": "all_except_excluded",
+            "excluded_top_level_fields": list(
+                SET_DIGEST_EXCLUDED_TOP_LEVEL_FIELDS
+            ),
+            "artifact_descriptor_fields": list(ARTIFACT_DESCRIPTOR_FIELDS),
+        },
+    }
+
+
+def manifest_identity_payload(manifest: dict[str, Any]) -> dict[str, Any]:
+    """Return the complete compatibility identity covered by ``set_sha256``.
+
+    Artifact ``sha256`` values identify canonical artifact bytes only. The set
+    digest identifies every manifest field except lifecycle ``status`` and the
+    recursive ``set_sha256`` field. Artifact descriptors are closed-world so a
+    new consumer-relevant field cannot be silently omitted from the digest.
+    """
+    expected_semantics = build_digest_semantics()
+    if manifest.get("digest_semantics") != expected_semantics:
+        raise ValueError("manifest digest semantics are missing or unsupported")
+
+    artifacts = manifest.get("artifacts")
+    if not isinstance(artifacts, list):
+        raise ValueError("manifest artifacts must be a list")
+
+    expected_descriptor_fields = set(ARTIFACT_DESCRIPTOR_FIELDS)
+    for index, item in enumerate(artifacts):
+        if not isinstance(item, dict):
+            raise ValueError(f"artifact descriptor {index} must be an object")
+        actual_fields = set(item)
+        if actual_fields != expected_descriptor_fields:
+            missing = sorted(expected_descriptor_fields - actual_fields)
+            unexpected = sorted(actual_fields - expected_descriptor_fields)
+            raise ValueError(
+                f"artifact descriptor {index} fields do not match digest scope; "
+                f"missing={missing}, unexpected={unexpected}"
+            )
+
+    excluded = set(SET_DIGEST_EXCLUDED_TOP_LEVEL_FIELDS)
+    return {key: value for key, value in manifest.items() if key not in excluded}
+
+
+def set_sha256_for_manifest(manifest: dict[str, Any]) -> str:
+    """Hash the complete canonical manifest identity using declared semantics."""
+    return sha256_hex(canonical_bytes(manifest_identity_payload(manifest)))
 
 
 def _resolve_document_value(document: Any, source: str) -> Any:
@@ -238,15 +305,7 @@ def build_manifest(root: Path = ROOT) -> dict[str, Any]:
         )
 
     artifacts.sort(key=lambda item: item["path"])
-    set_payload = {
-        "compatibility_set_id": COMPATIBILITY_SET_ID,
-        "artifacts": [
-            {"path": item["path"], "sha256": item["sha256"]}
-            for item in artifacts
-        ],
-    }
-
-    return {
+    manifest = {
         "manifest_version": 1,
         "compatibility_set_id": COMPATIBILITY_SET_ID,
         "status": "candidate",
@@ -260,9 +319,11 @@ def build_manifest(root: Path = ROOT) -> dict[str, Any]:
             "non_finite_numbers": "rejected",
             "trailing_bytes": "LF",
         },
+        "digest_semantics": build_digest_semantics(),
         "artifacts": artifacts,
-        "set_sha256": sha256_hex(canonical_bytes(set_payload)),
     }
+    manifest["set_sha256"] = set_sha256_for_manifest(manifest)
+    return manifest
 
 
 def rendered_manifest(root: Path = ROOT) -> str:
