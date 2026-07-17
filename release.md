@@ -4,9 +4,9 @@
 
 Status: `BLOCKED — EXACT-HEAD REVIEW AND CONFORMANCE EVIDENCE REQUIRED`
 
-QSO-GENOMES remains the portfolio's highest-priority declarative contract dependency. PR #2 is now the single canonical submission path, with submitted head `ffd631fb99fa4817a9520b73a69c0f719dbaa320`. The prior fifteen-commit remediation lineage was fast-forwarded onto that branch, resolving the competing-head decision without promoting the candidate.
+QSO-GENOMES remains the portfolio's highest-priority declarative contract dependency. PR #2 is the single canonical submission path, currently at submitted head `2d42c960cefb70fdaada969e75debf50fb06f36c`. The prior fifteen-commit remediation lineage and synchronized product/release documentation are on that branch, resolving the competing-head decision without promoting the candidate.
 
-The review timeline now contains twenty threads: four resolved/outdated, one unresolved/outdated release-sync thread, and fifteen current unresolved findings. No GitHub Actions workflow run is attached to the current head. Candidate reports and focused local tests are preserved as implementation evidence, not independent release verification.
+The review timeline contains twenty threads: four resolved/outdated, one unresolved/outdated release-sync thread, and fifteen current unresolved findings. No GitHub Actions workflow run is attached to the current head. Candidate reports and focused local tests are preserved as implementation evidence, not independent release verification.
 
 ## Versioning
 
@@ -38,7 +38,7 @@ PR #2 and its reports record:
 - `QSO-GENOME-IMMUTABLE-ETHICS-MIGRATION-v1` binding the authoritative protocol digest;
 - Aequitas reference/invariant validation;
 - focused reports of four exact-set tests, five migration tests, and eight Aequitas reference-integrity tests under CPython 3.13.5;
-- reachable provenance and documentation describing the canonical-head consolidation.
+- reachable provenance and synchronized product/release documentation.
 
 These are candidate claims. They do not establish accepted digest semantics, complete immutable enforcement, reproducible installation, exact-head CI, independent clean replay, downstream compatibility, or release approval.
 
@@ -59,7 +59,7 @@ These are candidate claims. They do not establish accepted digest semantics, com
 
 | Gate | Status | Requirement |
 |---|---|---|
-| Canonical submission | PASS | Existing PR #2 is the sole submitted path and contains the consolidated remediation lineage. |
+| Canonical submission | PASS | Existing PR #2 is the sole submitted path and contains the consolidated remediation and documentation lineage. |
 | Candidate review | FAIL | Resolve or disposition all sixteen unresolved threads against the final immutable submitted head. |
 | Set completeness | REVIEW | Exact Atlas/Nova/Orion/Lyra enforcement exists as candidate code; replay and review acceptance remain. |
 | Immutable policy | FAIL | Bind protocol/migration into set identity and reject conflicting or duplicate local migration entries. |
@@ -69,7 +69,7 @@ These are candidate claims. They do not establish accepted digest semantics, com
 | CI semantics | FAIL | Certify the submitted head and retain exact workflow evidence. |
 | Negative fixtures | INCOMPLETE | All missing, stale, duplicate, conflicting, mutated, and incompatible cases must fail closed. |
 | Downstream consumption | BLOCKED | Both runtime consumers must verify the same accepted commit and identities read-only. |
-| Status checks | NO EVIDENCE | No workflow run is attached to current head `ffd631fb99fa4817a9520b73a69c0f719dbaa320`. |
+| Status checks | NO EVIDENCE | No workflow run is attached to current head `2d42c960cefb70fdaada969e75debf50fb06f36c`. |
 | Security | PARTIAL | Data-only boundary is declared; independent final-state verification remains. |
 | Approval | PENDING | Explicit release approval only after every blocking gate passes. |
 
@@ -90,4 +90,4 @@ Reject or roll back the candidate if the reviewed and released heads differ; any
 - 2026-07-16 — Confirmed the complete four-genome contract as the highest-priority portfolio unblocker.
 - 2026-07-16 — Advanced the objective to independent acceptance of PR #2 and held release blocked on review, CI, provenance, identity, and downstream evidence.
 - 2026-07-16 — Consolidated the fifteen-commit remediation lineage onto PR #2, making canonical submission `PASS` without changing release priority or approval state.
-- 2026-07-16 — Recorded five additional integrity findings and the absence of an exact-head workflow run; release remains blocked.
+- 2026-07-16 — Synchronized product and release directives on the default and PR branches, recorded five additional integrity findings, and confirmed no exact-head workflow run; release remains blocked.
