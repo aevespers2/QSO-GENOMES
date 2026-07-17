@@ -1,0 +1,29 @@
+name: PR Ontology Controls
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-pr-ontology:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out submitted PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Validate ontology declaration and derive controls
+        run: python scripts/validate_pr_ontology.py
+      - name: Upload ontology evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-ontology-${{ github.event.pull_request.head.sha }}
+          path: pr-ontology-report.json
+          if-no-files-found: error
