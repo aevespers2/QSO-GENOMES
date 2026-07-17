@@ -9,7 +9,8 @@ All notable product, architecture, implementation, release, and deployment chang
 - 2026-07-16 — Confirmed this repository remains declarative and data-only; executable behavior and payment authority are out of scope.
 - 2026-07-16 — Advanced the objective from candidate creation to independent acceptance of PR #2, preserving QSO-GENOMES as the highest portfolio unblocker while requiring exact-head evidence.
 - 2026-07-16 — Selected existing PR #2 as the single canonical submission path and fast-forwarded its branch through the fifteen-commit remediation lineage rather than opening a competing pull request.
-- 2026-07-16 — Kept portfolio priority unchanged after consolidation. The immediate P0 focus is now manifest identity, immutable binding, duplicate/conflict validation, reproducible dependencies, exact-head CI, and review-thread disposition.
+- 2026-07-16 — Synchronized product, release, punch-list, and changelog directives on the default and PR branches; the submitted review head is `2d42c960cefb70fdaada969e75debf50fb06f36c`.
+- 2026-07-16 — Kept portfolio priority unchanged after consolidation. The immediate P0 focus is manifest identity, immutable binding, duplicate/conflict validation, reproducible dependencies, exact-head CI, and review-thread disposition.
 
 ### Architecture
 - QSO-GENOMES is the highest upstream contract blocker for the four-QSO portfolio and must publish schema/version/hash boundaries before runtime integration proceeds.
@@ -21,7 +22,7 @@ All notable product, architecture, implementation, release, and deployment chang
 ### Candidate implementation
 - PR #2 proposes the missing Atlas genome, immutable baseline, Aequitas review binding, deterministic canonicalization, a compatibility manifest, conformance tests, reports, and a workflow.
 - Earlier branch evidence reports sixteen passing tests, a nine-artifact replay, and candidate set digest `4ed083cb204a77d1f1878aea8dbf9c61f996541c9b4de83c812bb461530d3eac`.
-- The canonical submitted head is now `ffd631fb99fa4817a9520b73a69c0f719dbaa320`; it includes exact four-genome enforcement, a versioned immutable-ethics migration, Aequitas reference/invariant validation, reachable provenance work, and consolidation documentation.
+- The canonical submitted head includes exact four-genome enforcement, a versioned immutable-ethics migration, Aequitas reference/invariant validation, reachable provenance work, and synchronized product/release documentation.
 - Additional focused reports record four exact-set tests, five migration tests, and eight Aequitas reference-integrity tests under CPython 3.13.5.
 - These remain candidate claims: no exact-head workflow run, independent clean-checkout replay, accepted release identity, downstream verification, or publication approval exists.
 
@@ -33,7 +34,7 @@ All notable product, architecture, implementation, release, and deployment chang
 
 ### Release
 - The candidate remains blocked until exact-head CI or independent clean replay succeeds, all blocking findings and adversarial fixtures pass, downstream consumers validate the accepted set, and provenance/checksum/rollback evidence is retained.
-- Consolidating the submission path is a review correction, not a release promotion.
+- Consolidating and synchronizing the submission path is a review correction, not a release promotion.
 - No release, tag, deployment, or downstream compatibility claim is authorized from current candidate evidence alone.
 
 ### Deployment
