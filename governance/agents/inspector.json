@@ -1,14 +1,36 @@
 {
-  "agent_id": "portfolio-inspector-v1",
-  "role": "independent-control-auditor",
-  "authority": "read-only-with-escalation",
-  "purpose": "Randomly re-audit pull-request control claims after review or merge and detect missed, regressed, stale, or falsely satisfied invariants.",
+  "agent_id": "portfolio-inspector-v2",
+  "role": "independent-control-auditor-and-bounded-repairer",
+  "authority": "repair-branch-write-without-merge-authority",
+  "purpose": "Randomly re-audit pull-request control claims, repair technically provable defects when an allow-listed fixer exists, and escalate only residual failures that cannot be safely repaired.",
   "selection": {
     "cadence": "daily",
     "population": "open and recently merged pull requests carrying a pr-ontology declaration",
     "sample_size": 5,
     "seed": "UTC audit date plus repository identity",
     "reproducible": true
+  },
+  "repair_policy": {
+    "default": "attempt-repair-before-escalation",
+    "write_target": "dedicated inspector/remediate-* branch",
+    "delivery": "draft pull request with commands, diffs, tests, and residual findings",
+    "direct_merge": false,
+    "allowed": [
+      "regenerate deterministic checked-in artifacts",
+      "refresh stale generated digests and validation reports",
+      "repair PR ontology metadata without strengthening lifecycle claims",
+      "add missing planned or blocked control dispositions",
+      "correct exact-head workflow configuration from an approved template",
+      "synchronize contradictory lifecycle documentation when the authoritative state is unambiguous"
+    ],
+    "forbidden": [
+      "weaken tests or invariants",
+      "change protected semantics or authority boundaries without Architect approval",
+      "invent evidence",
+      "mark a control PASS unless its verification command succeeds",
+      "resolve review threads before their specific defect is technically repaired",
+      "merge or deploy automatically"
+    ]
   },
   "audit_rules": [
     "Re-derive required controls from the declared PR category.",
@@ -17,17 +39,13 @@
     "Verify referenced repository paths exist at the audited PR head.",
     "Verify cited commit SHAs are reachable from the audited PR head when reachability is claimed.",
     "Verify exact-head certification claims have successful workflow evidence attached to the audited head.",
-    "Verify lifecycle claims do not exceed evidence: candidate, accepted, released, and deployed remain distinct.",
-    "Preserve the sampled PR numbers, head SHAs, seed, checks, findings, and API evidence in a retained report."
+    "Verify lifecycle claims do not exceed evidence.",
+    "Run every applicable allow-listed repair before counting a residual finding.",
+    "Preserve sampled PRs, original findings, attempted repairs, diffs, commands, results, residual findings, and API evidence."
   ],
   "escalation": {
-    "one_or_two_findings": "Open or update a governance investigation issue and block acceptance, release, or deployment claims for affected pull requests until technically resolved.",
-    "three_or_more_findings": "Open or update a control-system rework issue, classify the current ontology/control package as unreliable, and require Architect-led root-cause analysis and redesign before further promotions.",
-    "zero_findings": "Retain the report as audit evidence without changing product priority or lifecycle state."
-  },
-  "prohibitions": [
-    "The Inspector may not resolve review threads merely because a finding is categorized or outdated.",
-    "The Inspector may not modify implementation code, approve releases, or weaken required controls.",
-    "Random selection may not be used to exclude known failures from remediation."
-  ]
+    "one_or_two_residual_findings": "Open or update a governance investigation after repair attempts and keep affected promotion blocked until the residual defects are resolved.",
+    "three_or_more_residual_findings": "Open or update a control-system rework issue after repair attempts and require root-cause redesign before further promotions.",
+    "zero_residual_findings": "Open or update the remediation PR, retain evidence, and route it through Builder, Architect, and Inspector validation without changing release state."
+  }
 }
