@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0.0",
+  "categories": {
+    "documentation": ["truthfulness", "lifecycle-consistency", "evidence-provenance"],
+    "contract": ["exact-set", "identity-binding", "semantic-integrity", "canonical-manifest", "evidence-provenance", "reproducible-execution", "exact-head-certification", "lifecycle-consistency"],
+    "runtime": ["identity-binding", "semantic-integrity", "authority-boundary", "negative-testing", "reproducible-execution", "exact-head-certification", "rollback", "lifecycle-consistency"],
+    "security": ["identity-binding", "semantic-integrity", "authority-boundary", "negative-testing", "evidence-provenance", "exact-head-certification", "rollback", "lifecycle-consistency"],
+    "release": ["canonical-manifest", "evidence-provenance", "reproducible-execution", "exact-head-certification", "rollback", "lifecycle-consistency"],
+    "deployment": ["authority-boundary", "evidence-provenance", "exact-head-certification", "rollback", "lifecycle-consistency"],
+    "migration": ["exact-set", "identity-binding", "semantic-integrity", "canonical-manifest", "negative-testing", "evidence-provenance", "rollback", "lifecycle-consistency"],
+    "governance": ["truthfulness", "identity-binding", "evidence-provenance", "lifecycle-consistency"],
+    "experiment": ["truthfulness", "authority-boundary", "evidence-provenance", "reproducible-execution", "rollback"]
+  },
+  "layers": ["portfolio", "system", "repository", "documentation", "schema", "data-contract", "runtime", "transport", "security", "release", "deployment"],
+  "lifecycles": ["proposal", "candidate", "review", "accepted", "released", "deployed", "deprecated", "retired"],
+  "authorities": ["documentation-only", "declarative-only", "read-only", "bounded-local", "networked", "deployment"],
+  "controls": {
+    "exact-set": "Identity-bearing collections are complete, unique, ordered where meaningful, and validated before normalization.",
+    "identity-binding": "Published identifiers, versions, paths, and source identities are verified against authoritative source documents.",
+    "semantic-integrity": "Protected semantics are validated completely rather than by prefixes, subsets, or self-consistency alone.",
+    "canonical-manifest": "All consumer-relevant identity metadata and required artifacts are bound by canonical digest semantics.",
+    "evidence-provenance": "Evidence names an exact source state reachable from the reviewed head and retains reproducible commands and results.",
+    "reproducible-execution": "Dependencies and bootstrap instructions are declared and clean-checkout replay is supported.",
+    "exact-head-certification": "CI certifies the submitted head explicitly and records any synthetic merge state separately.",
+    "lifecycle-consistency": "PR, taskchain, punchlist, changelog, release, and deploy states do not contradict one another.",
+    "authority-boundary": "The change cannot acquire authority beyond its declared product and execution boundary.",
+    "negative-testing": "Adversarial and malformed cases fail closed for every claimed invariant.",
+    "rollback": "A tested reversal or safe disable path exists for the declared lifecycle and authority level.",
+    "truthfulness": "Implemented, tested, proposed, accepted, released, and deployed claims are explicitly distinguished."
+  }
+}
