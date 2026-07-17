@@ -17,10 +17,22 @@ COMPATIBILITY_SET_ID = "qso-genomes-four-object-v1"
 ARTIFACT_SPECS = (
     ("contract", "aequitas-external-review-v1", "contracts/aequitas-review-binding.json", "contract_version"),
     ("contract", "immutable-baseline-v1", "contracts/immutable-baseline.json", "schema_version"),
+    (
+        "contract",
+        "QSO-GENOME-IMMUTABLE-ETHICS-MIGRATION-v1",
+        "contracts/immutable-ethics-migration-v1.json",
+        "migration_version",
+    ),
     ("genome", "atlas", "genomes/atlas.json", "schema_version"),
     ("genome", "lyra", "genomes/lyra.json", "schema_version"),
     ("genome", "nova", "genomes/nova.json", "schema_version"),
     ("genome", "orion", "genomes/orion.json", "schema_version"),
+    (
+        "protocol",
+        "QSO-IMMUTABLE-ETHICS-v1",
+        "protocols/immutable-ethics-v1.json",
+        1,
+    ),
     ("schema", "qso-genome", "schema/qso-genome.schema.json", "properties.schema_version.const"),
     ("schema", "qso-sprite", "schema/qso-sprite.schema.json", "properties.schema_version.const"),
     ("sprite", "aequitas", "sprites/aequitas.json", "schema_version"),
@@ -76,18 +88,26 @@ def sha256_hex(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
-def _resolve_version(document: Any, version_path: str) -> int:
+def _resolve_version(document: Any, version_source: str | int) -> int:
+    if isinstance(version_source, int) and not isinstance(version_source, bool):
+        if version_source < 1:
+            raise ValueError("literal artifact version must be positive")
+        return version_source
+
+    if not isinstance(version_source, str):
+        raise TypeError("version source must be a dotted document path or integer")
+
     value = document
-    for part in version_path.split("."):
+    for part in version_source.split("."):
         value = value[part]
     if not isinstance(value, int) or isinstance(value, bool):
-        raise ValueError(f"{version_path} must resolve to an integer")
+        raise ValueError(f"{version_source} must resolve to an integer")
     return value
 
 
 def build_manifest(root: Path = ROOT) -> dict[str, Any]:
     artifacts: list[dict[str, Any]] = []
-    for kind, artifact_id, relative_path, version_path in ARTIFACT_SPECS:
+    for kind, artifact_id, relative_path, version_source in ARTIFACT_SPECS:
         path = root / relative_path
         document = load_json(path)
         encoded = canonical_bytes(document)
@@ -97,7 +117,7 @@ def build_manifest(root: Path = ROOT) -> dict[str, Any]:
                 "canonical_bytes": len(encoded),
                 "kind": kind,
                 "path": relative_path,
-                "schema_version": _resolve_version(document, version_path),
+                "schema_version": _resolve_version(document, version_source),
                 "sha256": sha256_hex(encoded),
             }
         )
