@@ -6,13 +6,13 @@ Status: `BLOCKED — CANONICAL-HEAD RECONCILIATION, SCOPE APPROVAL, EXACT-HEAD R
 
 QSO-GENOMES remains the portfolio's highest-priority declarative contract dependency. PR #2 is the single canonical submission path, but GitHub reports it open, non-mergeable, and diverged from `main`. Reconciliation must preserve the existing pull request, commit lineage, review history, and all intended candidate commits; produce one immutable mergeable head; and restart exact-head review and conformance evidence.
 
-The latest observed comparison used PR head `7af2c7eac9f4bf14c98367500f23657f2230db9b` and default-branch head `5dc663aaca9de57a5ef79261b119ddabfc5fdb90`: the PR is 82 commits ahead and 27 commits behind, with merge base `c6c6ccdd61391da5fae5a268022c510069016b33`. These counts are timestamped evidence and must be recaptured immediately before reconciliation. The branch advanced eight commits after the prior frozen-head directive, so previous exact-head evidence no longer identifies the current submission.
+The latest comparison snapshot before this release-record update used PR head `e51a814cd329c55e45a1599b205ef234859e4848` and default-branch head `90cf6896f532bb7f9628d2140c76759109318761`: the PR was 86 commits ahead and 34 commits behind, with merge base `c6c6ccdd61391da5fae5a268022c510069016b33`. The branch advanced four additional commits after the prior `7af2c7e...` release snapshot and at least twelve commits after the earlier freeze directive, so all earlier exact-head evidence is superseded. Counts are historical evidence and must be recaptured immediately before reconciliation.
 
-The stale hard-coded manifest digest was corrected on the current candidate head to `99f33227247ef39fef3e1c3206c8ea49b9be9af86148298f07bdbf00b0cd6921`, and source-derived manifest identity validation was added. This removes the previously demonstrated digest-assertion failure, but it does not establish that the complete deterministic suite passes at the current head: no combined status checks and no pull-request workflow runs are attached to `7af2c7e...`, and the retained focused-test evidence is tied to earlier implementation ancestors rather than an independent clean replay of the current submission.
+The current candidate now includes `requirements.txt` pinning `jsonschema==4.26.0`, changes the workflow to check out the submitted head, and records the checked-out SHA before validation. Those changes address earlier dependency/cache and synthetic-merge concerns in candidate code, but they are not release evidence: no combined status checks and no pull-request workflow runs are attached to `e51a814...`, and no independent clean replay has been retained.
 
-The current branch also adds `sprites/socrates.json` and `contracts/socrates-review-binding.json`. Those files introduce a new supervisory identity, compatibility aliases to Aequitas, and declarative authority to open repair pull requests. They are not part of the eleven-artifact compatibility manifest and are outside the currently approved release scope. They must be removed from this candidate, explicitly excluded with a documented non-authoritative status, or approved through a versioned Aequitas-to-Socrates migration and independent security/authority review.
+The branch still adds `sprites/socrates.json` and `contracts/socrates-review-binding.json`. The Sprite itself is non-executing and denies repository writes, but the binding aliases `aequitas-external-review-v1`, permits a `human_or_bounded_repair_agent`, specifies draft-pull-request repair delivery, and declares authority to propose and open repair pull requests. These artifacts remain outside the eleven-artifact compatibility manifest and the approved release scope. They must be removed, explicitly quarantined as non-authoritative and non-consumer-visible, or approved through a versioned Aequitas-to-Socrates migration plus independent security/authority review.
 
-The review timeline contains 34 threads: four resolved/outdated and 30 unresolved, including current and still-material outdated findings. Candidate reports, tests, manifests, and focused local replays remain implementation evidence, not independent release verification.
+The review timeline now contains 40 threads: four resolved/outdated and 36 unresolved, including current and still-material outdated findings. Candidate reports, tests, manifests, and focused local replays remain implementation evidence, not independent release verification.
 
 ## Versioning
 
@@ -47,6 +47,7 @@ PR #2 and repository reports currently record:
 - local-ethics conflict and duplicate migration-path rejection;
 - source-derived manifest artifact identifiers and versions;
 - a corrected candidate digest assertion;
+- a pinned schema-validation dependency and exact-head checkout assertions in the workflow candidate;
 - focused reports for schema, exact-set, immutable-contract, migration, Aequitas, manifest, source identity, and provenance work.
 
 These are candidate claims. They do not establish a mergeable final state, a passing exact-head test suite, accepted digest semantics, complete immutable enforcement, reproducible installation, exact-head CI, independent clean replay, downstream compatibility, supervisory-scope approval, or release approval.
@@ -55,14 +56,14 @@ These are candidate claims. They do not establish a mergeable final state, a pas
 
 - PR #2 is diverged from `main` and non-mergeable; reconciliation will create a new head requiring renewed review and evidence.
 - The submitted head continued moving after the freeze directive, invalidating earlier exact-head snapshots and increasing review churn.
-- Socrates files add an unapproved supervisory identity, Aequitas aliases, and repair-PR authority outside the current manifest and release scope.
-- Thirty review threads remain unresolved; all current and still-material outdated findings require final-head disposition.
+- Socrates files add an unapproved supervisory identity, Aequitas alias, bounded-repair-agent semantics, and repair-PR authority outside the current manifest and release scope.
+- Thirty-six review threads remain unresolved; all current and still-material outdated findings require final-head disposition.
 - Complete digest-scope semantics remain undefined for artifact bytes versus all consumer-relevant manifest metadata.
 - The immutable migration validator must require exact migration identity and source profile, exact `QSO-IMMUTABLE-ETHICS-v1` identity and approved contents, immutable status, approved external enforcement boundary, exact consumer-requirement key set, and unique migration paths.
 - Complete immutable-statement enforcement remains unresolved or undispositioned.
 - Aequitas validation must pin the approved Sprite identity and validate references, invariants, activation mode, human-review semantics, per-surface oversight, uniqueness, source consistency, and numeric finiteness.
-- Schema-validation dependencies and pip-cache inputs are not reproducibly accepted.
-- Pull-request workflow semantics do not yet certify and retain the submitted head identity.
+- Socrates must either be schema-validated and included in an approved versioned manifest/migration or remain outside the candidate and consumer contract.
+- Dependency and workflow improvements have no exact-head run, retained logs, or independent replay.
 - Exact-head CI, clean-checkout replay, complete negative fixtures, downstream validation, provenance bundle, checksums, rollback evidence, and explicit approval remain incomplete.
 
 ## Acceptance Gates
@@ -73,17 +74,17 @@ These are candidate claims. They do not establish a mergeable final state, a pas
 | Head stability | FAIL | Stop candidate-head churn, reconcile current `main`, freeze one immutable submitted head, and require an approved exception for any later change. |
 | Mergeability/reconciliation | FAIL | Integrate current `main` and all intended candidate commits without force-rewriting reviewed history, document conflicts, then review one mergeable immutable head. |
 | Scope integrity | FAIL | Remove, explicitly quarantine, or approve and version the Socrates/Aequitas alias and repair-authority additions. |
-| Deterministic suite | NO EVIDENCE | The stale digest assertion is corrected, but the complete suite must pass at the frozen current head with retained logs. |
-| Candidate review | FAIL | Re-enumerate and resolve or disposition all current and material outdated threads against the frozen reconciled head. |
+| Deterministic suite | NO EVIDENCE | The complete suite must pass at the frozen current head with retained logs. |
+| Candidate review | FAIL | Re-enumerate and resolve or disposition all 36 unresolved threads against the frozen reconciled head. |
 | Set completeness | REVIEW | The exact Atlas/Nova/Orion/Lyra and eleven-artifact candidate exists; reconciliation and acceptance replay remain. |
 | Immutable policy | FAIL | Enforce the complete approved migration identity, source profile, protocol identity/content, status, boundary, migration shape, and local-conflict rules. |
 | Aequitas integrity | FAIL | Pin the approved Aequitas identity and validate references, invariants, activation rules, per-surface oversight, uniqueness, source consistency, and numeric finiteness. |
 | Manifest identity | PARTIAL | Source identities are candidate-validated; complete digest scopes and independent exact-head replay remain. |
-| Dependencies/environment | FAIL | Check in reproducible dependency and supported-environment instructions. |
-| CI semantics | FAIL | Certify the frozen submitted head and retain exact workflow evidence. |
+| Dependencies/environment | PARTIAL | `jsonschema==4.26.0` is pinned in the candidate; supported-environment documentation and clean reproducibility evidence remain absent. |
+| CI semantics | PARTIAL | Exact-head checkout assertions are candidate code, but no workflow run certifies or retains evidence for the submitted head. |
 | Negative fixtures | INCOMPLETE | All missing, stale, duplicate, conflicting, mutated, overflowed, weakened-review, alias-drift, and incompatible cases must fail closed. |
 | Downstream consumption | BLOCKED | Both runtime consumers must verify the same accepted commit and identities read-only. |
-| Status checks | NO EVIDENCE | The observed head has no combined statuses and no pull-request workflow runs. |
+| Status checks | NO EVIDENCE | Head `e51a814...` has no combined statuses and no pull-request workflow runs. |
 | Security | PARTIAL | Data-only boundary is declared; supervisory aliases and repair authority require independent review, and final-state verification remains. |
 | Documentation | PARTIAL | Scope and reports exist, but branch/default directives conflict and final-head synchronization is absent. |
 | Provenance | PARTIAL | Candidate lineage exists; reconciliation record and final immutable-head evidence are absent. |
@@ -110,5 +111,6 @@ Reject or roll back the candidate if branch reconciliation loses reviewed change
 - 2026-07-16 — Preserved PR #2 as the singular review path without changing release priority or approval state.
 - 2026-07-16 — Made provenance-preserving reconciliation the first release gate after the PR diverged from `main` and became non-mergeable.
 - 2026-07-16 — Recorded a deterministic-suite failure caused by a stale hard-coded manifest digest on an earlier candidate head.
-- 2026-07-16 — Observed the branch advance five remediation commits to `46f3248…`, with no statuses or workflow runs and 30 unresolved threads.
-- 2026-07-16 — Observed eight further commits advancing PR #2 to `7af2c7e…`, now 82 commits ahead and 27 behind `main`. The digest assertion and source-identity candidate work improved, but no exact-head run exists, and unapproved Socrates/Aequitas alias and repair-authority files create a new scope decision. Release remains blocked.
+- 2026-07-16 — Observed the branch advance five remediation commits to `46f3248...`, with no statuses or workflow runs and 30 unresolved threads.
+- 2026-07-16 — Observed eight further commits advancing PR #2 to `7af2c7e...`, now 82 commits ahead and 27 behind `main`; unapproved Socrates/Aequitas alias and repair-authority files created a new scope decision.
+- 2026-07-17 — Refreshed the deployment review against PR head `e51a814...`: four more candidate commits added dependency and exact-head workflow improvements, but the branch remained non-mergeable, 86 ahead/34 behind the pre-update default head, without status checks or workflow runs, and with 36 unresolved review threads. Release and deployment remain blocked pending provenance-preserving reconciliation and explicit Socrates scope disposition.
