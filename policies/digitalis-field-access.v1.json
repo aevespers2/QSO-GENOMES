@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0",
+  "policy_id": "digitalis-field-access-v1",
+  "description": "Declarative capability policy for QSO access to sanitized QSO-SEEKER evidence through the Digital Consciousness Field.",
+  "default": "deny",
+  "capabilities": {
+    "field.discover": {
+      "description": "Discover authorized topics and immutable evidence references.",
+      "constraints": ["experiment_scope", "purpose_scope", "topic_scope", "sensitivity_ceiling", "retention_window"]
+    },
+    "evidence.read": {
+      "description": "Read bounded canonical evidence views after field authorization.",
+      "constraints": ["content_hash_required", "provenance_required", "untrusted_text_only", "no_raw_payload"]
+    },
+    "evidence.acknowledge": {
+      "description": "Record receipt of an immutable evidence reference.",
+      "constraints": ["qso_identity_required", "experiment_id_required", "ledger_event_required"]
+    }
+  },
+  "denied_capabilities": [
+    "network.fetch",
+    "raw_payload.read",
+    "credential.read",
+    "binary.execute",
+    "package.install",
+    "field.publish",
+    "capability.delegate",
+    "retention.override",
+    "provenance.rewrite"
+  ],
+  "revocation": {
+    "supported": true,
+    "effective": "immediate_for_new_reads",
+    "audit_required": true
+  },
+  "human_review_required": true
+}
