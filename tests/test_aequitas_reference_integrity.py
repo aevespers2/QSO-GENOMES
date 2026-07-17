@@ -31,6 +31,49 @@ class AequitasReferenceIntegrityTests(unittest.TestCase):
                 {"genome_id": genome_id, "path": f"genomes/{genome_id}.json"}
                 for genome_id in ("atlas", "lyra", "nova", "orion")
             ],
+            "activation_rules": {
+                "review_surfaces": [
+                    {
+                        "surface": "input",
+                        "required_oversight": [
+                            "classify_snippet_purpose",
+                            "detect_vulnerabilities",
+                        ],
+                    },
+                    {
+                        "surface": "interpretation",
+                        "required_oversight": [
+                            "assess_integrity",
+                            "assess_transparency",
+                        ],
+                    },
+                    {
+                        "surface": "ontology",
+                        "required_oversight": [
+                            "map_ontology",
+                            "assess_equity",
+                            "detect_bias",
+                        ],
+                    },
+                    {
+                        "surface": "proposed_edit",
+                        "required_oversight": [
+                            "assess_integrity",
+                            "assess_transparency",
+                            "detect_vulnerabilities",
+                        ],
+                    },
+                    {
+                        "surface": "communication",
+                        "required_oversight": [
+                            "classify_snippet_purpose",
+                            "assess_equity",
+                            "detect_bias",
+                            "assess_transparency",
+                        ],
+                    },
+                ]
+            },
             "invariants": {
                 "sprite_human_review_required": True,
                 "sprite_may_annotate": True,
@@ -46,23 +89,30 @@ class AequitasReferenceIntegrityTests(unittest.TestCase):
                 "genomes_may_change_immutable": False,
             },
         }
-        self.write("contracts/aequitas-review-binding.json", self.binding)
-        self.write(
-            "sprites/aequitas.json",
-            {
-                "schema_version": 1,
-                "sprite_id": "aequitas",
-                "ethics": {"human_review_required": True},
-                "authority": {
-                    "may_annotate": True,
-                    "may_block_pending_review": True,
-                    "may_modify_genome": False,
-                    "may_execute": False,
-                    "may_write_repository": False,
-                    "may_override_immutable_ethics": False,
-                },
+        self.sprite = {
+            "schema_version": 1,
+            "sprite_id": "aequitas",
+            "oversight": {
+                "classify_snippet_purpose": True,
+                "map_ontology": True,
+                "assess_equity": True,
+                "detect_bias": True,
+                "detect_vulnerabilities": True,
+                "assess_integrity": True,
+                "assess_transparency": True,
             },
-        )
+            "ethics": {"human_review_required": True},
+            "authority": {
+                "may_annotate": True,
+                "may_block_pending_review": True,
+                "may_modify_genome": False,
+                "may_execute": False,
+                "may_write_repository": False,
+                "may_override_immutable_ethics": False,
+            },
+        }
+        self.write("contracts/aequitas-review-binding.json", self.binding)
+        self.save_sprite()
         self.write(
             "schema/qso-sprite.schema.json",
             {"properties": {"schema_version": {"const": 1}}},
@@ -94,6 +144,9 @@ class AequitasReferenceIntegrityTests(unittest.TestCase):
 
     def save_binding(self) -> None:
         self.write("contracts/aequitas-review-binding.json", self.binding)
+
+    def save_sprite(self) -> None:
+        self.write("sprites/aequitas.json", self.sprite)
 
     def test_source_artifacts_pass(self) -> None:
         validate_binding(self.root)
@@ -144,6 +197,60 @@ class AequitasReferenceIntegrityTests(unittest.TestCase):
         del self.binding["invariants"]["genomes_require_hash"]
         self.save_binding()
         with self.assertRaisesRegex(BindingValidationError, "invariant key set mismatch"):
+            validate_binding(self.root)
+
+    def test_duplicate_review_surface_is_rejected_before_deduplication(self) -> None:
+        surfaces = self.binding["activation_rules"]["review_surfaces"]
+        surfaces.append(copy.deepcopy(surfaces[0]))
+        self.save_binding()
+        with self.assertRaisesRegex(
+            BindingValidationError, "duplicate review surface before de-duplication"
+        ):
+            validate_binding(self.root)
+
+    def test_conflicting_duplicate_review_surface_is_rejected(self) -> None:
+        surfaces = self.binding["activation_rules"]["review_surfaces"]
+        conflicting = copy.deepcopy(surfaces[0])
+        conflicting["required_oversight"] = ["assess_integrity"]
+        surfaces.append(conflicting)
+        self.save_binding()
+        with self.assertRaisesRegex(
+            BindingValidationError,
+            "conflicting oversight definitions for duplicate review surface",
+        ):
+            validate_binding(self.root)
+
+    def test_duplicate_oversight_definition_is_rejected_before_deduplication(self) -> None:
+        required = self.binding["activation_rules"]["review_surfaces"][0][
+            "required_oversight"
+        ]
+        required.append(required[0])
+        self.save_binding()
+        with self.assertRaisesRegex(
+            BindingValidationError, "duplicate oversight definition before de-duplication"
+        ):
+            validate_binding(self.root)
+
+    def test_unknown_oversight_definition_is_rejected(self) -> None:
+        self.binding["activation_rules"]["review_surfaces"][0][
+            "required_oversight"
+        ].append("unpublished_capability")
+        self.save_binding()
+        with self.assertRaisesRegex(BindingValidationError, "unknown oversight definition"):
+            validate_binding(self.root)
+
+    def test_disabled_oversight_definition_is_rejected(self) -> None:
+        self.sprite["oversight"]["detect_vulnerabilities"] = False
+        self.save_sprite()
+        with self.assertRaisesRegex(
+            BindingValidationError, "required oversight conflicts with sprite source"
+        ):
+            validate_binding(self.root)
+
+    def test_missing_review_surface_is_rejected(self) -> None:
+        self.binding["activation_rules"]["review_surfaces"].pop()
+        self.save_binding()
+        with self.assertRaisesRegex(BindingValidationError, "review surface set mismatch"):
             validate_binding(self.root)
 
 
