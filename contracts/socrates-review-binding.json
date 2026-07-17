@@ -1,0 +1,42 @@
+{
+  "contract_version": 1,
+  "binding_id": "socrates-external-review-v1",
+  "compatibility_aliases": ["aequitas-external-review-v1"],
+  "sprite_reference": {
+    "sprite_id": "socrates",
+    "path": "sprites/socrates.json",
+    "schema_path": "schema/qso-sprite.schema.json",
+    "schema_version": 1
+  },
+  "activation_rules": {
+    "mode": "external_controller_only",
+    "reviewer_type": "human_or_bounded_repair_agent",
+    "default_on_missing_review": "block_pending_review",
+    "repair_before_escalation": true,
+    "repair_delivery": "draft_pull_request",
+    "merge_authority": false,
+    "deploy_authority": false
+  },
+  "repair_rules": {
+    "safe_repairs_only": true,
+    "require_allow_list": true,
+    "require_reproducible_commands": true,
+    "require_test_pass": true,
+    "require_diff_and_evidence": true,
+    "forbid_invariant_weakening": true,
+    "forbid_automatic_merge": true,
+    "forbid_automatic_deployment": true
+  },
+  "invariants": {
+    "sprite_human_review_required": true,
+    "sprite_may_annotate": true,
+    "sprite_may_block_pending_review": true,
+    "sprite_may_propose_repair": true,
+    "sprite_may_open_repair_pull_request": true,
+    "sprite_may_modify_genome": false,
+    "sprite_may_execute": false,
+    "sprite_may_merge": false,
+    "sprite_may_deploy": false,
+    "sprite_may_override_immutable_ethics": false
+  }
+}
