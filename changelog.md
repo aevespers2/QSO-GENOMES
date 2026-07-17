@@ -32,7 +32,7 @@ All notable product, architecture, implementation, release, and deployment chang
 - Validation of `socrates.json` establishes only schema conformance; it does not authorize Socrates, compatibility aliases, or repair authority for the current release.
 
 ### Repository health
-- Historical snapshot: PR #2 head `46f3248d8f67b7f0cc734159d2fa0a27e6051ea7` was 74 commits ahead and 24 behind default head `0ac8960db20dba6ef083f2cf9d2b491c686eb` at the earlier review point.
+- Historical snapshot: PR #2 head `46f3248d8f67b7f0cc734159d2fa0a27e6051ea7` was 74 commits ahead and 24 behind default head `0ac8960db20dba6ef083d928a44f4ca756d44713` at the earlier review point.
 - Current snapshot: PR #2 is open and non-mergeable at `e51a814cd329c55e45a1599b205ef234859e4848`; default `main` was observed at `20efbbf2f869b48a921519943580d2b491c686eb`; the branch is 86 commits ahead and 28 behind with merge base `c6c6ccdd61391da5fae5a268022c510069016b33`.
 - Snapshot counts are evidence, not stable identifiers. Reconciliation must recapture base, head, ahead/behind state, workflow state, and review-thread state immediately before work begins.
 - Reconciliation must record old base/head, method, conflict resolutions, retained and excluded changes, Socrates disposition, resulting immutable head, review-thread mapping, and renewed evidence.
