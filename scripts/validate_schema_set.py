@@ -16,6 +16,10 @@ REQUIRED_GENOME_FILENAMES = (
     "nova.json",
     "orion.json",
 )
+REQUIRED_SPRITE_FILENAMES = (
+    "aequitas.json",
+    "socrates.json",
+)
 
 VALIDATION_SETS = (
     (
@@ -24,7 +28,7 @@ VALIDATION_SETS = (
     ),
     (
         ROOT / "schema" / "qso-sprite.schema.json",
-        (ROOT / "sprites" / "aequitas.json",),
+        tuple(ROOT / "sprites" / name for name in REQUIRED_SPRITE_FILENAMES),
     ),
 )
 
@@ -88,14 +92,14 @@ def main() -> int:
     validated = 0
     failures: list[str] = []
 
-    try:
-        assert_exact_json_artifact_set(
-            ROOT / "genomes",
-            REQUIRED_GENOME_FILENAMES,
-            label="genome",
-        )
-    except (ArtifactSetError, OSError) as error:
-        failures.append(f"genomes: {error}")
+    for directory, required, label in (
+        (ROOT / "genomes", REQUIRED_GENOME_FILENAMES, "genome"),
+        (ROOT / "sprites", REQUIRED_SPRITE_FILENAMES, "sprite"),
+    ):
+        try:
+            assert_exact_json_artifact_set(directory, required, label=label)
+        except (ArtifactSetError, OSError) as error:
+            failures.append(f"{directory.relative_to(ROOT)}: {error}")
 
     for schema_path, documents in VALIDATION_SETS:
         try:
@@ -108,10 +112,6 @@ def main() -> int:
 
         for document_path in documents:
             if not document_path.is_file():
-                # Exact-set validation above records missing required genomes.
-                if document_path.parent == ROOT / "genomes":
-                    continue
-                failures.append(f"{document_path.relative_to(ROOT)}: missing artifact")
                 continue
 
             try:
