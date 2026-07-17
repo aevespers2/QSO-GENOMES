@@ -21,6 +21,14 @@ A genome is a declarative configuration, not executable code. It defines identit
 - Orion — architecture, interfaces, protocols, systems composition.
 - Lyra — language, ontology, epistemology, etymology, documentation, human context.
 
+## Experimenter role registry
+
+`roles/experimenters.v1.json` defines a declarative twelve-role scientific and invention collective:
+
+`Futurist → Theorist → Inventor → Skeptic → Experimentalist → Observer → Synthesist → Engineer → Optimizer → Strategist → Ethicist/Governor → Archivist`
+
+The registry defines each role's purpose, required outputs, prohibited behaviors, workflow position, and shared immutable boundaries. It is data only and does not grant operational authority.
+
 ## Consumption model
 
-The future `QuantumStateObjects` runtime will load a genome, verify its schema and digest, instantiate a bounded QSO, and keep immutable fields outside the QSO's writable state. Any proposed mutation is recorded separately and evaluated at freeze points.
+The future `QuantumStateObjects` runtime will load a genome, verify its schema and digest, instantiate a bounded QSO, and keep immutable fields outside the QSO's writable state. Any proposed mutation is recorded separately and evaluated at freeze points. QSO-FABRIC may consume the experimenter registry only after validating its schema, version, and digest.
