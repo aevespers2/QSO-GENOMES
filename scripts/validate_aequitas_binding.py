@@ -9,6 +9,13 @@ from pathlib import Path, PurePosixPath
 from typing import Any
 
 EXPECTED_GENOME_IDS = ("atlas", "lyra", "nova", "orion")
+EXPECTED_REVIEW_SURFACE_IDS = (
+    "input",
+    "interpretation",
+    "ontology",
+    "proposed_edit",
+    "communication",
+)
 EXPECTED_INVARIANTS = {
     "sprite_human_review_required",
     "sprite_may_annotate",
@@ -84,6 +91,97 @@ def _require_bool(mapping: dict[str, Any], key: str) -> bool:
     return value
 
 
+def _validate_review_surfaces(binding: dict[str, Any], sprite: dict[str, Any]) -> None:
+    activation_rules = binding.get("activation_rules")
+    if not isinstance(activation_rules, dict):
+        raise BindingValidationError("activation_rules must be an object")
+    review_surfaces = activation_rules.get("review_surfaces")
+    if not isinstance(review_surfaces, list):
+        raise BindingValidationError("activation_rules.review_surfaces must be an array")
+
+    sprite_oversight = sprite.get("oversight")
+    if not isinstance(sprite_oversight, dict):
+        raise BindingValidationError("sprite oversight must be an object")
+    enabled_oversight: set[str] = set()
+    for oversight_id, enabled in sprite_oversight.items():
+        if not isinstance(oversight_id, str) or not oversight_id:
+            raise BindingValidationError("sprite oversight identifiers must be non-empty strings")
+        if type(enabled) is not bool:
+            raise BindingValidationError(
+                f"sprite oversight definition must be boolean: {oversight_id}"
+            )
+        if enabled:
+            enabled_oversight.add(oversight_id)
+
+    seen_surfaces: dict[str, tuple[str, ...]] = {}
+    referenced_oversight: list[str] = []
+    for index, review_surface in enumerate(review_surfaces):
+        if not isinstance(review_surface, dict):
+            raise BindingValidationError(f"review surface {index} must be an object")
+        surface_id = review_surface.get("surface")
+        if not isinstance(surface_id, str) or not surface_id:
+            raise BindingValidationError(f"review surface {index} has invalid surface")
+        required_oversight = review_surface.get("required_oversight")
+        if not isinstance(required_oversight, list) or not required_oversight:
+            raise BindingValidationError(
+                f"review surface {surface_id} required_oversight must be a non-empty array"
+            )
+
+        seen_required: set[str] = set()
+        normalized_required: list[str] = []
+        for oversight_index, oversight_id in enumerate(required_oversight):
+            if not isinstance(oversight_id, str) or not oversight_id:
+                raise BindingValidationError(
+                    f"review surface {surface_id} oversight {oversight_index} must be a non-empty string"
+                )
+            if oversight_id in seen_required:
+                raise BindingValidationError(
+                    "duplicate oversight definition before de-duplication: "
+                    f"{surface_id}.{oversight_id}"
+                )
+            seen_required.add(oversight_id)
+            if oversight_id not in sprite_oversight:
+                raise BindingValidationError(
+                    f"unknown oversight definition for review surface {surface_id}: {oversight_id}"
+                )
+            if sprite_oversight[oversight_id] is not True:
+                raise BindingValidationError(
+                    "required oversight conflicts with sprite source: "
+                    f"{surface_id}.{oversight_id}"
+                )
+            normalized_required.append(oversight_id)
+
+        normalized_tuple = tuple(normalized_required)
+        if surface_id in seen_surfaces:
+            if seen_surfaces[surface_id] != normalized_tuple:
+                raise BindingValidationError(
+                    "conflicting oversight definitions for duplicate review surface "
+                    f"before de-duplication: {surface_id}"
+                )
+            raise BindingValidationError(
+                f"duplicate review surface before de-duplication: {surface_id}"
+            )
+        seen_surfaces[surface_id] = normalized_tuple
+        referenced_oversight.extend(normalized_required)
+
+    expected_surfaces = set(EXPECTED_REVIEW_SURFACE_IDS)
+    actual_surfaces = set(seen_surfaces)
+    if actual_surfaces != expected_surfaces:
+        raise BindingValidationError(
+            "review surface set mismatch: "
+            f"missing={sorted(expected_surfaces - actual_surfaces)}, "
+            f"unexpected={sorted(actual_surfaces - expected_surfaces)}"
+        )
+
+    referenced_set = set(referenced_oversight)
+    if referenced_set != enabled_oversight:
+        raise BindingValidationError(
+            "review surface oversight coverage mismatch: "
+            f"missing={sorted(enabled_oversight - referenced_set)}, "
+            f"unexpected={sorted(referenced_set - enabled_oversight)}"
+        )
+
+
 def validate_binding(root: Path, binding_relative: str = "contracts/aequitas-review-binding.json") -> None:
     root = root.resolve()
     binding_path = _canonical_reference_path(root, binding_relative, binding_relative)
@@ -116,6 +214,8 @@ def validate_binding(root: Path, binding_relative: str = "contracts/aequitas-rev
         raise BindingValidationError("sprite schema lacks schema_version const") from exc
     if schema_const != schema_version:
         raise BindingValidationError("stale sprite schema path or version")
+
+    _validate_review_surfaces(binding, sprite)
 
     references = binding.get("genome_references")
     if not isinstance(references, list):
@@ -203,7 +303,10 @@ def main() -> int:
     except BindingValidationError as exc:
         print(f"FAIL: {exc}")
         return 1
-    print("PASS: Aequitas references and invariants are unique, canonical, and source-consistent")
+    print(
+        "PASS: Aequitas references, review surfaces, oversight definitions, "
+        "and invariants are unique, canonical, and source-consistent"
+    )
     return 0
 
 
