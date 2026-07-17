@@ -31,11 +31,11 @@
     },
     {
       "artifact_id": "QSO-GENOME-IMMUTABLE-ETHICS-MIGRATION-v1",
-      "canonical_bytes": 1773,
+      "canonical_bytes": 2516,
       "kind": "contract",
       "path": "contracts/immutable-ethics-migration-v1.json",
       "schema_version": 1,
-      "sha256": "d56994e90dd9d57a65db62b558d4acbd99b8b28ac8b1e124ed48257a9e29fb30"
+      "sha256": "7677a01c9ea9d35f3c8c3a84e4601c0ffa2ac289aaf65699771e25876bbf8926"
     },
     {
       "artifact_id": "atlas",
@@ -102,5 +102,5 @@
       "sha256": "32752ebfa1ff1e9d60d9a94cd505bfcbc3a27724991e48a238e5261af9ac3d2a"
     }
   ],
-  "set_sha256": "6d9b0ca8c6766fbb63b4613df5b2baee455f1e63c848d6f75e56726efbc57cac"
+  "set_sha256": "99f33227247ef39fef3e1c3206c8ea49b9be9af86148298f07bdbf00b0cd6921"
 }
