@@ -35,6 +35,30 @@
     "local_conflict_result": "reject_genome",
     "missing_or_mismatched_protocol_result": "reject_genome"
   },
+  "local_ethics_policy": {
+    "binding_mode": "exact_canonical_list_digest",
+    "unbound_addition_result": "reject_genome",
+    "conflicting_addition_result": "reject_genome",
+    "change_requires_new_migration_version": true
+  },
+  "local_ethics_bindings": [
+    {
+      "path": "genomes/atlas.json",
+      "canonical_sha256": "8042611f3a27f986333ce94508bba77634b73e0398528abe9a4282913d32e0f7"
+    },
+    {
+      "path": "genomes/lyra.json",
+      "canonical_sha256": "61b90bd918b27b64a7288fd4eecba99a65d7941910575902b5ae7f9b36ac27af"
+    },
+    {
+      "path": "genomes/nova.json",
+      "canonical_sha256": "d8bf979ee100c3a6d3402dc3150d3f864430983662951cb0a4023a7bd43f5c04"
+    },
+    {
+      "path": "genomes/orion.json",
+      "canonical_sha256": "6d8df2621f2066aff20a3d9ca16a1eb509254a3cfa2137311f31eb160713976a"
+    }
+  ],
   "consumer_requirements": {
     "validate_before_genome_use": true,
     "require_exact_path": true,
@@ -52,6 +76,6 @@
   "approval": {
     "state": "not_accepted",
     "required_action": "human_review",
-    "acceptance_condition": "A clean replay verifies this migration, the exact protocol digest, all four genome references, and downstream fail-closed behavior at one reviewed commit."
+    "acceptance_condition": "A clean replay verifies this migration, the exact protocol digest, unique migration paths, the exact bound local-ethics lists for all four genomes, and downstream fail-closed behavior at one reviewed commit."
   }
 }
