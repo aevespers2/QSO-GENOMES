@@ -13,6 +13,9 @@ ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = ROOT / "manifests" / "qso-genomes-compatibility-v1.json"
 PROFILE_ID = "qso-canonical-json-v1"
 COMPATIBILITY_SET_ID = "qso-genomes-four-object-v1"
+SET_DIGEST_PROFILE = "qso-genomes-manifest-identity-v1"
+SET_DIGEST_SCOPE = "complete_identity_manifest"
+SET_DIGEST_EXCLUDED_FIELDS = ("status", "set_sha256")
 
 ARTIFACT_SPECS = (
     ("contract", "aequitas-external-review-v1", "contracts/aequitas-review-binding.json", "contract_version"),
@@ -85,6 +88,38 @@ def _resolve_version(document: Any, version_path: str) -> int:
     return value
 
 
+def set_digest_metadata() -> dict[str, Any]:
+    """Return the versioned rules that define compatibility-set identity."""
+    return {
+        "algorithm": "sha256",
+        "profile": SET_DIGEST_PROFILE,
+        "scope": SET_DIGEST_SCOPE,
+        "excluded_fields": list(SET_DIGEST_EXCLUDED_FIELDS),
+    }
+
+
+def manifest_identity_payload(manifest: dict[str, Any]) -> dict[str, Any]:
+    """Select every identity-bearing manifest field for set hashing.
+
+    Lifecycle status is deliberately excluded so an accepted candidate retains
+    the same set identity. The digest value itself is excluded to avoid
+    recursion. Manifest version, set ID, complete canonicalization rules, digest
+    semantics, and every artifact descriptor are identity-bearing.
+    """
+    return {
+        "manifest_version": manifest["manifest_version"],
+        "compatibility_set_id": manifest["compatibility_set_id"],
+        "canonicalization": manifest["canonicalization"],
+        "set_digest": manifest["set_digest"],
+        "artifacts": manifest["artifacts"],
+    }
+
+
+def compute_set_sha256(manifest: dict[str, Any]) -> str:
+    """Hash the complete versioned identity manifest under QSO Canonical JSON v1."""
+    return sha256_hex(canonical_bytes(manifest_identity_payload(manifest)))
+
+
 def build_manifest(root: Path = ROOT) -> dict[str, Any]:
     artifacts: list[dict[str, Any]] = []
     for kind, artifact_id, relative_path, version_path in ARTIFACT_SPECS:
@@ -103,15 +138,7 @@ def build_manifest(root: Path = ROOT) -> dict[str, Any]:
         )
 
     artifacts.sort(key=lambda item: item["path"])
-    set_payload = {
-        "compatibility_set_id": COMPATIBILITY_SET_ID,
-        "artifacts": [
-            {"path": item["path"], "sha256": item["sha256"]}
-            for item in artifacts
-        ],
-    }
-
-    return {
+    manifest = {
         "manifest_version": 1,
         "compatibility_set_id": COMPATIBILITY_SET_ID,
         "status": "candidate",
@@ -125,9 +152,11 @@ def build_manifest(root: Path = ROOT) -> dict[str, Any]:
             "non_finite_numbers": "rejected",
             "trailing_bytes": "LF",
         },
+        "set_digest": set_digest_metadata(),
         "artifacts": artifacts,
-        "set_sha256": sha256_hex(canonical_bytes(set_payload)),
     }
+    manifest["set_sha256"] = compute_set_sha256(manifest)
+    return manifest
 
 
 def rendered_manifest(root: Path = ROOT) -> str:
@@ -164,6 +193,7 @@ def main() -> int:
         print(
             "PASS: "
             f"{len(manifest['artifacts'])} artifacts; "
+            f"set_digest_profile={manifest['set_digest']['profile']}; "
             f"set_sha256={manifest['set_sha256']}"
         )
         return 0
@@ -173,6 +203,7 @@ def main() -> int:
     print(
         f"WROTE: {MANIFEST_PATH.relative_to(ROOT)}; "
         f"{len(manifest['artifacts'])} artifacts; "
+        f"set_digest_profile={manifest['set_digest']['profile']}; "
         f"set_sha256={manifest['set_sha256']}"
     )
     return 0
