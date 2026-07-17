@@ -55,12 +55,16 @@ jobs:
           set -euo pipefail
           level="$(cat inspector-escalation.txt)"
           count="$(python -c 'import json; print(json.load(open("inspector-audit-report.json"))["finding_count"])')"
+          gh label create inspector --repo "$REPOSITORY" --description "Independent random control audit" --force
           if [[ "$level" == "control-system-rework" ]]; then
             title="[Inspector] Control-system rework required"
             labels="inspector,governance-rework,release-blocked"
+            gh label create governance-rework --repo "$REPOSITORY" --description "Three or more Inspector findings require control redesign" --force
+            gh label create release-blocked --repo "$REPOSITORY" --description "Acceptance, release, and deployment promotion blocked" --force
           else
             title="[Inspector] Governance investigation required"
             labels="inspector,governance-investigation"
+            gh label create governance-investigation --repo "$REPOSITORY" --description "Inspector finding requires root-cause investigation" --force
           fi
           body_file="$(mktemp)"
           {
