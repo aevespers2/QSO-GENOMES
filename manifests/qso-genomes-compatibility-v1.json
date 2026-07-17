@@ -12,6 +12,30 @@
     "non_finite_numbers": "rejected",
     "trailing_bytes": "LF"
   },
+  "digest_semantics": {
+    "algorithm": "SHA-256",
+    "artifact_sha256": {
+      "input": "canonical_artifact_bytes",
+      "canonicalization_profile": "qso-canonical-json-v1"
+    },
+    "set_sha256": {
+      "input": "canonical_manifest_identity",
+      "canonicalization_profile": "qso-canonical-json-v1",
+      "top_level_field_rule": "all_except_excluded",
+      "excluded_top_level_fields": [
+        "set_sha256",
+        "status"
+      ],
+      "artifact_descriptor_fields": [
+        "artifact_id",
+        "canonical_bytes",
+        "kind",
+        "path",
+        "schema_version",
+        "sha256"
+      ]
+    }
+  },
   "artifacts": [
     {
       "artifact_id": "aequitas-external-review-v1",
@@ -102,5 +126,5 @@
       "sha256": "32752ebfa1ff1e9d60d9a94cd505bfcbc3a27724991e48a238e5261af9ac3d2a"
     }
   ],
-  "set_sha256": "99f33227247ef39fef3e1c3206c8ea49b9be9af86148298f07bdbf00b0cd6921"
+  "set_sha256": "2b59fe7c865409f9112eb3d21bb1954abb7c8195eaa7758da6602fec8410ba6e"
 }
