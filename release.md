@@ -2,11 +2,13 @@
 
 ## Current Decision
 
-Status: `BLOCKED — EXACT-HEAD REVIEW AND CONFORMANCE EVIDENCE REQUIRED`
+Status: `BLOCKED — PR RECONCILIATION, EXACT-HEAD REVIEW, AND CONFORMANCE EVIDENCE REQUIRED`
 
-QSO-GENOMES remains the portfolio's highest-priority declarative contract dependency. PR #2 is the single canonical submission path, currently at submitted head `2d42c960cefb70fdaada969e75debf50fb06f36c`. The prior fifteen-commit remediation lineage and synchronized product/release documentation are on that branch, resolving the competing-head decision without promoting the candidate.
+QSO-GENOMES remains the portfolio's highest-priority declarative contract dependency. PR #2 is the single canonical submission path at submitted head `2d42c960cefb70fdaada969e75debf50fb06f36c`; the prior remediation lineage is present on that branch, resolving the earlier competing-head decision without promoting the candidate.
 
-The review timeline contains twenty threads: four resolved/outdated, one unresolved/outdated release-sync thread, and fifteen current unresolved findings. No GitHub Actions workflow run is attached to the current head. Candidate reports and focused local tests are preserved as implementation evidence, not independent release verification.
+The canonical submission is not currently mergeable. GitHub reports PR #2 as `mergeable: false`, and comparison with current `main` shows the PR branch is diverged, 62 commits ahead and 19 commits behind, with merge base `c6c6ccdd61391da5fae5a268022c510069016b33`. Reconciliation must preserve the existing review lineage, produce one new immutable submitted head, and trigger fresh review and exact-head evidence.
+
+The review timeline contains twenty threads: four resolved/outdated, one unresolved/outdated release-sync thread, and fifteen current unresolved findings. No GitHub Actions workflow run or status check is attached to the current submitted head. Candidate reports and focused local tests are preserved as implementation evidence, not independent release verification.
 
 ## Versioning
 
@@ -40,10 +42,11 @@ PR #2 and its reports record:
 - focused reports of four exact-set tests, five migration tests, and eight Aequitas reference-integrity tests under CPython 3.13.5;
 - reachable provenance and synchronized product/release documentation.
 
-These are candidate claims. They do not establish accepted digest semantics, complete immutable enforcement, reproducible installation, exact-head CI, independent clean replay, downstream compatibility, or release approval.
+These are candidate claims. They do not establish a mergeable final state, accepted digest semantics, complete immutable enforcement, reproducible installation, exact-head CI, independent clean replay, downstream compatibility, or release approval.
 
 ## Current Blocking Findings
 
+- PR #2 is diverged from `main`, GitHub reports it non-mergeable, and any reconciliation will create a new head requiring renewed review and evidence.
 - The compatibility manifest does not bind the immutable protocol and migration that establish the full protection boundary.
 - Local ethics additions are not validated for conflict with the authoritative protocol.
 - Duplicate migration paths can pass after set conversion.
@@ -59,7 +62,8 @@ These are candidate claims. They do not establish accepted digest semantics, com
 
 | Gate | Status | Requirement |
 |---|---|---|
-| Canonical submission | PASS | Existing PR #2 is the sole submitted path and contains the consolidated remediation and documentation lineage. |
+| Canonical path | PASS | PR #2 remains the sole submitted review path; no competing release PR is authorized. |
+| Mergeability/reconciliation | FAIL | Reconcile the branch with current `main` without losing review provenance, then freeze and review one new immutable submitted head. |
 | Candidate review | FAIL | Resolve or disposition all sixteen unresolved threads against the final immutable submitted head. |
 | Set completeness | REVIEW | Exact Atlas/Nova/Orion/Lyra enforcement exists as candidate code; replay and review acceptance remain. |
 | Immutable policy | FAIL | Bind protocol/migration into set identity and reject conflicting or duplicate local migration entries. |
@@ -69,7 +73,7 @@ These are candidate claims. They do not establish accepted digest semantics, com
 | CI semantics | FAIL | Certify the submitted head and retain exact workflow evidence. |
 | Negative fixtures | INCOMPLETE | All missing, stale, duplicate, conflicting, mutated, and incompatible cases must fail closed. |
 | Downstream consumption | BLOCKED | Both runtime consumers must verify the same accepted commit and identities read-only. |
-| Status checks | NO EVIDENCE | No workflow run is attached to current head `2d42c960cefb70fdaada969e75debf50fb06f36c`. |
+| Status checks | NO EVIDENCE | No workflow run or status check is attached to submitted head `2d42c960cefb70fdaada969e75debf50fb06f36c`. |
 | Security | PARTIAL | Data-only boundary is declared; independent final-state verification remains. |
 | Approval | PENDING | Explicit release approval only after every blocking gate passes. |
 
@@ -78,16 +82,18 @@ These are candidate claims. They do not establish accepted digest semantics, com
 - Versioned schemas, four genomes, immutable protocol and migration, Aequitas definition, and forbidden-capability rules.
 - Complete compatibility manifest with source-derived identity fields and explicit digest scopes.
 - Validator and deterministic positive/negative/boundary/migration/duplicate/conflict fixture bundles.
+- Branch-reconciliation record showing old head, `main` base, merge/rebase method, resulting immutable head, and preservation of review provenance.
 - Review-thread disposition map tied to the final head.
 - Exact-head CI logs, clean-checkout report, downstream reports, source archive, security-boundary report, dependency/SBOM record where applicable, SHA-256 checksums, provenance manifest, and rollback instructions.
 
 ## Rollback Criteria
 
-Reject or roll back the candidate if the reviewed and released heads differ; any required artifact or identity binding is missing; hashes or metadata change without approved versioning; immutable protections are weakened or contradicted; duplicate paths, references, surfaces, or identities pass; dependencies are undeclared; CI certifies the wrong state; provenance is unreachable; consumers do not fail closed; or executable authority is introduced. Preserve rejected manifests, fixtures, reports, workflow logs, hashes, review dispositions, and supersession records.
+Reject or roll back the candidate if branch reconciliation loses reviewed changes or review provenance; the reviewed and released heads differ; any required artifact or identity binding is missing; hashes or metadata change without approved versioning; immutable protections are weakened or contradicted; duplicate paths, references, surfaces, or identities pass; dependencies are undeclared; CI certifies the wrong state; provenance is unreachable; consumers do not fail closed; or executable authority is introduced. Preserve rejected heads, manifests, fixtures, reports, workflow logs, hashes, review dispositions, and supersession records.
 
 ## Release Log
 
 - 2026-07-16 — Confirmed the complete four-genome contract as the highest-priority portfolio unblocker.
 - 2026-07-16 — Advanced the objective to independent acceptance of PR #2 and held release blocked on review, CI, provenance, identity, and downstream evidence.
-- 2026-07-16 — Consolidated the fifteen-commit remediation lineage onto PR #2, making canonical submission `PASS` without changing release priority or approval state.
-- 2026-07-16 — Synchronized product and release directives on the default and PR branches, recorded five additional integrity findings, and confirmed no exact-head workflow run; release remains blocked.
+- 2026-07-16 — Consolidated the fifteen-commit remediation lineage onto PR #2, making the canonical path singular without changing release priority or approval state.
+- 2026-07-16 — Synchronized product and release directives on the default and PR branches, recorded five additional integrity findings, and confirmed no exact-head workflow run.
+- 2026-07-16 — Recorded that PR #2 is diverged, 62 commits ahead and 19 behind current `main`, and currently non-mergeable; release remains blocked pending provenance-preserving reconciliation and complete renewed acceptance evidence.
