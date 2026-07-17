@@ -1,0 +1,23 @@
+{
+  "repository": "QSO-GENOMES",
+  "phase_order": ["foundation", "contracts", "implementation", "assurance", "integration", "release"],
+  "groups": {
+    "": ["LICENSE", "pyproject.toml", "requirements.txt", "CHANGELOG.md", "SECURITY.md", "CONTRIBUTING.md"],
+    "schemas": ["experimenter-role.schema.json", "experimenter-registry.schema.json", "experimenter-genome.schema.json", "workflow.schema.json", "capability-policy.schema.json", "immutable-boundaries.schema.json", "compatibility-manifest.schema.json"],
+    "roles": ["futurist.v1.json", "theorist.v1.json", "inventor.v1.json", "skeptic.v1.json", "experimentalist.v1.json", "observer.v1.json", "synthesist.v1.json", "engineer.v1.json", "optimizer.v1.json", "strategist.v1.json", "ethicist-governor.v1.json", "archivist.v1.json"],
+    "genomes/experimenters": ["futurist.genome.json", "theorist.genome.json", "inventor.genome.json", "skeptic.genome.json", "experimentalist.genome.json", "observer.genome.json", "synthesist.genome.json", "engineer.genome.json", "optimizer.genome.json", "strategist.genome.json", "ethicist-governor.genome.json", "archivist.genome.json"],
+    "workflows": ["default-scientific-loop.v1.json", "invention-loop.v1.json", "falsification-loop.v1.json", "rapid-prototype-loop.v1.json", "future-scenarios-loop.v1.json", "independent-review-loop.v1.json"],
+    "policies": ["immutable-ethics.v1.json", "capability-denylist.v1.json", "communication-limits.v1.json", "resource-limits.v1.json", "goal-evolution.v1.json", "human-review.v1.json", "freeze-policy.v1.json", "provenance-policy.v1.json"],
+    "manifests": ["experimenters-compatibility.v1.json", "artifact-checksums.sha256", "release-manifest.json"],
+    "migrations": ["README.md"],
+    "migrations/v1": ["migration-plan.json", "compatibility-fixtures.json", "rollback-plan.md"],
+    "scripts": ["validate_registry.py", "validate_genomes.py", "validate_workflows.py", "generate_manifest.py", "verify_checksums.py", "canonicalize_json.py"],
+    "tests": ["test_role_schema.py", "test_registry_exact_set.py", "test_genome_schema.py", "test_immutable_boundaries.py", "test_workflow_references.py", "test_manifest_integrity.py", "test_canonicalization.py"],
+    "tests/fixtures/valid": [".gitkeep"],
+    "tests/fixtures/invalid": [".gitkeep"],
+    "docs": ["architecture.md", "role-contract.md", "genome-contract.md", "workflow-contract.md", "compatibility-contract.md", "governance.md", "threat-model.md"],
+    "docs/role-catalog": ["futurist.md", "theorist.md", "inventor.md", "skeptic.md", "experimentalist.md", "observer.md", "synthesist.md", "engineer.md", "optimizer.md", "strategist.md", "ethicist-governor.md", "archivist.md"],
+    ".github/workflows": ["validate-genomes.yml", "validate-registry.yml", "compatibility.yml", "security-review.yml"],
+    ".github": ["CODEOWNERS", "pull_request_template.md"]
+  }
+}
