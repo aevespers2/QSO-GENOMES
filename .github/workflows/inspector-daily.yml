@@ -1,0 +1,87 @@
+name: Daily Inspector Audit
+
+on:
+  schedule:
+    - cron: "23 11 * * *"
+  workflow_dispatch:
+    inputs:
+      sample_size:
+        description: Pull requests to sample
+        required: false
+        default: "5"
+
+permissions:
+  contents: read
+  actions: read
+  pull-requests: read
+  issues: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out governance controls
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Run independent random audit
+        id: audit
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          INSPECTOR_SAMPLE_SIZE: ${{ inputs.sample_size || '5' }}
+          INSPECTOR_LOOKBACK_DAYS: "30"
+        run: python scripts/inspector_audit.py
+      - name: Retain audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: inspector-audit-${{ github.run_id }}
+          path: |
+            inspector-audit-report.json
+            inspector-escalation.txt
+          if-no-files-found: error
+          retention-days: 90
+      - name: Escalate findings
+        if: steps.audit.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          level="$(cat inspector-escalation.txt)"
+          count="$(python -c 'import json; print(json.load(open("inspector-audit-report.json"))["finding_count"])')"
+          if [[ "$level" == "control-system-rework" ]]; then
+            title="[Inspector] Control-system rework required"
+            labels="inspector,governance-rework,release-blocked"
+          else
+            title="[Inspector] Governance investigation required"
+            labels="inspector,governance-investigation"
+          fi
+          body_file="$(mktemp)"
+          {
+            echo "The daily Inspector audit found **${count}** technical control failure(s)."
+            echo
+            echo "Escalation: **${level}**"
+            echo
+            echo "Workflow evidence: ${RUN_URL}"
+            echo
+            echo '```json'
+            cat inspector-audit-report.json
+            echo '```'
+            echo
+            echo "This issue remains open until every cited defect is technically resolved and the root cause is documented. Three or more findings require redesign and revalidation of the control package before acceptance, release, or deployment promotion."
+          } > "$body_file"
+          existing="$(gh issue list --repo "$REPOSITORY" --state open --search "$title in:title" --json number --jq '.[0].number // empty')"
+          if [[ -n "$existing" ]]; then
+            gh issue comment "$existing" --repo "$REPOSITORY" --body-file "$body_file"
+          else
+            gh issue create --repo "$REPOSITORY" --title "$title" --body-file "$body_file" --label "$labels"
+          fi
+      - name: Enforce audit result
+        if: steps.audit.outcome == 'failure'
+        run: exit 1
