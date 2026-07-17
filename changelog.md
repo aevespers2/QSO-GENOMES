@@ -10,7 +10,7 @@ All notable product, architecture, implementation, release, and deployment chang
 - 2026-07-16 — Advanced the objective from candidate creation to independent acceptance of PR #2, preserving QSO-GENOMES as the highest portfolio unblocker while requiring exact-head evidence.
 - 2026-07-16 — Selected existing PR #2 as the single canonical submission path and consolidated remediation there rather than opening a competing release PR.
 - 2026-07-16 — Changed the local execution order after GitHub reported PR #2 non-mergeable and diverged from `main`: provenance-preserving branch reconciliation and one frozen submitted head now precede further exact-head remediation.
-- 2026-07-17 — Kept portfolio priority unchanged after PR #2 advanced to head `e51a814cd329c55e45a1599b205ef234859e4848`; reconciliation remains P0 because the branch is now 86 commits ahead and 28 behind `main`.
+- 2026-07-17 — Kept portfolio priority unchanged after PR #2 advanced to head `e51a814cd329c55e45a1599b205ef234859e4848`; reconciliation remains P0 because the branch is materially diverged and exact-head evidence cannot stabilize while either side continues moving.
 - 2026-07-17 — Scoped the first eligible alpha to the four genomes and the approved Aequitas boundary. Socrates, Aequitas compatibility aliases, and repair-pull-request authority are quarantined from the current release candidate and require a separately versioned migration plus explicit product and security approval.
 
 ### Architecture
@@ -33,9 +33,9 @@ All notable product, architecture, implementation, release, and deployment chang
 
 ### Repository health
 - Historical snapshot: PR #2 head `46f3248d8f67b7f0cc734159d2fa0a27e6051ea7` was 74 commits ahead and 24 behind default head `0ac8960db20dba6ef083d928a44f4ca756d44713` at the earlier review point.
-- Current snapshot: PR #2 is open and non-mergeable at `e51a814cd329c55e45a1599b205ef234859e4848`; default `main` was observed at `20efbbf2f869b48a921519943580d2b491c686eb`; the branch is 86 commits ahead and 28 behind with merge base `c6c6ccdd61391da5fae5a268022c510069016b33`.
-- Snapshot counts are evidence, not stable identifiers. Reconciliation must recapture base, head, ahead/behind state, workflow state, and review-thread state immediately before work begins.
-- Reconciliation must record old base/head, method, conflict resolutions, retained and excluded changes, Socrates disposition, resulting immutable head, review-thread mapping, and renewed evidence.
+- Review-start snapshot: PR #2 was open and non-mergeable at `e51a814cd329c55e45a1599b205ef234859e4848`; then-current `main` was `20efbbf2f869b48a921519943580d2b491c686eb`; the branch was 86 commits ahead and 28 behind with merge base `c6c6ccdd61391da5fae5a268022c510069016b33`.
+- Governance-document commits made during this review intentionally advance `main`, so the review-start counts are historical evidence rather than current reconciliation inputs.
+- Reconciliation must recapture base, head, ahead/behind state, workflow state, and review-thread state immediately before work begins, then record method, conflict resolutions, retained and excluded changes, Socrates disposition, resulting immutable head, and renewed evidence.
 
 ### Review findings
 - Material findings include complete immutable-statement enforcement; approved protocol-content pinning; migration source-profile, contract-ID, protocol-ID, status, boundary, exact-key, and unique-path checks; Aequitas identity, activation, per-surface oversight, duplicate-reference, duplicate-surface, and source-integrity checks; overflowed-number rejection; digest-scope semantics; exact-head provenance; and review-thread disposition.
