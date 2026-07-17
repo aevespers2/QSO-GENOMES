@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import importlib.util
 import json
 import sys
@@ -63,8 +64,43 @@ class ContractManifestTests(unittest.TestCase):
         self.assertEqual(first, second)
         self.assertEqual(first["set_sha256"], committed["set_sha256"])
         self.assertEqual(
-            "4ed083cb204a77d1f1878aea8dbf9c61f996541c9b4de83c812bb461530d3eac",
+            "3583dd05506c8d2921554676f80140cd66efa23a83154dbf4536ed51e56d5ed6",
             first["set_sha256"],
+        )
+
+    def test_digest_covers_all_identity_bearing_metadata(self) -> None:
+        manifest = manifest_tool.build_manifest(ROOT)
+        expected = manifest["set_sha256"]
+        mutations = (
+            ("manifest_version", lambda value: value + 1),
+            ("compatibility_set_id", lambda value: value + "-changed"),
+            ("canonicalization", lambda value: {**value, "encoding": "UTF-16"}),
+            ("set_digest", lambda value: {**value, "profile": "changed"}),
+            (
+                "artifacts",
+                lambda value: [
+                    {**value[0], "artifact_id": value[0]["artifact_id"] + "-changed"},
+                    *value[1:],
+                ],
+            ),
+        )
+        for field, mutate in mutations:
+            with self.subTest(field=field):
+                changed = copy.deepcopy(manifest)
+                changed[field] = mutate(changed[field])
+                self.assertNotEqual(expected, manifest_tool.compute_set_sha256(changed))
+
+    def test_status_is_explicitly_non_identity_bearing(self) -> None:
+        manifest = manifest_tool.build_manifest(ROOT)
+        accepted = copy.deepcopy(manifest)
+        accepted["status"] = "accepted"
+        self.assertEqual(
+            manifest["set_sha256"],
+            manifest_tool.compute_set_sha256(accepted),
+        )
+        self.assertEqual(
+            ["status", "set_sha256"],
+            manifest["set_digest"]["excluded_fields"],
         )
 
 
