@@ -7,38 +7,37 @@ All notable product, architecture, implementation, release, and deployment chang
 ### Product
 - 2026-07-16 — Defined the MVP as a complete, deterministic Atlas/Nova/Orion/Lyra compatibility set with immutable ethics, Aequitas references, canonical hashes, and an independent consumer manifest.
 - 2026-07-16 — Confirmed this repository remains declarative and data-only; executable behavior and payment authority are out of scope.
-- 2026-07-16 — Advanced the next objective from creating the missing compatibility set to independently accepting or rejecting PR #2. This preserves QSO-GENOMES as the highest portfolio unblocker while requiring evidence rather than accepting self-reported results.
-- 2026-07-16 — Retained the same portfolio priority after partial review progress: four earlier provenance threads are resolved/outdated, but eleven review threads remain unresolved and acceptance is still blocked.
-- 2026-07-16 — Refined P0 to require one canonical submitted review head before further acceptance work. Exact-set, immutable-migration, and Aequitas-integrity remediations currently exist on a fifteen-commit chain ahead of PR #2, so branch-only progress cannot close PR findings or unlock independent acceptance.
+- 2026-07-16 — Advanced the objective from candidate creation to independent acceptance of PR #2, preserving QSO-GENOMES as the highest portfolio unblocker while requiring exact-head evidence.
+- 2026-07-16 — Selected existing PR #2 as the single canonical submission path and fast-forwarded its branch through the fifteen-commit remediation lineage rather than opening a competing pull request.
+- 2026-07-16 — Kept portfolio priority unchanged after consolidation. The immediate P0 focus is now manifest identity, immutable binding, duplicate/conflict validation, reproducible dependencies, exact-head CI, and review-thread disposition.
 
 ### Architecture
 - QSO-GENOMES is the highest upstream contract blocker for the four-QSO portfolio and must publish schema/version/hash boundaries before runtime integration proceeds.
-- The accepted set identity must bind all consumer-relevant manifest metadata, or explicitly distinguish an artifact-only digest from the full compatibility-manifest identity.
-- Immutable protections must be derived from or proven equivalent to the approved immutable-ethics protocol; a weaker parallel baseline is not acceptable.
-- All accepted remediations must converge on one submitted commit lineage so workflow, provenance, review-thread, manifest, and downstream evidence refer to the same immutable candidate.
+- The accepted set identity must bind all consumer-relevant manifest metadata, including the authoritative immutable protocol and migration, or explicitly distinguish separate digest scopes.
+- Immutable protections must be derived from or proven equivalent to the approved immutable-ethics protocol, and local additions must fail closed when conflicting or duplicated.
+- Manifest identity-bearing fields must be validated against source documents rather than trusted from hard-coded generator metadata.
+- Aequitas references and review surfaces must be unique before set/dictionary normalization.
 
 ### Candidate implementation
-- PR #2 proposes the missing Atlas genome, an immutable baseline, an Aequitas review binding, deterministic canonicalization, a nine-artifact manifest, conformance tests, reports, and a workflow.
-- PR #2 reports sixteen passing tests, a nine-artifact replay, and set digest `4ed083cb204a77d1f1878aea8dbf9c61f996541c9b4de83c812bb461530d3eac`.
-- Subsequent candidate work adds exact four-genome enforcement, an explicit immutable-ethics migration, and Aequitas reference/invariant validation on remediation head `8c3d4ad3a8fc8cae864586d873cca319225c3e1d`, which is fifteen commits ahead of PR #2 head `5a435807487fd713c87465f3d23aaf9cd7cdd2b4`.
-- These remain candidate claims: the remediation chain is not the submitted PR head, no release approval exists, exact-head CI and downstream validation are not accepted, and review findings remain unresolved.
+- PR #2 proposes the missing Atlas genome, immutable baseline, Aequitas review binding, deterministic canonicalization, a compatibility manifest, conformance tests, reports, and a workflow.
+- Earlier branch evidence reports sixteen passing tests, a nine-artifact replay, and candidate set digest `4ed083cb204a77d1f1878aea8dbf9c61f996541c9b4de83c812bb461530d3eac`.
+- The canonical submitted head is now `ffd631fb99fa4817a9520b73a69c0f719dbaa320`; it includes exact four-genome enforcement, a versioned immutable-ethics migration, Aequitas reference/invariant validation, reachable provenance work, and consolidation documentation.
+- Additional focused reports record four exact-set tests, five migration tests, and eight Aequitas reference-integrity tests under CPython 3.13.5.
+- These remain candidate claims: no exact-head workflow run, independent clean-checkout replay, accepted release identity, downstream verification, or publication approval exists.
 
 ### Review findings
-- Reachable submitted-state provenance must replace references to inaccessible, sibling, or non-ancestor source states.
-- Validation must assert the exact Atlas/Nova/Orion/Lyra set rather than whatever JSON files happen to be present.
-- Immutable tests must compare complete approved statements or explicit versioned variants and must not validate a weaker baseline than the published protocol.
-- Aequitas tests must validate the published invariants, reject duplicate/stale references before de-duplication, and prove source consistency.
-- Schema-validation dependencies must be declared or removed; the conformance workflow must not enable pip caching without a dependency file.
-- Pull-request CI must check out or explicitly record the submitted head rather than silently certifying only a synthetic merge commit.
-- Review-thread state currently records fifteen total threads, four resolved/outdated and eleven unresolved.
-- The Architect must choose whether PR #2 advances to the consolidated remediation head or is superseded by a replacement PR with preserved review provenance; no additional remediation branch should be treated as accepted until that path is recorded.
+- The current review timeline contains twenty threads: four resolved/outdated, one unresolved/outdated release-sync thread, and fifteen current unresolved findings.
+- Existing blockers include complete immutable-statement enforcement, invariant/source validation, declared schema dependency, compatibility-set digest semantics, pip-cache setup, submitted-head checkout, duplicate reference rejection, and final reachable provenance.
+- Consolidation surfaced five additional gaps: the manifest omits the immutable migration/protocol binding; local ethics conflicts are not rejected; artifact identifiers are not validated against source documents; duplicate migration paths can pass; and duplicate Aequitas review surfaces can pass.
+- Every finding must be resolved or explicitly dispositioned against the final immutable submitted head before acceptance.
 
 ### Release
-- The candidate remains blocked until one canonical submitted head contains the intended fixes, review findings are resolved against it, clean-checkout/CI replay passes at that exact head, remaining fail-closed fixtures pass, downstream consumers validate the accepted set, and provenance/checksum/rollback evidence is retained.
-- No release, tag, or downstream compatibility claim is authorized from the current PR or side-branch evidence alone.
+- The candidate remains blocked until exact-head CI or independent clean replay succeeds, all blocking findings and adversarial fixtures pass, downstream consumers validate the accepted set, and provenance/checksum/rollback evidence is retained.
+- Consolidating the submission path is a review correction, not a release promotion.
+- No release, tag, deployment, or downstream compatibility claim is authorized from current candidate evidence alone.
 
 ### Deployment
-- No deployment surface is authorized; consumers retrieve versioned declarative artifacts only.
+- No deployment surface is authorized; consumers retrieve only an approved, versioned declarative artifact set.
 
 ## Entry Format
 - Date
