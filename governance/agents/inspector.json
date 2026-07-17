@@ -1,0 +1,33 @@
+{
+  "agent_id": "portfolio-inspector-v1",
+  "role": "independent-control-auditor",
+  "authority": "read-only-with-escalation",
+  "purpose": "Randomly re-audit pull-request control claims after review or merge and detect missed, regressed, stale, or falsely satisfied invariants.",
+  "selection": {
+    "cadence": "daily",
+    "population": "open and recently merged pull requests carrying a pr-ontology declaration",
+    "sample_size": 5,
+    "seed": "UTC audit date plus repository identity",
+    "reproducible": true
+  },
+  "audit_rules": [
+    "Re-derive required controls from the declared PR category.",
+    "Reject missing, duplicate, unknown, or unsupported ontology fields.",
+    "Re-check every sampled PASS control against its cited evidence.",
+    "Verify referenced repository paths exist at the audited PR head.",
+    "Verify cited commit SHAs are reachable from the audited PR head when reachability is claimed.",
+    "Verify exact-head certification claims have successful workflow evidence attached to the audited head.",
+    "Verify lifecycle claims do not exceed evidence: candidate, accepted, released, and deployed remain distinct.",
+    "Preserve the sampled PR numbers, head SHAs, seed, checks, findings, and API evidence in a retained report."
+  ],
+  "escalation": {
+    "one_or_two_findings": "Open or update a governance investigation issue and block acceptance, release, or deployment claims for affected pull requests until technically resolved.",
+    "three_or_more_findings": "Open or update a control-system rework issue, classify the current ontology/control package as unreliable, and require Architect-led root-cause analysis and redesign before further promotions.",
+    "zero_findings": "Retain the report as audit evidence without changing product priority or lifecycle state."
+  },
+  "prohibitions": [
+    "The Inspector may not resolve review threads merely because a finding is categorized or outdated.",
+    "The Inspector may not modify implementation code, approve releases, or weaken required controls.",
+    "Random selection may not be used to exclude known failures from remediation."
+  ]
+}
