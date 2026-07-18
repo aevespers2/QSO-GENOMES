@@ -1,46 +1,47 @@
 # QSOBuilder Punch List
 
-The Architect controls dependency order in `taskchain.md`. Execute only the first unblocked item and attach reproducible evidence. PR #2 is the canonical candidate under review, not an accepted release. A checked implementation item means the candidate contains an attempted remediation; it does not mean the review finding or release gate is accepted.
+The Architect controls dependency order in `taskchain.md`. PR #2 is the sole canonical candidate, not an accepted release. A checked implementation item means candidate remediation is present somewhere in the submitted lineage; it does not mean the finding is accepted. **Do not add further acceptance-remediation commits until the Architect completes P0a reconciliation and freezes one mergeable head, unless an explicit bounded exception is recorded.**
 
-## Immediate — PR #2 acceptance findings
+## P0a — Architect reconciliation and scope containment
 
-- [x] Replace inaccessible or non-ancestor intermediate commit references with reachable submitted-state provenance. **Candidate remediation present; final review disposition and exact-head replay remain.**
-- [x] Make schema validation assert the exact required Atlas, Nova, Orion, and Lyra artifact set. **Candidate remediation present; review thread remains open.**
-- [x] Record an explicit versioned migration binding the full approved immutable-ethics protocol. **Candidate artifact present; complete enforcement and final acceptance remain open.**
-- [x] Add Aequitas invariant/reference validation before de-duplication. **Candidate validator present; original and newly identified uniqueness/source-identity findings remain open.**
-- [x] Bind `protocols/immutable-ethics-v1.json` and `contracts/immutable-ethics-migration-v1.json` into the compatibility manifest or another explicit accepted set identity. **Candidate manifest now contains both artifacts; exact-head replay and review disposition remain.**
-- [x] Reject local ethics additions that conflict with the authoritative protocol; reject duplicate migration paths before set conversion. **Candidate validator now binds exact local-ethics list digests and rejects duplicate migration and binding paths before conversion; exact-head replay and review disposition remain.**
-- [x] Reject duplicate Aequitas review surfaces and conflicting oversight definitions before set conversion. **Candidate validator rejects duplicate and conflicting surface definitions, duplicate per-surface oversight entries, unknown or disabled oversight definitions, incomplete surface sets, and incomplete enabled-capability coverage; exact-head replay and review disposition remain.**
-- [x] Derive or verify manifest artifact IDs, versions, and other identity-bearing fields against source documents. **Candidate generator derives IDs and versions from source fields, schema `$id` paths, protocol version suffixes, or the immutable-baseline path/version convention and fails closed on drift; exact-head replay and review disposition remain.**
-- [x] Define whether each digest identifies artifact bytes only or the complete compatibility manifest; bind all consumer-relevant metadata accordingly. **Artifact hashes now identify canonical artifact bytes only; the set digest covers every manifest-identity field except lifecycle `status` and recursive `set_sha256`, binds every declared artifact descriptor field, automatically includes new top-level metadata, and fails closed on undeclared descriptor metadata. Candidate set digest: `2b59fe7c865409f9112eb3d21bb1954abb7c8195eaa7758da6602fec8410ba6e`; exact-head replay and review disposition remain.**
-- [x] Declare the schema-validation dependency or replace it with reproducible standard-library tooling. **Candidate branch pins `jsonschema==4.26.0` in `requirements.txt`; exact-head installation evidence remains open.**
-- [x] Fix conformance workflow setup so pip caching cannot fail for lack of a dependency file. **Candidate workflow points pip caching and installation at `requirements.txt`; exact-head workflow evidence remains open.**
-- [x] Make pull-request CI check out and certify the submitted head, or explicitly retain both submitted and synthetic merge SHAs. **Candidate workflow checks out `${{ github.event.pull_request.head.sha || github.sha }}` and asserts `git rev-parse HEAD` equality; no run is attached to the current candidate head.**
-- [ ] Resolve or formally disposition every current review thread against the final candidate head.
+- [ ] Recapture current `main`, PR head, merge base, ahead/behind counts, mergeability, workflow/status state, and review-thread inventory.
+- [ ] Reconcile current `main` and every intended in-scope candidate commit into existing PR #2 without force-rewriting reviewed history.
+- [ ] Exclude or explicitly quarantine `sprites/socrates.json`, `contracts/socrates-review-binding.json`, Aequitas compatibility aliases, and repair-pull-request authority from the current `0.1.0-alpha.1` candidate.
+- [ ] Record conflicts, retained paths, excluded paths, Socrates disposition, old/new heads, reconciliation method, and rollback plan.
+- [ ] Freeze the resulting mergeable submitted head for exact-head review.
+
+## P0b — Candidate findings after the head is frozen
+
+- [x] Reachable submitted-state provenance is present. **Final-head replay and review disposition remain.**
+- [x] Exact Atlas/Nova/Orion/Lyra artifact-set enforcement is present. **Final-head replay and review disposition remain.**
+- [x] Versioned immutable-ethics migration and authoritative protocol binding are present in the candidate lineage. **Complete identity/content/boundary enforcement remains.**
+- [x] Local-ethics conflict and duplicate migration-path rejection are present. **Final-head replay and review disposition remain.**
+- [x] Aequitas reference, invariant, review-surface, oversight uniqueness, and source-consistency candidate checks are present. **Approved identity, activation semantics, numeric finiteness, final replay, and disposition remain.**
+- [x] Source-derived manifest identity validation is present. **Complete digest-scope semantics remain.**
+- [x] A pinned `jsonschema==4.26.0` dependency and cache input are present on current PR head `e51a814cd329c55e45a1599b205ef234859e4848`. **Not accepted until reconciled and replayed.**
+- [x] Submitted-head checkout and verification are configured on the current PR head. **No attached exact-head workflow run exists; acceptance remains open.**
+- [ ] Define artifact-byte and complete-manifest digest scopes and bind all consumer-relevant metadata.
+- [ ] Pin the approved immutable protocol identity and contents; require exact migration identity, source profile, status, boundary, consumer key set, and unique paths.
+- [ ] Pin the approved Aequitas identity and validate activation mode, human-review semantics, per-surface oversight, aliases, and numeric finiteness.
+- [ ] Correct any deterministic-suite failures exposed at the frozen reconciled head.
+- [ ] Resolve or formally disposition every current and still-material outdated review thread against that exact head.
 
 ## Acceptance replay
 
-- [ ] Run schema, immutable, migration, Aequitas, canonicalization, manifest, duplicate/conflict, and negative tests from a clean checkout at the exact reviewed commit.
+- [ ] Run the complete schema, immutable, migration, Aequitas, canonicalization, manifest, duplicate/conflict, numeric-overflow, scope-exclusion, and negative suite from a clean checkout at the frozen reviewed commit.
 - [ ] Retain supported Python/OS/tool versions, install commands, exit codes, workflow URLs, logs, artifact hashes, and digest-scope identities.
-- [ ] Verify missing artifacts, unknown fields, source-identity drift, immutable mutations, conflicting local ethics, duplicate migration paths, duplicate review surfaces, unresolved/duplicate references, incompatible versions, and canonicalization drift fail closed.
+- [ ] Verify missing, stale, mutated, duplicate, conflicting, overflowed, weakened-review, unapproved-supervisor, alias-drift, and incompatible artifacts fail closed.
 - [ ] Validate the accepted version/hash set read-only in `QuantumStateObjects` and `QSO-FABRIC`.
 
 ## Held behind approval
 
 - [ ] Publish or tag the compatibility set only after all release gates pass and explicit approval is recorded.
+- [ ] Evaluate Socrates only as a separately versioned supervisory migration after the four-genome alpha and explicit product/security approval.
 - [ ] Payment-policy genome fields remain blocked until the settlement boundary and migration policy are approved.
 
-## Quality Gates
+## Quality gates
 
-- [ ] Genomes remain declarative data only.
-- [ ] No shell, network, credential, package-installation-at-runtime, repository-write, payment, or self-replication authority is introduced.
-- [ ] Every completed item records the exact command, result, reachable commit, canonicalization profile, artifact paths, and hash set.
-- [ ] Candidate implementations, unresolved findings, accepted CI evidence, and downstream-consumer evidence remain explicitly separated.
-
-## Evidence Log
-
-- 2026-07-16 — Completed the highest-priority immutable artifact binding item on implementation/test head `74c7d714a14123f52903178e805a614f2ead1bf1`, based directly on canonical PR #2 head `2d42c960cefb70fdaada969e75debf50fb06f36c`. The candidate manifest now contains eleven artifacts, including the authoritative protocol and versioned migration, with protocol digest `ecbab42031461161e91e511ce5f1ba19f1d2d75d81a8351a32f185b181c206af`, migration digest `d56994e90dd9d57a65db62b558d4acbd99b8b28ac8b1e124ed48257a9e29fb30`, and candidate path/hash set digest `6d9b0ca8c6766fbb63b4613df5b2baee455f1e63c848d6f75e56726efbc57cac`. CPython 3.13.5 bytecode compilation and a focused deterministic canonical replay passed; evidence is recorded in `reports/p0-immutable-artifact-manifest-binding-validation.md`. Clean-checkout CI and review acceptance remain open; the next unblocked item is local-ethics conflict and duplicate migration-path rejection.
-- 2026-07-16 — Completed local-ethics conflict and duplicate migration-path rejection on implementation/test ancestor `a75f23c3e91dea925ee5b97cc265bddb5ec7b1fc`, based directly on canonical PR #2 head `8c65748cfaa9a213d29d7f03d250a3f797bbb1a1`. A standard-library validator now checks duplicate `applies_to` and local-binding paths before set/map conversion and binds each genome's exact canonical local-ethics list digest, causing any unreviewed addition or mutation to fail closed pending a new migration version. CPython 3.13.5 compilation, direct validator replay, and eight focused tests passed against an exact relevant-data fixture mirror. The migration digest is `7677a01c9ea9d35f3c8c3a84e4601c0ffa2ac289aaf65699771e25876bbf8926`; the candidate set digest is `99f33227247ef39fef3e1c3206c8ea49b9be9af86148298f07bdbf00b0cd6921`. Evidence and limitations are recorded in `reports/p0-local-ethics-conflict-validation.md`; clean-checkout CI and review acceptance remain open.
-- 2026-07-16 — Completed duplicate Aequitas review-surface and conflicting oversight-definition rejection on implementation/test head `6c6ad0b02e83126c24411cc27e129cda8cc58bdc`, based directly on canonical PR #2 head `cacd9dda3d4d9c933c917306374cdde0afdab991`. The standard-library validator now rejects exact duplicate surfaces, duplicate surfaces with conflicting oversight lists, duplicate oversight entries within a surface, unknown or disabled Sprite oversight definitions, missing/unexpected surfaces, and incomplete coverage of enabled oversight. CPython 3.13.5 bytecode compilation, direct validator replay, and fourteen focused/existing tests passed with exit code 0 against an exact relevant-data fixture mirror. Tested file SHA-256 values are `8bd3a84b67890a9ba5bc525b7b262a1117b54465d29257f6e075b916caef2dc8` for the validator and `0d65fb023b86da76217a6049425a770731154515ddf34ad3eec49f5132657651` for the tests. Evidence and limitations are recorded in `reports/p0-aequitas-review-surface-integrity-validation.md`; clean-checkout CI and review acceptance remain open. The next unblocked item is source-derived manifest identity validation.
-- 2026-07-16 — Completed source-derived manifest identity validation on implementation/test ancestor `76b2c461e226bb18de152da5fba828ec313bad18`, descended from canonical PR #2 head `46f3248d8f67b7f0cc734159d2fa0a27e6051ea7`. The generator now derives or verifies all eleven artifact IDs and versions from source fields, schema `$id` paths, the protocol `-vN` suffix, or the immutable-baseline path/version convention, and rejects missing, malformed, duplicate, whitespace-padded, path-inconsistent, or declaration-conflicting identities. CPython 3.13.5 bytecode compilation and five focused positive/negative tests passed with exit code 0 against a standard-library artifact fixture. The candidate set digest remains `99f33227247ef39fef3e1c3206c8ea49b9be9af86148298f07bdbf00b0cd6921`; evidence and the DNS/clean-checkout limitation are recorded in `reports/p0-manifest-source-identity-validation.md`. The next unblocked item is complete digest-scope semantics.
-- 2026-07-17 — Completed complete digest-scope semantics against canonical PR #2 parent `e51a814cd329c55e45a1599b205ef234859e4848`. The manifest now declares that artifact hashes cover canonical artifact bytes only and that `set_sha256` covers all top-level identity metadata except lifecycle `status` and recursive `set_sha256`; all six current artifact descriptor fields are bound, new top-level metadata is automatically bound, and undeclared descriptor metadata fails closed. CPython 3.13.5 compilation, six focused fixture tests, and committed-manifest digest replay passed. Candidate set digest: `2b59fe7c865409f9112eb3d21bb1954abb7c8195eaa7758da6602fec8410ba6e`. Evidence and the DNS/clean-checkout limitation are recorded in `reports/p0-manifest-digest-scope-validation.md`. The dependency, cache-path, and exact-head workflow implementations are present on the parent lineage; the next gate is a successful workflow replay on the final submitted head, followed by review-thread disposition.
+- [ ] Genomes and supervisory contracts remain declarative data only.
+- [ ] No shell, network, credential, package-installation-at-runtime, repository-write, repair-PR, payment, or self-replication authority enters the accepted alpha.
+- [ ] Every evidence claim records exact command, result, reachable commit, canonicalization profile, artifact paths, and hash set.
+- [ ] Candidate implementations, configured workflows, accepted CI, review dispositions, and downstream evidence remain explicitly separated.
