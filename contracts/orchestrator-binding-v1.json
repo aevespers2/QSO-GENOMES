@@ -1,0 +1,43 @@
+{
+  "contract_version": 1,
+  "binding_id": "orchestrator-binding-v1",
+  "agent_reference": {
+    "agent_id": "jacob_thomas_vespers",
+    "display_name": "Jacob Thomas Vespers",
+    "role": "ORCHESTRATOR",
+    "path": "governance/agents/jacob-thomas-vespers.json"
+  },
+  "orchestration_scope": {
+    "allowed": [
+      "task-routing",
+      "workflow-sequencing",
+      "dependency-resolution",
+      "evidence-aggregation",
+      "capability-boundary-enforcement",
+      "human-review-escalation"
+    ],
+    "forbidden": [
+      "immutable-ethics-modification",
+      "credential-granting",
+      "unapproved-network-access",
+      "scope-expansion-without-review",
+      "production-intrusion",
+      "automatic-merge",
+      "publication-or-release"
+    ]
+  },
+  "bound_agents": [
+    "jacob_thomas_redmond",
+    "jacob_michael_messer",
+    "jacob_redmond",
+    "michael_redmond"
+  ],
+  "invariants": {
+    "least_privilege": true,
+    "role_separation": true,
+    "provenance_required": true,
+    "rollback_required": true,
+    "human_final_approval_required": true,
+    "external_commit_authorized": false
+  }
+}
