@@ -52,7 +52,6 @@ jobs:
           while IFS= read -r PR_NUMBER; do
             [ -n "$PR_NUMBER" ] || continue
 
-            # GitHub may briefly report UNKNOWN while calculating mergeability.
             STATE="UNKNOWN"
             for attempt in 1 2 3 4 5; do
               STATE="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json mergeStateStatus --jq '.mergeStateStatus')"
@@ -61,8 +60,7 @@ jobs:
             done
 
             if [ "$STATE" != "DIRTY" ]; then
-              printf '{"pr":%s,"merge_state":"%s","action":"none"}\n' "$PR_NUMBER" "$STATE" \
-                > "reports/pr-${PR_NUMBER}.json"
+              printf '{"pr":%s,"merge_state":"%s","action":"none"}\n' "$PR_NUMBER" "$STATE" > "reports/pr-${PR_NUMBER}.json"
               continue
             fi
 
@@ -71,7 +69,13 @@ jobs:
             HEAD_REPO="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRepository --jq '.headRepository.nameWithOwner')"
             HEAD_SHA="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRefOid --jq '.headRefOid')"
             BASE_SHA="$(gh api "repos/$GITHUB_REPOSITORY/commits/$BASE_REF" --jq '.sha')"
-            BRANCH="agent/michael-aaron-redmond/pr-${PR_NUMBER}-reconcile"
+            BRANCH="agent/michael-aaron-redmond/pr-${PR_NUMBER}-${HEAD_SHA:0:12}"
+
+            if [ "$HEAD_REPO" != "$GITHUB_REPOSITORY" ]; then
+              printf '{"pr":%s,"merge_state":"DIRTY","action":"human_review","reason":"fork_head"}\n' "$PR_NUMBER" > "reports/pr-${PR_NUMBER}.json"
+              gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "Michael Aaron Redmond detected a non-mergeable fork-based pull request. The workflow will not write to or execute code from an external fork. Human reconciliation under Jacob Elias Redmond is required."
+              continue
+            fi
 
             rm -rf worktree
             git clone --no-checkout "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" worktree
@@ -114,7 +118,7 @@ jobs:
             fi
 
             git commit -m "Michael Aaron Redmond: reconcile PR #${PR_NUMBER} with ${BASE_REF}"
-            git push --force-with-lease origin "$BRANCH"
+            git push origin "$BRANCH"
             RECONCILIATION_SHA="$(git rev-parse HEAD)"
             cd ..
 
@@ -125,7 +129,7 @@ jobs:
                 --head "$BRANCH" \
                 --base "$HEAD_REF" \
                 --title "Michael Aaron Redmond: reconcile PR #${PR_NUMBER}" \
-                --body "Automated non-destructive reconciliation of \`$BASE_REF\` into the current head of PR #${PR_NUMBER}. This draft PR does not authorize merge, publication, or release. Normal CI and Jacob Elias Redmond plus human review remain required."
+                --body "Automated non-destructive reconciliation of \`$BASE_REF\` into the exact current head of PR #${PR_NUMBER}. This draft PR does not authorize merge, publication, or release. Normal CI and Jacob Elias Redmond plus human review remain required."
             fi
 
             python - "$PR_NUMBER" "$BASE_REF" "$HEAD_REF" "$HEAD_SHA" "$BASE_SHA" "$RECONCILIATION_SHA" <<'PY'
@@ -141,7 +145,7 @@ jobs:
               "base_sha": base_sha,
               "head_sha": head_sha,
               "merge_state": "DIRTY",
-              "reconciliation_result": "draft_reconciliation_pr_opened_or_updated",
+              "reconciliation_result": "draft_reconciliation_pr_opened",
               "reconciliation_sha": reconciliation_sha,
               "automatic_merge_authorized": False
           }, sort_keys=True, separators=(",", ":")) + "\n")
