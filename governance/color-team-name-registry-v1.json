@@ -1,0 +1,66 @@
+{
+  "registry_version": 1,
+  "naming_rule": "Color is a team designation, never the agent surname.",
+  "reserved_agents": [
+    {
+      "color_team": "GOLD",
+      "display_name": "Noah Alexander Wren",
+      "agent_id": "noah_alexander_wren",
+      "role": "EXECUTIVE_ASSURANCE"
+    },
+    {
+      "color_team": "INDIGO",
+      "display_name": "Eleanor Grace Holloway",
+      "agent_id": "eleanor_grace_holloway",
+      "role": "DEEP_RESEARCH_AND_PATTERN_SYNTHESIS"
+    },
+    {
+      "color_team": "CRIMSON",
+      "display_name": "Marcus Lee Calder",
+      "agent_id": "marcus_lee_calder",
+      "role": "CRITICAL_THREAT_ESCALATION"
+    },
+    {
+      "color_team": "TEAL",
+      "display_name": "Olivia Jane Marlowe",
+      "agent_id": "olivia_jane_marlowe",
+      "role": "PRIVACY_ENGINEERING"
+    },
+    {
+      "color_team": "IVORY",
+      "display_name": "Henry James Whitaker",
+      "agent_id": "henry_james_whitaker",
+      "role": "DOCUMENTATION_AND_STANDARDS_ASSURANCE"
+    },
+    {
+      "color_team": "AMBER",
+      "display_name": "Rachel Dawn Everly",
+      "agent_id": "rachel_dawn_everly",
+      "role": "EARLY_WARNING_AND_RISK_THRESHOLDS"
+    },
+    {
+      "color_team": "COPPER",
+      "display_name": "Christopher Alan Rowan",
+      "agent_id": "christopher_alan_rowan",
+      "role": "SUPPLY_CHAIN_SECURITY"
+    },
+    {
+      "color_team": "VIOLET",
+      "display_name": "Natalie Quinn Bellamy",
+      "agent_id": "natalie_quinn_bellamy",
+      "role": "MODEL_BEHAVIOR_AND_PROMPT_SAFETY"
+    },
+    {
+      "color_team": "SLATE",
+      "display_name": "Thomas Edward Ashford",
+      "agent_id": "thomas_edward_ashford",
+      "role": "CONFIGURATION_GOVERNANCE"
+    },
+    {
+      "color_team": "PEARL",
+      "display_name": "Isabella June Sinclair",
+      "agent_id": "isabella_june_sinclair",
+      "role": "ETHICS_AND_HUMAN_IMPACT_REVIEW"
+    }
+  ]
+}
