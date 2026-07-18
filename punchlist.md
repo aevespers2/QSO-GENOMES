@@ -10,6 +10,15 @@ The Architect controls dependency order in `taskchain.md`. PR #2 is the sole can
 - [ ] Record conflicts, retained paths, excluded paths, Socrates disposition, old/new heads, reconciliation method, and rollback plan.
 - [ ] Freeze the resulting mergeable submitted head for exact-head review.
 
+## Pre-Review Tasks — reconciliation automation
+
+- [ ] Bound scheduled open-PR enumeration explicitly and deduplicate the resulting PR-number set before processing.
+- [ ] Paginate existing PR comments before deciding whether a reconciliation notice already exists.
+- [ ] Add stable hidden markers keyed by finding type and exact head/base SHAs so hourly runs do not post duplicate fork/conflict notices.
+- [ ] Add regression coverage proving more than 30 open PRs are enumerated up to the configured bound and repeated runs leave one notice per exact reconciliation state.
+- [ ] Run the corrected workflow from trusted `main`, retain its evidence artifact, and verify PR #2 receives no duplicate comment on a second identical run.
+- [ ] Keep PR #2 in draft while it is non-mergeable or lacks exact-head CI.
+
 ## P0b — Candidate findings after the head is frozen
 
 - [x] Reachable submitted-state provenance is present. **Final-head replay and review disposition remain.**
