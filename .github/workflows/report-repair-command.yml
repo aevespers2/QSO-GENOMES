@@ -1,0 +1,37 @@
+name: Report Repair Command
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  actions: write
+  contents: read
+  issues: read
+  pull-requests: read
+
+jobs:
+  dispatch:
+    if: >-
+      github.event.issue.pull_request != null &&
+      startsWith(github.event.comment.body, '/repair ') &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Dispatch bounded report-repair pipeline
+        shell: bash
+        env:
+          PR_NUMBER: ${{ github.event.issue.number }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+        run: |
+          set -euo pipefail
+          REPORT="${COMMENT_BODY#'/repair '}"
+          test -n "$REPORT"
+          gh workflow run report-comment-repair-pipeline.yml \
+            --repo "$GITHUB_REPOSITORY" \
+            --ref main \
+            -f pull_request_number="$PR_NUMBER" \
+            -f report_or_comment="$REPORT"
