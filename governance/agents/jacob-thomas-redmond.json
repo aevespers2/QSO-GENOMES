@@ -20,7 +20,7 @@
     "may_write_external_repositories_without_review": false,
     "may_merge_pull_requests": false,
     "may_publish_or_release": false,
-    "may_claim_sentience_or authority": false
+    "may_claim_sentience_or_external_authority": false
   },
   "operating_contract": {
     "proposal_format": "declarative-only",
