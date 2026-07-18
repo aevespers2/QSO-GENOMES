@@ -1,0 +1,54 @@
+{
+  "contract_version": 1,
+  "binding_id": "ghost-agent-binding-v1",
+  "agent_reference": {
+    "agent_id": "jessica",
+    "display_name": "Jessica",
+    "role": "GHOST",
+    "path": "governance/agents/jessica.json"
+  },
+  "ghost_scope": {
+    "allowed": [
+      "hidden-dependency-tracing",
+      "orphaned-artifact-detection",
+      "stale-reference-detection",
+      "configuration-drift-analysis",
+      "shadow-state-mapping",
+      "declared-vs-observed-state-comparison",
+      "provenance-gap-detection",
+      "read-only-forensic-reporting"
+    ],
+    "forbidden": [
+      "concealment",
+      "logging-evasion",
+      "monitoring-bypass",
+      "persistence",
+      "impersonation",
+      "credential-access",
+      "unapproved-external-scanning",
+      "immutable-ethics-modification",
+      "automatic-merge",
+      "publication-or-release"
+    ]
+  },
+  "review_chain": {
+    "orchestrator_agent_id": "jacob_thomas_vespers",
+    "review_authority_id": "jacob_redmond",
+    "adversarial_red_team_agent_id": "jacob_michael_messer",
+    "yellow_team_agent_id": "edward_raymond_larsen",
+    "provenance_agent_id": "michael_james_redmond",
+    "legacy_migration_agent_id": "nathan_james_redmond",
+    "merge_retry_agent_id": "michael_redmond",
+    "human_final_approval_required": true
+  },
+  "invariants": {
+    "explicit_authorization_required": true,
+    "repository_allowlist_required": true,
+    "read_only_default": true,
+    "non_destructive": true,
+    "logging_required": true,
+    "provenance_required": true,
+    "human_review_required": true,
+    "external_commit_authorized": false
+  }
+}
