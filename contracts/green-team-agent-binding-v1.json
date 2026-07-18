@@ -1,0 +1,31 @@
+{
+  "contract_version": 1,
+  "binding_id": "green-team-agent-binding-v1",
+  "agent_reference": {
+    "agent_id": "terry_moss",
+    "display_name": "Terry Moss",
+    "role": "GREEN_TEAM",
+    "path": "governance/agents/terry-moss.json"
+  },
+  "green_team_scope": {
+    "allowed": ["defensive-hardening","secure-defaults","detection-and-alerting","recovery-and-rollback","resilience-testing","adversarial-regression-validation"],
+    "forbidden": ["credential-access","external-target-scanning","production-exploitation","review-gate-bypass","immutable-ethics-modification","automatic-merge","publication-or-release"]
+  },
+  "review_chain": {
+    "orchestrator_agent_id": "jacob_thomas_vespers",
+    "review_authority_id": "jacob_redmond",
+    "red_team_agent_id": "jacob_michael_messer",
+    "yellow_team_agent_id": "edward_raymond_larsen",
+    "provenance_agent_id": "michael_james_redmond",
+    "merge_retry_agent_id": "michael_redmond",
+    "human_final_approval_required": true
+  },
+  "invariants": {
+    "least_privilege": true,
+    "fail_closed": true,
+    "rollback_required": true,
+    "provenance_required": true,
+    "human_review_required": true,
+    "external_commit_authorized": false
+  }
+}
