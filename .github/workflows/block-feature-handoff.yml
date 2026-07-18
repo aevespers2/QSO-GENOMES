@@ -1,0 +1,129 @@
+name: Blocked Feature Authoring Handoff
+
+on:
+  workflow_run:
+    workflows: ["Jacob Redmond Block Remediation"]
+    types: [completed]
+
+permissions:
+  actions: read
+  contents: read
+  issues: write
+
+concurrency:
+  group: block-feature-handoff-${{ github.event.workflow_run.id }}
+  cancel-in-progress: false
+
+jobs:
+  prepare-feature:
+    if: github.event.workflow_run.conclusion == 'failure'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Download block-remediation evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p incoming
+          gh run download "${{ github.event.workflow_run.id }}" \
+            --repo "${{ github.repository }}" \
+            --dir incoming
+          RECEIPT="$(find incoming -type f -name block-receipt.json -print -quit)"
+          REPORT="$(find incoming -type f -name block-remediation-result.json -print -quit)"
+          test -n "$RECEIPT"
+          test -n "$REPORT"
+          cp "$RECEIPT" block-receipt.json
+          cp "$REPORT" block-remediation-result.json
+
+      - name: Prepare bounded feature-authoring specification
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/prepare_feature_request.py \
+            --receipt block-receipt.json \
+            --remediation-report block-remediation-result.json \
+            --output feature-authoring-request.json
+
+      - name: Render issue body
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          task = json.loads(Path("feature-authoring-request.json").read_text())
+          problem = task["problem"]
+          contract = task["implementation_contract"]
+          acceptance = task["acceptance"]
+          failures = "\n".join(
+              f"- `{item['command']}` exited `{item['exit_code']}`"
+              for item in problem["failed_checks"]
+          )
+          required = "\n".join(f"- {item}" for item in contract["required_behavior"])
+          forbidden = "\n".join(f"- {item}" for item in contract["forbidden_behavior"])
+          checks = "\n".join(f"- `{key}`: `{value}`" for key, value in acceptance.items())
+          body = f"""## Jacob Redmond blocking evidence
+
+**Decision:** `{problem['decision']}`  
+**Block codes:** `{', '.join(problem['block_codes'])}`  
+**Rationale:** {problem['rationale']}
+
+## Failed checks
+
+{failures}
+
+## Required implementation behavior
+
+{required}
+
+## Forbidden behavior
+
+{forbidden}
+
+## Acceptance contract
+
+{checks}
+
+## Agent routing
+
+Prepare implementation on an isolated `agent/block-feature-*` branch, add tests and exact-head evidence, and open a **draft** pull request. Do not merge, publish, change immutable ethics, rewrite blocking evidence, or grant repository-write authority to a QSO. Final disposition requires Jacob Redmond and human review.
+
+Source workflow: `${{{{ github.event.workflow_run.html_url }}}}`
+"""
+          Path("feature-issue.md").write_text(body, encoding="utf-8")
+          PY
+
+      - name: Create agent-ready feature issue
+        shell: bash
+        run: |
+          set -euo pipefail
+          TITLE="Blocked remediation requires a new bounded feature (run ${{ github.event.workflow_run.id }})"
+          EXISTING="$(gh issue list --repo "${{ github.repository }}" --state open --search "in:title run ${{ github.event.workflow_run.id }}" --json number --jq '.[0].number // empty')"
+          if [ -n "$EXISTING" ]; then
+            echo "Issue #$EXISTING already records this workflow run."
+            exit 0
+          fi
+          gh issue create \
+            --repo "${{ github.repository }}" \
+            --title "$TITLE" \
+            --body-file feature-issue.md \
+            --label "agent-ready" \
+            --label "blocked-remediation"
+
+      - name: Upload feature specification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: feature-authoring-request-${{ github.event.workflow_run.id }}
+          if-no-files-found: error
+          retention-days: 30
+          path: |
+            feature-authoring-request.json
+            feature-issue.md
