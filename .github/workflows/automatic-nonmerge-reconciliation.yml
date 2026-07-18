@@ -1,0 +1,158 @@
+name: Automatic Non-Merge Reconciliation
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review, edited]
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+    inputs:
+      pull_request_number:
+        description: Optional pull request number to reconcile
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: nonmerge-reconciliation-${{ github.event.pull_request.number || inputs.pull_request_number || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  detect-and-reconcile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      AGENT_ID: michael_aaron_redmond
+      REVIEW_AUTHORITY_ID: jacob_elias_redmond
+    steps:
+      - name: Resolve pull request set
+        id: prs
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -n "${{ inputs.pull_request_number || '' }}" ]; then
+            printf '%s\n' "${{ inputs.pull_request_number }}" > /tmp/prs.txt
+          elif [ "${{ github.event_name }}" = "pull_request_target" ]; then
+            printf '%s\n' "${{ github.event.pull_request.number }}" > /tmp/prs.txt
+          else
+            gh pr list --repo "$GITHUB_REPOSITORY" --state open --json number --jq '.[].number' > /tmp/prs.txt
+          fi
+          echo "count=$(wc -l < /tmp/prs.txt | tr -d ' ')" >> "$GITHUB_OUTPUT"
+
+      - name: Inspect mergeability and prepare reconciliation
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p reports
+          while IFS= read -r PR_NUMBER; do
+            [ -n "$PR_NUMBER" ] || continue
+
+            # GitHub may briefly report UNKNOWN while calculating mergeability.
+            STATE="UNKNOWN"
+            for attempt in 1 2 3 4 5; do
+              STATE="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json mergeStateStatus --jq '.mergeStateStatus')"
+              [ "$STATE" != "UNKNOWN" ] && break
+              sleep 6
+            done
+
+            if [ "$STATE" != "DIRTY" ]; then
+              printf '{"pr":%s,"merge_state":"%s","action":"none"}\n' "$PR_NUMBER" "$STATE" \
+                > "reports/pr-${PR_NUMBER}.json"
+              continue
+            fi
+
+            BASE_REF="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json baseRefName --jq '.baseRefName')"
+            HEAD_REF="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRefName --jq '.headRefName')"
+            HEAD_REPO="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRepository --jq '.headRepository.nameWithOwner')"
+            HEAD_SHA="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRefOid --jq '.headRefOid')"
+            BASE_SHA="$(gh api "repos/$GITHUB_REPOSITORY/commits/$BASE_REF" --jq '.sha')"
+            BRANCH="agent/michael-aaron-redmond/pr-${PR_NUMBER}-reconcile"
+
+            rm -rf worktree
+            git clone --no-checkout "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" worktree
+            cd worktree
+            git config user.name "Michael Aaron Redmond"
+            git config user.email "michael-aaron-redmond-agent@users.noreply.github.com"
+            git fetch origin "$BASE_REF" "$HEAD_SHA"
+            git switch --create "$BRANCH" "$HEAD_SHA"
+
+            set +e
+            git merge --no-ff --no-commit "$BASE_SHA" > "../reports/pr-${PR_NUMBER}-merge.stdout" 2> "../reports/pr-${PR_NUMBER}-merge.stderr"
+            STATUS=$?
+            set -e
+
+            if [ "$STATUS" -ne 0 ]; then
+              git diff --name-only --diff-filter=U > "../reports/pr-${PR_NUMBER}-conflicts.txt"
+              git merge --abort || true
+              cd ..
+              python - "$PR_NUMBER" "$BASE_REF" "$HEAD_REF" "$HEAD_SHA" "$BASE_SHA" <<'PY'
+          import json, sys
+          from pathlib import Path
+          pr, base_ref, head_ref, head_sha, base_sha = sys.argv[1:]
+          conflicts = Path(f"reports/pr-{pr}-conflicts.txt").read_text().splitlines()
+          Path(f"reports/pr-{pr}.json").write_text(json.dumps({
+              "agent_id": "michael_aaron_redmond",
+              "review_authority_id": "jacob_elias_redmond",
+              "pr": int(pr),
+              "base_ref": base_ref,
+              "head_ref": head_ref,
+              "base_sha": base_sha,
+              "head_sha": head_sha,
+              "merge_state": "DIRTY",
+              "reconciliation_result": "conflicts_require_human_review",
+              "conflict_files": conflicts,
+              "automatic_merge_authorized": False
+          }, sort_keys=True, separators=(",", ":")) + "\n")
+          PY
+              gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "Michael Aaron Redmond attempted a non-destructive reconciliation with \`$BASE_REF\`, but conflicts remain. No history was rewritten and no merge was performed. Human review under Jacob Elias Redmond is required. Evidence is retained in workflow run $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID."
+              continue
+            fi
+
+            git commit -m "Michael Aaron Redmond: reconcile PR #${PR_NUMBER} with ${BASE_REF}"
+            git push --force-with-lease origin "$BRANCH"
+            RECONCILIATION_SHA="$(git rev-parse HEAD)"
+            cd ..
+
+            EXISTING="$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --head "$BRANCH" --json number --jq '.[0].number // empty')"
+            if [ -z "$EXISTING" ]; then
+              gh pr create --repo "$GITHUB_REPOSITORY" \
+                --draft \
+                --head "$BRANCH" \
+                --base "$HEAD_REF" \
+                --title "Michael Aaron Redmond: reconcile PR #${PR_NUMBER}" \
+                --body "Automated non-destructive reconciliation of \`$BASE_REF\` into the current head of PR #${PR_NUMBER}. This draft PR does not authorize merge, publication, or release. Normal CI and Jacob Elias Redmond plus human review remain required."
+            fi
+
+            python - "$PR_NUMBER" "$BASE_REF" "$HEAD_REF" "$HEAD_SHA" "$BASE_SHA" "$RECONCILIATION_SHA" <<'PY'
+          import json, sys
+          from pathlib import Path
+          pr, base_ref, head_ref, head_sha, base_sha, reconciliation_sha = sys.argv[1:]
+          Path(f"reports/pr-{pr}.json").write_text(json.dumps({
+              "agent_id": "michael_aaron_redmond",
+              "review_authority_id": "jacob_elias_redmond",
+              "pr": int(pr),
+              "base_ref": base_ref,
+              "head_ref": head_ref,
+              "base_sha": base_sha,
+              "head_sha": head_sha,
+              "merge_state": "DIRTY",
+              "reconciliation_result": "draft_reconciliation_pr_opened_or_updated",
+              "reconciliation_sha": reconciliation_sha,
+              "automatic_merge_authorized": False
+          }, sort_keys=True, separators=(",", ":")) + "\n")
+          PY
+          done < /tmp/prs.txt
+
+      - name: Upload reconciliation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: automatic-nonmerge-reconciliation-${{ github.run_id }}
+          if-no-files-found: warn
+          retention-days: 30
+          path: reports/
