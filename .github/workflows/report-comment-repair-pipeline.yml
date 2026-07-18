@@ -1,0 +1,185 @@
+name: Report Comment Repair Pipeline
+
+on:
+  pull_request_review:
+    types: [submitted]
+  pull_request_review_comment:
+    types: [created]
+  workflow_run:
+    workflows:
+      - Conformance
+      - Automatic Non-Merge Reconciliation
+      - Jacob Redmond Block Remediation
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      pull_request_number:
+        description: Pull request to analyze and repair
+        required: true
+        type: string
+      report_or_comment:
+        description: Report, finding, or reevaluation request
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: report-repair-${{ github.event.pull_request.number || github.event.workflow_run.id || inputs.pull_request_number || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  compile-and-draft:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'failure') ||
+      (github.event_name == 'pull_request_review' && github.event.review.state == 'changes_requested' && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.review.author_association)) ||
+      (github.event_name == 'pull_request_review_comment' && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout trusted default-branch tooling
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Resolve source pull request and evidence
+        id: source
+        shell: bash
+        env:
+          MANUAL_PR: ${{ inputs.pull_request_number }}
+          MANUAL_TEXT: ${{ inputs.report_or_comment }}
+          REVIEW_BODY: ${{ github.event.review.body }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          EVENT_PR: ${{ github.event.pull_request.number }}
+          RUN_PR: ${{ github.event.workflow_run.pull_requests[0].number }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+          RUN_NAME: ${{ github.event.workflow_run.name }}
+          RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+        run: |
+          set -euo pipefail
+          PR_NUMBER="${MANUAL_PR:-${EVENT_PR:-${RUN_PR:-}}}"
+          test -n "$PR_NUMBER"
+
+          HEAD_SHA="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRefOid --jq '.headRefOid')"
+          HEAD_REF="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRefName --jq '.headRefName')"
+          HEAD_REPO="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRepository --jq '.headRepository.nameWithOwner')"
+
+          if [ "$HEAD_REPO" != "$GITHUB_REPOSITORY" ]; then
+            echo "Fork-based repair branches require human handling."
+            exit 2
+          fi
+
+          BODY="${MANUAL_TEXT:-${REVIEW_BODY:-${COMMENT_BODY:-}}}"
+          if [ -z "$BODY" ]; then
+            BODY="Workflow failure: ${RUN_NAME:-unknown} concluded ${RUN_CONCLUSION:-unknown}. Evidence: ${RUN_URL:-unavailable}"
+          fi
+
+          python - "$PR_NUMBER" "$HEAD_SHA" "$BODY" <<'PY'
+          import json, sys
+          from pathlib import Path
+          pr, head, body = sys.argv[1:]
+          source = {
+              "pull_request_number": int(pr),
+              "head_sha": head,
+              "report": body,
+              "comments": [body],
+              "accepted_comments": [body],
+              "rejected_or_stale_comments": [],
+          }
+          Path("repair-source.json").write_text(json.dumps(source, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8")
+          PY
+
+          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+          echo "head_sha=$HEAD_SHA" >> "$GITHUB_OUTPUT"
+          echo "head_ref=$HEAD_REF" >> "$GITHUB_OUTPUT"
+
+      - name: Compile repair directive
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/compile_repair_directive.py \
+            --input repair-source.json \
+            --output repair-directive.json
+
+      - name: Create immutable draft repair branch
+        id: repair
+        shell: bash
+        env:
+          PR_NUMBER: ${{ steps.source.outputs.pr_number }}
+          HEAD_SHA: ${{ steps.source.outputs.head_sha }}
+          HEAD_REF: ${{ steps.source.outputs.head_ref }}
+        run: |
+          set -euo pipefail
+          BRANCH="agent/repair-pr-${PR_NUMBER}-${HEAD_SHA:0:12}-${GITHUB_RUN_ID}"
+          git init repair-worktree
+          cd repair-worktree
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git fetch --depth=1 origin "$HEAD_SHA"
+          git switch --create "$BRANCH" FETCH_HEAD
+          git config user.name "Evan Theodore Quill"
+          git config user.email "evan-theodore-quill-agent@users.noreply.github.com"
+          mkdir -p reports/repair-directives
+          cp ../repair-directive.json "reports/repair-directives/pr-${PR_NUMBER}-${GITHUB_RUN_ID}.json"
+          cp ../repair-source.json "reports/repair-directives/pr-${PR_NUMBER}-${GITHUB_RUN_ID}.source.json"
+          git add reports/repair-directives
+          git commit -m "Evan Theodore Quill: draft repair directive for PR #${PR_NUMBER}"
+          git push origin "$BRANCH"
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+
+      - name: Open draft repair pull request
+        id: draft
+        shell: bash
+        env:
+          PR_NUMBER: ${{ steps.source.outputs.pr_number }}
+          HEAD_REF: ${{ steps.source.outputs.head_ref }}
+          REPAIR_BRANCH: ${{ steps.repair.outputs.branch }}
+        run: |
+          set -euo pipefail
+          BODY_FILE="$(mktemp)"
+          cat > "$BODY_FILE" <<EOF
+          ## Report-repair pipeline
+
+          This draft was prepared by the QSO report-repair team from an evidence-bound report or review comment on PR #${PR_NUMBER}.
+
+          ### Agent sequence
+
+          Adrian Felix Morrow analyzed the report; Beatrice Elena Crowe adjudicated the comment; Caleb Orion Bennett formulated reevaluation criteria; Daphne Mira Hollis mapped the repair architecture; Evan Theodore Quill prepared this draft; Fiona Celeste Arden must verify execution before Michael Aaron Redmond reconciliation.
+
+          ### Required behavior
+
+          Implement the directive under \`reports/repair-directives/\`, answer every accepted finding, add regression tests, preserve provenance, and keep immutable ethics and human approval intact. This draft does not authorize final merge, release, or deployment.
+          EOF
+
+          URL="$(gh pr create --repo "$GITHUB_REPOSITORY" --draft --head "$REPAIR_BRANCH" --base "$HEAD_REF" --title "Repair PR #${PR_NUMBER}: report and comment remediation" --body-file "$BODY_FILE")"
+          REPAIR_PR="$(gh pr view "$URL" --repo "$GITHUB_REPOSITORY" --json number --jq '.number')"
+          echo "repair_pr=$REPAIR_PR" >> "$GITHUB_OUTPUT"
+
+      - name: Request implementation and reevaluation
+        shell: bash
+        env:
+          SOURCE_PR: ${{ steps.source.outputs.pr_number }}
+          REPAIR_PR: ${{ steps.draft.outputs.repair_pr }}
+        run: |
+          set -euo pipefail
+          gh pr comment "$REPAIR_PR" --repo "$GITHUB_REPOSITORY" --body "@codex address the repair directive and accepted findings in this draft. Implement bounded changes and tests only; preserve immutable ethics, provenance, rollback, and human final approval."
+          gh pr comment "$SOURCE_PR" --repo "$GITHUB_REPOSITORY" --body "The report-repair team opened draft repair PR #${REPAIR_PR}. After implementation, Fiona Celeste Arden must reevaluate the original findings; successful verification then routes the draft to Michael Aaron Redmond for bounded reconciliation."
+
+      - name: Upload pipeline evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-repair-${{ github.run_id }}
+          if-no-files-found: warn
+          retention-days: 30
+          path: |
+            repair-source.json
+            repair-directive.json
