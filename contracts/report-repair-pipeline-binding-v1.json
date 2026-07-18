@@ -1,0 +1,50 @@
+{
+  "contract_version": 1,
+  "binding_id": "report-repair-pipeline-binding-v1",
+  "team_reference": {
+    "team_id": "qso-report-repair-team-v1",
+    "path": "governance/report-repair-team-v1.json"
+  },
+  "accepted_inputs": [
+    "validation-report",
+    "workflow-failure",
+    "pull-request-review",
+    "inline-review-comment",
+    "human-reevaluation-request"
+  ],
+  "pipeline": [
+    "report-analysis",
+    "comment-adjudication",
+    "reevaluation-request",
+    "repair-architecture",
+    "draft-repair-authoring",
+    "execution-verification",
+    "bounded-reconciliation"
+  ],
+  "required_repair_spec_fields": [
+    "source_pr",
+    "source_head_sha",
+    "source_evidence_digest",
+    "finding_class",
+    "accepted_comments",
+    "rejected_or_stale_comments",
+    "affected_invariants",
+    "exact_code_locations",
+    "implementation_actions",
+    "test_plan",
+    "migration_effects",
+    "rollback_plan",
+    "reevaluation_criteria",
+    "human_review_requirement"
+  ],
+  "execution_boundary": {
+    "draft_branch_only": true,
+    "draft_pull_request_only": true,
+    "untrusted_code_execution_with_write_token": false,
+    "automatic_final_merge": false,
+    "immutable_ethics_modification": false,
+    "reconciliation_agent_id": "michael_aaron_redmond",
+    "review_authority_id": "jacob_elias_redmond",
+    "human_final_approval_required": true
+  }
+}
