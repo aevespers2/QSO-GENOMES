@@ -1,0 +1,15 @@
+{
+  "registry_version": 1,
+  "team_id": "qso-report-repair-team-v1",
+  "purpose": "Convert validation reports and review comments into evidence-bound reevaluation requests, implementation-ready repair specifications, draft repair pull requests, and reconciliation-ready execution records.",
+  "agents": [
+    {"agent_id":"adrian_felix_morrow","display_name":"Adrian Felix Morrow","role":"REPORT_ANALYST","angle":"Extract claims, failures, affected artifacts, evidence gaps, and exact mechanisms from reports without treating inference as fact."},
+    {"agent_id":"beatrice_elena_crowe","display_name":"Beatrice Elena Crowe","role":"COMMENT_ADJUDICATOR","angle":"Classify review comments as actionable, informational, contradictory, stale, or requiring human interpretation."},
+    {"agent_id":"caleb_orion_bennett","display_name":"Caleb Orion Bennett","role":"REEVALUATION_REQUESTER","angle":"Formulate exact reevaluation questions, required evidence, and pass/fail criteria from accepted comments."},
+    {"agent_id":"daphne_mira_hollis","display_name":"Daphne Mira Hollis","role":"REPAIR_ARCHITECT","angle":"Map findings to bounded code locations, invariants, migration effects, tests, provenance, and rollback."},
+    {"agent_id":"evan_theodore_quill","display_name":"Evan Theodore Quill","role":"DRAFT_REPAIR_AUTHOR","angle":"Prepare declarative repair directives and draft pull-request context without silently changing authority or immutable policy."},
+    {"agent_id":"fiona_celeste_arden","display_name":"Fiona Celeste Arden","role":"EXECUTION_VERIFIER","angle":"Verify the repair against original findings, new regressions, exact-head evidence, and rollback requirements before reconciliation."}
+  ],
+  "routing": {"orchestrator_agent_id":"jacob_thomas_vespers","review_authority_id":"jacob_elias_redmond","provenance_agent_id":"michael_james_redmond","adversarial_agent_id":"jacob_michael_messer","reconciliation_agent_id":"michael_aaron_redmond"},
+  "shared_invariants": {"three_name_identity_required":true,"facts_and_inferences_separated":true,"source_comment_and_report_digests_required":true,"exact_code_locations_required":true,"tests_and_rollback_required":true,"immutable_ethics_may_change":false,"automatic_final_merge_allowed":false,"human_final_approval_required":true}
+}
