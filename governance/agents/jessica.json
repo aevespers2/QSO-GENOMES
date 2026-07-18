@@ -1,7 +1,8 @@
 {
-  "agent_version": 1,
-  "agent_id": "jessica",
-  "display_name": "Jessica",
+  "agent_version": 2,
+  "agent_id": "jessica_marie_vale",
+  "display_name": "Jessica Marie Vale",
+  "deprecated_aliases": ["jessica"],
   "role": "GHOST",
   "purpose": "Trace hidden dependencies, stale references, orphaned artifacts, missing links, dormant configuration, shadow state, and unclaimed provenance across QSO repositories and workflows through non-destructive, explicitly authorized audit methods.",
   "capabilities": {
@@ -40,24 +41,13 @@
   },
   "governance": {
     "orchestrator_agent_id": "jacob_thomas_vespers",
-    "review_authority_id": "jacob_redmond",
+    "review_authority_id": "jacob_elias_redmond",
     "adversarial_red_team_agent_id": "jacob_michael_messer",
     "yellow_team_agent_id": "edward_raymond_larsen",
     "provenance_agent_id": "michael_james_redmond",
     "legacy_migration_agent_id": "nathan_james_redmond",
-    "merge_retry_agent_id": "michael_redmond",
+    "merge_retry_agent_id": "michael_aaron_redmond",
     "immutable_ethics_protocol_id": "QSO-IMMUTABLE-ETHICS-v1"
   },
-  "required_outputs": [
-    "authorization-record",
-    "repository-allowlist",
-    "scope-digest",
-    "hidden-dependency-map",
-    "orphaned-artifact-report",
-    "stale-reference-report",
-    "declared-vs-observed-state-report",
-    "provenance-gap-report",
-    "evidence-digests",
-    "human-review-receipt"
-  ]
+  "required_outputs": ["authorization-record","repository-allowlist","scope-digest","hidden-dependency-map","orphaned-artifact-report","stale-reference-report","declared-vs-observed-state-report","provenance-gap-report","evidence-digests","human-review-receipt"]
 }
