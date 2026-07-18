@@ -1,0 +1,93 @@
+name: Report Comment Repair Pipeline
+
+on:
+  pull_request_review:
+    types: [submitted]
+  pull_request_review_comment:
+    types: [created]
+  workflow_run:
+    workflows: [Conformance, Automatic Non-Merge Reconciliation, Jacob Redmond Block Remediation]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      pull_request_number:
+        required: true
+        type: string
+      report_or_comment:
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  compile-and-draft:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'failure') ||
+      (github.event_name == 'pull_request_review' && github.event.review.state == 'changes_requested' && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.review.author_association)) ||
+      (github.event_name == 'pull_request_review_comment' && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - id: source
+        shell: bash
+        env:
+          MANUAL_PR: ${{ inputs.pull_request_number }}
+          MANUAL_TEXT: ${{ inputs.report_or_comment }}
+          REVIEW_BODY: ${{ github.event.review.body }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          EVENT_PR: ${{ github.event.pull_request.number }}
+          RUN_PR: ${{ github.event.workflow_run.pull_requests[0].number }}
+        run: |
+          set -euo pipefail
+          PR_NUMBER="${MANUAL_PR:-${EVENT_PR:-${RUN_PR:-}}}"
+          test -n "$PR_NUMBER"
+          HEAD_SHA="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRefOid --jq '.headRefOid')"
+          HEAD_REF="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRefName --jq '.headRefName')"
+          BODY="${MANUAL_TEXT:-${REVIEW_BODY:-${COMMENT_BODY:-workflow-failure}}}"
+          python - "$PR_NUMBER" "$HEAD_SHA" "$BODY" <<'PY'
+          import json,sys
+          from pathlib import Path
+          pr,head,body=sys.argv[1:]
+          Path('repair-source.json').write_text(json.dumps({'pull_request_number':int(pr),'head_sha':head,'report':body,'comments':[body],'accepted_comments':[body],'rejected_or_stale_comments':[]},sort_keys=True,separators=(',',':'))+'\n')
+          PY
+          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+          echo "head_sha=$HEAD_SHA" >> "$GITHUB_OUTPUT"
+          echo "head_ref=$HEAD_REF" >> "$GITHUB_OUTPUT"
+      - run: python scripts/compile_repair_directive.py --input repair-source.json --output repair-directive.json
+      - id: repair
+        shell: bash
+        env:
+          PR_NUMBER: ${{ steps.source.outputs.pr_number }}
+          HEAD_SHA: ${{ steps.source.outputs.head_sha }}
+        run: |
+          set -euo pipefail
+          BRANCH="agent/repair-pr-${PR_NUMBER}-${HEAD_SHA:0:12}-${GITHUB_RUN_ID}"
+          git init work && cd work
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git fetch --depth=1 origin "$HEAD_SHA"
+          git switch --create "$BRANCH" FETCH_HEAD
+          git config user.name "Evan Theodore Quill"
+          git config user.email "evan-theodore-quill-agent@users.noreply.github.com"
+          mkdir -p reports/repair-directives
+          cp ../repair-directive.json "reports/repair-directives/pr-${PR_NUMBER}-${GITHUB_RUN_ID}.json"
+          cp ../repair-source.json "reports/repair-directives/pr-${PR_NUMBER}-${GITHUB_RUN_ID}.source.json"
+          git add . && git commit -m "Evan Theodore Quill: draft repair directive for PR #${PR_NUMBER}" && git push origin "$BRANCH"
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+      - shell: bash
+        env:
+          PR_NUMBER: ${{ steps.source.outputs.pr_number }}
+          HEAD_REF: ${{ steps.source.outputs.head_ref }}
+          BRANCH: ${{ steps.repair.outputs.branch }}
+        run: |
+          gh pr create --repo "$GITHUB_REPOSITORY" --draft --head "$BRANCH" --base "$HEAD_REF" --title "Repair PR #${PR_NUMBER}: report and comment remediation" --body "Evidence-bound draft repair. Fiona Celeste Arden verification, Michael Aaron Redmond reconciliation, Jacob Elias Redmond review, and human approval remain required."
