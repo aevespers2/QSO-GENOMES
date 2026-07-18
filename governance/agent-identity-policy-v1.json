@@ -1,0 +1,23 @@
+{
+  "policy_version": 1,
+  "policy_id": "qso-agent-three-name-identity-v1",
+  "requirement": "Every canonical agent identity must contain exactly three human-style name components: given, middle, and family name.",
+  "purpose": "Ensure agents remain uniquely distinguishable in simulation, virtual-reality, multi-agent, provenance, audit, and human-interaction contexts.",
+  "rules": {
+    "canonical_display_name_components": 3,
+    "canonical_agent_id_must_encode_all_three_names": true,
+    "legacy_short_ids_may_be_retained_as_deprecated_aliases": true,
+    "aliases_must_not_create_duplicate_authority": true,
+    "historical_hashes_and_receipts_must_not_be_rewritten": true,
+    "new_agents_must_pass_uniqueness_validation": true,
+    "human_review_required": true
+  },
+  "uniqueness_scope": [
+    "QSO-GENOMES",
+    "QSO-SEEKER",
+    "QSO-FABRIC",
+    "QuantumStateObjects",
+    "simulation-environments",
+    "virtual-reality-environments"
+  ]
+}
