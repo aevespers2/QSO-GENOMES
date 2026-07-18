@@ -1,0 +1,172 @@
+name: Michael Redmond Merge Retry
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_ref:
+        description: Candidate branch, tag, or commit to reconcile
+        required: true
+        default: builder/p0-four-genome-validation-20260716
+        type: string
+      base_ref:
+        description: Base branch to merge into the candidate
+        required: true
+        default: main
+        type: string
+      publish_reconciliation_branch:
+        description: Push a reconciliation branch only when merge and checks pass
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: michael-redmond-merge-retry-${{ inputs.candidate_ref }}-${{ inputs.base_ref }}
+  cancel-in-progress: false
+
+jobs:
+  retry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      AGENT_ID: michael_redmond
+      REVIEW_AUTHORITY_ID: jacob_redmond
+    steps:
+      - name: Checkout candidate with full history
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.candidate_ref }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Configure bounded merge identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "Michael Redmond"
+          git config user.email "michael-redmond-agent@users.noreply.github.com"
+
+      - name: Fetch exact refs
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin \
+            "+refs/heads/${{ inputs.base_ref }}:refs/remotes/origin/${{ inputs.base_ref }}" \
+            "+refs/heads/${{ inputs.candidate_ref }}:refs/remotes/origin/${{ inputs.candidate_ref }}"
+
+      - name: Attempt non-destructive reconciliation
+        id: merge
+        shell: bash
+        run: |
+          set -uo pipefail
+          mkdir -p reports
+          BASE_SHA="$(git rev-parse refs/remotes/origin/${{ inputs.base_ref }})"
+          CANDIDATE_SHA="$(git rev-parse refs/remotes/origin/${{ inputs.candidate_ref }})"
+          MERGE_BASE="$(git merge-base "$BASE_SHA" "$CANDIDATE_SHA")"
+          BRANCH="agent/michael-redmond-reconcile-${GITHUB_RUN_ID}"
+          git switch --create "$BRANCH" "$CANDIDATE_SHA"
+          set +e
+          git merge --no-ff --no-commit "$BASE_SHA" >reports/merge-stdout.txt 2>reports/merge-stderr.txt
+          STATUS=$?
+          set -e
+          git diff --name-only --diff-filter=U > reports/conflict-files.txt
+          python - <<PY
+          import json, os
+          from pathlib import Path
+          report = {
+              "report_version": 1,
+              "agent_id": os.environ["AGENT_ID"],
+              "review_authority_id": os.environ["REVIEW_AUTHORITY_ID"],
+              "base_ref": "${{ inputs.base_ref }}",
+              "candidate_ref": "${{ inputs.candidate_ref }}",
+              "base_sha": "$BASE_SHA",
+              "candidate_sha": "$CANDIDATE_SHA",
+              "merge_base": "$MERGE_BASE",
+              "reconciliation_branch": "$BRANCH",
+              "merge_exit_code": $STATUS,
+              "conflict_files": [line for line in Path("reports/conflict-files.txt").read_text().splitlines() if line],
+              "automatic_merge_authorized": False,
+              "human_review_required": True,
+          }
+          Path("reports/michael-redmond-merge-attempt.json").write_text(
+              json.dumps(report, sort_keys=True, separators=(",", ":")) + "\n",
+              encoding="utf-8",
+          )
+          PY
+          echo "status=$STATUS" >> "$GITHUB_OUTPUT"
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+          if [ "$STATUS" -ne 0 ]; then
+            git merge --abort || true
+          fi
+          exit 0
+
+      - name: Install declared dependencies
+        if: steps.merge.outputs.status == '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check -r requirements.txt
+
+      - name: Run conformance before recording merge
+        if: steps.merge.outputs.status == '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_schema_set.py
+          python scripts/validate_immutable_ethics_migration.py
+          python scripts/validate_aequitas_binding.py
+          python scripts/generate_contract_manifest.py --check
+          python -m unittest discover -s tests -v
+
+      - name: Record reconciliation commit
+        if: steps.merge.outputs.status == '0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git commit -m "Michael Redmond: reconcile ${{ inputs.candidate_ref }} with ${{ inputs.base_ref }}"
+          git rev-parse HEAD > reports/reconciliation-commit-sha.txt
+
+      - name: Push reviewed reconciliation branch
+        if: steps.merge.outputs.status == '0' && inputs.publish_reconciliation_branch
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push --set-upstream origin "${{ steps.merge.outputs.branch }}"
+
+      - name: Write final disposition
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path("reports/michael-redmond-merge-attempt.json")
+          report = json.loads(path.read_text()) if path.exists() else {"report_version": 1}
+          report["workflow_conclusion_pending"] = True
+          report["external_merge_authorized"] = False
+          report["next_required_authority"] = "jacob_redmond_and_human_reviewer"
+          path.write_text(json.dumps(report, sort_keys=True, separators=(",", ":")) + "\n")
+          PY
+
+      - name: Upload merge evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: michael-redmond-merge-retry-${{ github.run_id }}
+          if-no-files-found: error
+          retention-days: 30
+          path: reports/
+
+      - name: Fail closed on unresolved conflicts
+        if: steps.merge.outputs.status != '0'
+        shell: bash
+        run: |
+          echo "Merge retry found conflicts; human review is required."
+          exit 1
