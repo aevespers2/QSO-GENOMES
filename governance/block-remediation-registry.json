@@ -1,0 +1,44 @@
+{
+  "registry_version": 1,
+  "authority": {
+    "canonical_id": "jacob_redmond",
+    "display_name": "Jacob Redmond",
+    "deprecated_aliases": ["aequitas"]
+  },
+  "default_disposition": "block_pending_human_review",
+  "rules": {
+    "schema_validation": {
+      "description": "Validate the exact genome artifact set and every schema-bound artifact.",
+      "commands": [
+        ["python", "scripts/validate_schema_set.py"]
+      ]
+    },
+    "immutable_ethics": {
+      "description": "Validate immutable ethics migration and local-ethics conflict boundaries.",
+      "commands": [
+        ["python", "scripts/validate_immutable_ethics_migration.py"]
+      ]
+    },
+    "review_binding": {
+      "description": "Validate the Jacob Redmond review binding through the deprecated Aequitas compatibility validator until migration completion.",
+      "commands": [
+        ["python", "scripts/validate_aequitas_binding.py"]
+      ]
+    },
+    "manifest_identity": {
+      "description": "Regenerate and verify identity-bearing compatibility-manifest semantics.",
+      "commands": [
+        ["python", "scripts/generate_contract_manifest.py", "--check"]
+      ]
+    },
+    "full_conformance": {
+      "description": "Run all bounded, repository-local conformance checks.",
+      "commands": [
+        ["python", "scripts/validate_schema_set.py"],
+        ["python", "scripts/validate_immutable_ethics_migration.py"],
+        ["python", "scripts/validate_aequitas_binding.py"],
+        ["python", "scripts/generate_contract_manifest.py", "--check"]
+      ]
+    }
+  }
+}

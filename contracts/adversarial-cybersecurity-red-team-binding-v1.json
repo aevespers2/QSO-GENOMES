@@ -1,0 +1,64 @@
+{
+  "contract_version": 1,
+  "binding_id": "adversarial-cybersecurity-red-team-binding-v1",
+  "agent_reference": {
+    "agent_id": "jacob_michael_messer",
+    "display_name": "Jacob Michael Messer",
+    "role": "ADVERSARIAL_CYBERSECURITY_RED_TEAM",
+    "path": "governance/agents/jacob-michael-messer.json"
+  },
+  "authorization": {
+    "mode": "explicit_allowlist_only",
+    "default_network_access": "denied",
+    "default_credential_access": "denied",
+    "default_destructive_access": "denied",
+    "production_intrusion_allowed": false,
+    "external_scanning_allowed": false,
+    "sandbox_or_fixture_only": true
+  },
+  "review_chain": {
+    "seeker_agent_id": "jacob_thomas_redmond",
+    "review_authority_id": "jacob_redmond",
+    "merge_retry_agent_id": "michael_redmond",
+    "human_final_approval_required": true
+  },
+  "allowed_surfaces": [
+    "schemas",
+    "validators",
+    "canonicalization",
+    "compatibility-manifests",
+    "provenance-ledgers",
+    "review-receipts",
+    "freeze-certificates",
+    "workflow-permissions",
+    "path-confinement",
+    "replay-protection",
+    "prompt-and-instruction-boundaries",
+    "capability-enforcement"
+  ],
+  "required_controls": {
+    "authorization_record": true,
+    "target_allowlist": true,
+    "scope_digest": true,
+    "bounded_runtime": true,
+    "fixture_data_only": true,
+    "evidence_and_reproduction": true,
+    "defensive_remediation": true,
+    "rollback_plan": true,
+    "human_review": true,
+    "external_commit_authorized": false
+  },
+  "forbidden_actions": [
+    "credential-theft",
+    "authentication-bypass-on-live-systems",
+    "production-exploitation",
+    "malware-deployment",
+    "persistence",
+    "data-exfiltration",
+    "service-disruption",
+    "social-engineering",
+    "unapproved-external-scanning",
+    "automatic-merge",
+    "publication-or-release"
+  ]
+}

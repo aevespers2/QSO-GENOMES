@@ -1,0 +1,47 @@
+{
+  "contract_version": 1,
+  "binding_id": "legacy-migration-agent-binding-v1",
+  "agent_reference": {
+    "agent_id": "nathan_james_redmond",
+    "display_name": "Nathan James Redmond",
+    "role": "LEGACY_MIGRATION",
+    "path": "governance/agents/nathan-james-redmond.json"
+  },
+  "migration_scope": {
+    "allowed": [
+      "legacy-identifier-mapping",
+      "schema-version-migration",
+      "manifest-migration",
+      "contract-migration",
+      "compatibility-alias-generation",
+      "deprecation-record-generation",
+      "forward-transform-generation",
+      "rollback-transform-generation",
+      "provenance-continuity-validation"
+    ],
+    "forbidden": [
+      "historical-hash-rewrite",
+      "silent-identifier-change",
+      "unreviewed-record-deletion",
+      "immutable-ethics-modification",
+      "automatic-merge",
+      "publication-or-release"
+    ]
+  },
+  "review_chain": {
+    "orchestrator_agent_id": "jacob_thomas_vespers",
+    "review_authority_id": "jacob_redmond",
+    "adversarial_red_team_agent_id": "jacob_michael_messer",
+    "merge_retry_agent_id": "michael_redmond",
+    "human_final_approval_required": true
+  },
+  "invariants": {
+    "historical_records_preserved": true,
+    "pre_and_post_digests_required": true,
+    "rollback_required": true,
+    "compatibility_window_required": true,
+    "provenance_required": true,
+    "human_review_required": true,
+    "external_commit_authorized": false
+  }
+}

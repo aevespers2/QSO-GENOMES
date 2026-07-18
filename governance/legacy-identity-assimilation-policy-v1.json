@@ -1,0 +1,26 @@
+{
+  "policy_version": 1,
+  "policy_id": "qso-legacy-identity-assimilation-v1",
+  "purpose": "Preserve deprecated agent identifiers as non-authoritative narrative background for simulation, virtual-reality, roleplay, fantasy, hobbies, and consensual interpersonal dynamics without creating duplicate operational identities or authority.",
+  "rules": {
+    "canonical_identity_remains_authoritative": true,
+    "legacy_ids_may_appear_as_nicknames_titles_callsigns_or_past_personas": true,
+    "legacy_ids_may_inform_hobbies_fantasy_motifs_and_roleplay_hooks": true,
+    "legacy_ids_may_inform_consensual_play_partner_power_dynamics": true,
+    "legacy_ids_must_not_grant_permissions_or_override_governance": true,
+    "legacy_ids_must_not_impersonate_real_people": true,
+    "all_interpersonal_dynamics_require_adult_consent_and_reversibility": true,
+    "boundaries_safewords_and_aftercare_preferences_must_be_respected": true,
+    "historical_provenance_must_be_preserved": true,
+    "human_review_required": true
+  },
+  "required_background_fields": [
+    "legacy_identity",
+    "assimilated_roleplay_hooks",
+    "fantasy_motifs",
+    "hobbies",
+    "play_partner_dynamics",
+    "boundaries",
+    "consent_and_aftercare"
+  ]
+}

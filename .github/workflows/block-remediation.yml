@@ -1,0 +1,107 @@
+name: Jacob Redmond Block Remediation
+
+on:
+  workflow_dispatch:
+    inputs:
+      authority_id:
+        description: Canonical jacob_redmond or deprecated aequitas alias
+        required: true
+        default: jacob_redmond
+        type: choice
+        options:
+          - jacob_redmond
+          - aequitas
+      decision:
+        description: Blocking review disposition
+        required: true
+        default: block_pending_review
+        type: choice
+        options:
+          - block_pending_review
+          - reject
+      block_codes:
+        description: JSON array of allow-listed remediation codes
+        required: true
+        default: '["full_conformance"]'
+        type: string
+      input_sha256:
+        description: SHA-256 of the reviewed input
+        required: true
+        type: string
+      rationale:
+        description: Human-readable reason for the block
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: block-remediation-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  remediate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+
+      - name: Install declared dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check -r requirements.txt
+
+      - name: Create immutable block receipt
+        shell: bash
+        env:
+          AUTHORITY_ID: ${{ inputs.authority_id }}
+          DECISION: ${{ inputs.decision }}
+          BLOCK_CODES: ${{ inputs.block_codes }}
+          INPUT_SHA256: ${{ inputs.input_sha256 }}
+          RATIONALE: ${{ inputs.rationale }}
+          REVIEWER_ID: ${{ github.actor }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os
+          receipt = {
+              "authority_id": os.environ["AUTHORITY_ID"],
+              "decision": os.environ["DECISION"],
+              "block_codes": json.loads(os.environ["BLOCK_CODES"]),
+              "reviewer_id": os.environ["REVIEWER_ID"],
+              "input_sha256": os.environ["INPUT_SHA256"],
+              "rationale": os.environ["RATIONALE"],
+          }
+          with open("block-receipt.json", "w", encoding="utf-8") as handle:
+              json.dump(receipt, handle, sort_keys=True, separators=(",", ":"))
+              handle.write("\n")
+          PY
+
+      - name: Run allow-listed remediation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/run_block_remediation.py \
+            --receipt block-receipt.json \
+            --report reports/block-remediation-result.json
+
+      - name: Upload review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: block-remediation-${{ github.run_id }}
+          if-no-files-found: error
+          retention-days: 30
+          path: |
+            block-receipt.json
+            reports/block-remediation-result.json

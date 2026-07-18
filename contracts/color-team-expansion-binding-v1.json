@@ -1,0 +1,32 @@
+{
+  "contract_version": 1,
+  "binding_id": "color-team-expansion-binding-v1",
+  "orchestrator_agent_id": "jacob_thomas_vespers",
+  "review_authority_id": "jacob_redmond",
+  "provenance_agent_id": "michael_james_redmond",
+  "merge_retry_agent_id": "michael_redmond",
+  "human_final_approval_required": true,
+  "teams": [
+    {"color":"BLUE","agent_id":"daniel_cole_mercer","role":"DEFENSIVE_OPERATIONS","path":"governance/agents/daniel-cole-mercer.json"},
+    {"color":"PURPLE","agent_id":"rebecca_anne_vale","role":"SECURITY_COORDINATION","path":"governance/agents/rebecca-anne-vale.json"},
+    {"color":"WHITE","agent_id":"samuel_orion_cross","role":"INDEPENDENT_VERIFICATION","path":"governance/agents/samuel-orion-cross.json"},
+    {"color":"GRAY","agent_id":"lucas_adrian_grey","role":"POLICY_AND_AMBIGUITY_REVIEW","path":"governance/agents/lucas-adrian-grey.json"},
+    {"color":"ORANGE","agent_id":"gabriel_thomas_flint","role":"SAFETY_AND_RESILIENCE","path":"governance/agents/gabriel-thomas-flint.json"},
+    {"color":"TEAL","agent_id":"olivia_jane_marlowe","role":"PRIVACY_ENGINEERING","path":"governance/agents/olivia-jane-marlowe.json"},
+    {"color":"SILVER","agent_id":"amelia_rose_sterling","role":"CRYPTOGRAPHIC_ASSURANCE","path":"governance/agents/amelia-rose-sterling.json"},
+    {"color":"AMBER","agent_id":"rachel_dawn_everly","role":"EARLY_WARNING_AND_RISK_THRESHOLDS","path":"governance/agents/rachel-dawn-everly.json"}
+  ],
+  "shared_invariants": {
+    "least_privilege": true,
+    "role_separation": true,
+    "immutable_ethics_may_change": false,
+    "credentials_may_be_accessed": false,
+    "unapproved_external_targets_may_be_scanned": false,
+    "automatic_merge_allowed": false,
+    "publication_or_release_allowed": false,
+    "provenance_required": true,
+    "rollback_required": true,
+    "human_review_required": true,
+    "external_commit_authorized": false
+  }
+}

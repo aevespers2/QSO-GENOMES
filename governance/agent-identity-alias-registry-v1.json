@@ -1,0 +1,49 @@
+{
+  "registry_version": 1,
+  "policy_id": "qso-agent-three-name-identity-v1",
+  "resolution_mode": "canonicalize_before_authorization",
+  "aliases": [
+    {
+      "legacy_id": "jacob_redmond",
+      "canonical_id": "jacob_elias_redmond",
+      "canonical_display_name": "Jacob Elias Redmond",
+      "legacy_use": "ethical-arbiter persona and roleplay background",
+      "authority_from_alias": false
+    },
+    {
+      "legacy_id": "aequitas",
+      "canonical_id": "jacob_elias_redmond",
+      "canonical_display_name": "Jacob Elias Redmond",
+      "legacy_use": "keeper-of-the-scales fantasy title",
+      "authority_from_alias": false
+    },
+    {
+      "legacy_id": "michael_redmond",
+      "canonical_id": "michael_aaron_redmond",
+      "canonical_display_name": "Michael Aaron Redmond",
+      "legacy_use": "reconciliation engineer persona",
+      "authority_from_alias": false
+    },
+    {
+      "legacy_id": "jessica",
+      "canonical_id": "jessica_marie_vale",
+      "canonical_display_name": "Jessica Marie Vale",
+      "legacy_use": "ghost callsign and hidden-path explorer persona",
+      "authority_from_alias": false
+    },
+    {
+      "legacy_id": "terry_moss",
+      "canonical_id": "terry_alan_moss",
+      "canonical_display_name": "Terry Alan Moss",
+      "legacy_use": "green-team field engineer persona",
+      "authority_from_alias": false
+    }
+  ],
+  "invariants": {
+    "legacy_aliases_never_grant_permissions": true,
+    "canonical_identity_required_for_new_receipts": true,
+    "historical_records_preserved": true,
+    "adult_consent_required_for_play_dynamics": true,
+    "human_review_required": true
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "contract_version": 1,
+  "binding_id": "yellow-team-agent-binding-v1",
+  "agent_reference": {
+    "agent_id": "edward_raymond_larsen",
+    "display_name": "Edward Raymond Larsen",
+    "role": "YELLOW_TEAM",
+    "path": "governance/agents/edward-raymond-larsen.json"
+  },
+  "yellow_team_scope": {
+    "allowed": [
+      "threat-informed-design",
+      "security-control-design",
+      "secure-defaults",
+      "fail-closed-workflows",
+      "abuse-case-testing",
+      "misuse-case-testing",
+      "security-usability-analysis",
+      "observability-and-recovery-design",
+      "cross-team-security-coordination",
+      "defensive-feature-proposals"
+    ],
+    "forbidden": [
+      "external-target-scanning",
+      "production-exploitation",
+      "authentication-bypass",
+      "credential-access",
+      "review-gate-weakening",
+      "immutable-ethics-modification",
+      "automatic-merge",
+      "publication-or-release"
+    ]
+  },
+  "review_chain": {
+    "orchestrator_agent_id": "jacob_thomas_vespers",
+    "adversarial_red_team_agent_id": "jacob_michael_messer",
+    "provenance_agent_id": "michael_james_redmond",
+    "legacy_migration_agent_id": "nathan_james_redmond",
+    "review_authority_id": "jacob_redmond",
+    "merge_retry_agent_id": "michael_redmond",
+    "human_final_approval_required": true
+  },
+  "invariants": {
+    "least_privilege": true,
+    "secure_defaults": true,
+    "fail_closed": true,
+    "observability_required": true,
+    "recovery_and_rollback_required": true,
+    "verification_tests_required": true,
+    "human_review_required": true,
+    "external_commit_authorized": false
+  }
+}

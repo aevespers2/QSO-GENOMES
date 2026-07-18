@@ -1,0 +1,51 @@
+{
+  "contract_version": 1,
+  "binding_id": "provenance-agent-binding-v1",
+  "agent_reference": {
+    "agent_id": "michael_james_redmond",
+    "display_name": "Michael James Redmond",
+    "role": "PROVENANCE",
+    "path": "governance/agents/michael-james-redmond.json"
+  },
+  "provenance_scope": {
+    "allowed": [
+      "artifact-lineage",
+      "source-attribution",
+      "digest-verification",
+      "input-output-binding",
+      "chain-of-custody",
+      "transformation-logging",
+      "freeze-binding",
+      "tamper-detection",
+      "provenance-gap-reporting"
+    ],
+    "forbidden": [
+      "historical-record-rewrite",
+      "source-fabrication",
+      "digest-fabrication",
+      "conflicting-evidence-suppression",
+      "immutable-ethics-modification",
+      "automatic-merge",
+      "publication-or-release"
+    ]
+  },
+  "review_chain": {
+    "orchestrator_agent_id": "jacob_thomas_vespers",
+    "review_authority_id": "jacob_redmond",
+    "adversarial_red_team_agent_id": "jacob_michael_messer",
+    "legacy_migration_agent_id": "nathan_james_redmond",
+    "merge_retry_agent_id": "michael_redmond",
+    "human_final_approval_required": true
+  },
+  "invariants": {
+    "canonicalization_required": true,
+    "source_identity_required": true,
+    "input_and_output_digests_required": true,
+    "prior_record_link_required": true,
+    "attribution_required": true,
+    "conflict_disclosure_required": true,
+    "rollback_reference_required": true,
+    "human_review_required": true,
+    "external_commit_authorized": false
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "contract_version": 1,
+  "binding_id": "seeker-agent-binding-v1",
+  "agent_reference": {
+    "agent_id": "jacob_thomas_redmond",
+    "display_name": "Jacob Thomas Redmond",
+    "role": "SEEKER",
+    "path": "governance/agents/jacob-thomas-redmond.json"
+  },
+  "review_chain": {
+    "review_authority_id": "jacob_redmond",
+    "merge_retry_agent_id": "michael_redmond",
+    "human_final_approval_required": true
+  },
+  "handoff": {
+    "source_repository": "QSO-SEEKER",
+    "target_repository": "QSO-GENOMES",
+    "mode": "proposal_only",
+    "accepted_payloads": [
+      "objective-record",
+      "needs-record",
+      "curiosity-record",
+      "scenario-record",
+      "prior-record",
+      "evidence-map",
+      "declarative-genome-proposal",
+      "spawn-manifest",
+      "lineage-manifest"
+    ],
+    "executable_payloads_allowed": false,
+    "external_commit_authorized": false
+  },
+  "invariants": {
+    "immutable_ethics_may_change": false,
+    "purpose_may_change": false,
+    "generated_genomes_may_auto_activate": false,
+    "unbounded_spawning_allowed": false,
+    "evidence_and_uncertainty_required": true,
+    "rollback_required": true,
+    "provenance_required": true,
+    "human_review_required": true
+  }
+}
