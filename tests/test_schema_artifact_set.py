@@ -15,15 +15,15 @@ sys.modules[SPEC.name] = schema_tool
 SPEC.loader.exec_module(schema_tool)
 
 
-class ExactGenomeArtifactSetTests(unittest.TestCase):
-    def write_genomes(self, directory: Path, *names: str) -> None:
+class ExactArtifactSetTests(unittest.TestCase):
+    def write_json(self, directory: Path, *names: str) -> None:
         for name in names:
             (directory / name).write_text("{}\n", encoding="utf-8")
 
-    def test_exact_required_set_passes(self) -> None:
+    def test_exact_required_genome_set_passes(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             directory = Path(temporary_directory)
-            self.write_genomes(directory, *schema_tool.REQUIRED_GENOME_FILENAMES)
+            self.write_json(directory, *schema_tool.REQUIRED_GENOME_FILENAMES)
             schema_tool.assert_exact_json_artifact_set(
                 directory,
                 schema_tool.REQUIRED_GENOME_FILENAMES,
@@ -38,7 +38,7 @@ class ExactGenomeArtifactSetTests(unittest.TestCase):
                 for name in schema_tool.REQUIRED_GENOME_FILENAMES
                 if name != "nova.json"
             )
-            self.write_genomes(directory, *names)
+            self.write_json(directory, *names)
             with self.assertRaisesRegex(
                 schema_tool.ArtifactSetError,
                 r"missing required genome artifacts: nova\.json",
@@ -52,7 +52,7 @@ class ExactGenomeArtifactSetTests(unittest.TestCase):
     def test_unexpected_genome_fails_closed(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             directory = Path(temporary_directory)
-            self.write_genomes(
+            self.write_json(
                 directory,
                 *schema_tool.REQUIRED_GENOME_FILENAMES,
                 "rogue.json",
@@ -67,10 +67,32 @@ class ExactGenomeArtifactSetTests(unittest.TestCase):
                     label="genome",
                 )
 
+    def test_empty_active_sprite_set_passes(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            schema_tool.assert_exact_json_artifact_set(
+                Path(temporary_directory),
+                schema_tool.REQUIRED_SPRITE_FILENAMES,
+                label="active sprite",
+            )
+
+    def test_disengaged_sprite_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            directory = Path(temporary_directory)
+            self.write_json(directory, "aequitas.json")
+            with self.assertRaisesRegex(
+                schema_tool.ArtifactSetError,
+                r"unexpected active sprite artifacts: aequitas\.json",
+            ):
+                schema_tool.assert_exact_json_artifact_set(
+                    directory,
+                    schema_tool.REQUIRED_SPRITE_FILENAMES,
+                    label="active sprite",
+                )
+
     def test_non_json_support_file_does_not_change_schema_bound_set(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             directory = Path(temporary_directory)
-            self.write_genomes(directory, *schema_tool.REQUIRED_GENOME_FILENAMES)
+            self.write_json(directory, *schema_tool.REQUIRED_GENOME_FILENAMES)
             (directory / "README.md").write_text("documentation\n", encoding="utf-8")
             schema_tool.assert_exact_json_artifact_set(
                 directory,
