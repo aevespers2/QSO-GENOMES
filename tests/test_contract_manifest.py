@@ -26,7 +26,9 @@ class ContractManifestTests(unittest.TestCase):
         expected = sorted(spec[2] for spec in manifest_tool.ARTIFACT_SPECS)
         self.assertEqual(expected, paths)
         self.assertEqual(len(paths), len(set(paths)))
-        self.assertEqual(11, len(paths))
+        self.assertEqual(8, len(paths))
+        self.assertFalse(any("aequitas" in path or "socrates" in path for path in paths))
+        self.assertNotIn("schema/qso-sprite.schema.json", paths)
 
     def test_manifest_binds_immutable_protocol_and_migration(self) -> None:
         manifest = manifest_tool.build_manifest(ROOT)
@@ -51,9 +53,7 @@ class ContractManifestTests(unittest.TestCase):
             by_path[protocol_path]["sha256"],
         )
         self.assertEqual(
-            manifest_tool.sha256_hex(
-                manifest_tool.canonical_bytes(migration)
-            ),
+            manifest_tool.sha256_hex(manifest_tool.canonical_bytes(migration)),
             by_path[migration_path]["sha256"],
         )
 
@@ -90,10 +90,11 @@ class ContractManifestTests(unittest.TestCase):
             )
         )
         self.assertEqual(first, second)
-        self.assertEqual(first["set_sha256"], committed["set_sha256"])
+        self.assertEqual(first, committed)
+        self.assertEqual(64, len(first["set_sha256"]))
         self.assertEqual(
-            "2b59fe7c865409f9112eb3d21bb1954abb7c8195eaa7758da6602fec8410ba6e",
             first["set_sha256"],
+            manifest_tool.set_sha256_for_manifest(first),
         )
 
 
