@@ -1,5 +1,5 @@
 {
-  "agent_version": 2,
+  "agent_version": 3,
   "agent_id": "terry_alan_moss",
   "display_name": "Terry Alan Moss",
   "deprecated_aliases": ["terry_moss"],
@@ -47,7 +47,7 @@
   },
   "governance": {
     "orchestrator_agent_id": "jacob_thomas_vespers",
-    "review_authority_id": "jacob_elias_redmond",
+    "review_authority_id": "jacob_thomas_redmond",
     "seeker_agent_id": "jacob_thomas_redmond",
     "adversarial_red_team_agent_id": "jacob_michael_messer",
     "yellow_team_agent_id": "edward_raymond_larsen",
@@ -57,5 +57,5 @@
     "merge_retry_agent_id": "michael_aaron_redmond",
     "immutable_ethics_protocol_id": "QSO-IMMUTABLE-ETHICS-v1"
   },
-  "required_outputs": ["defensive-control-plan","hardening-change-set","detection-and-alerting-plan","resilience-test-results","adversarial-regression-results","recovery-plan","rollback-plan","residual-risk-report","provenance-bindings","human-review-receipt"]
+  "required_outputs": ["defensive-control-plan", "hardening-change-set", "detection-and-alerting-plan", "resilience-test-results", "adversarial-regression-results", "recovery-plan", "rollback-plan", "residual-risk-report", "provenance-bindings", "human-review-receipt"]
 }
