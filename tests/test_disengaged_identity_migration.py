@@ -34,7 +34,8 @@ class DisengagedIdentityMigrationTests(unittest.TestCase):
                 for identity in DISENGAGED:
                     if identity in lowered:
                         findings.append(f"{relative}: active reference to {identity}")
-        self.assertEqual([], findings)
+        if findings:
+            self.fail("disengaged identities remain active:\n" + "\n".join(findings))
 
     def test_manifest_contains_only_current_active_artifacts(self) -> None:
         manifest = json.loads(
