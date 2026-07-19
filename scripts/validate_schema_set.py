@@ -65,6 +65,15 @@ def assert_exact_json_artifact_set(
 ) -> None:
     """Fail closed unless ``directory`` contains exactly the required JSON files."""
     required = frozenset(required_filenames)
+    if not directory.exists():
+        if not required:
+            return
+        raise ArtifactSetError(
+            f"missing required {label} artifacts: {', '.join(sorted(required))}"
+        )
+    if not directory.is_dir():
+        raise ArtifactSetError(f"{label} artifact path is not a directory")
+
     actual = frozenset(
         path.name
         for path in directory.iterdir()
