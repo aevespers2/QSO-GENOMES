@@ -1,9 +1,8 @@
 {
-  "registry_version": 1,
+  "registry_version": 3,
   "authority": {
-    "canonical_id": "jacob_redmond",
-    "display_name": "Jacob Redmond",
-    "deprecated_aliases": ["aequitas"]
+    "canonical_id": "jacob_thomas_redmond",
+    "display_name": "Jacob Thomas Redmond"
   },
   "default_disposition": "block_pending_human_review",
   "rules": {
@@ -19,10 +18,10 @@
         ["python", "scripts/validate_immutable_ethics_migration.py"]
       ]
     },
-    "review_binding": {
-      "description": "Validate the Jacob Redmond review binding through the deprecated Aequitas compatibility validator until migration completion.",
+    "active_identity_migration": {
+      "description": "Verify retired review identifiers cannot resolve through active governance surfaces.",
       "commands": [
-        ["python", "scripts/validate_aequitas_binding.py"]
+        ["python", "-m", "unittest", "discover", "-s", "tests", "-p", "test_disengaged_identity_migration.py", "-v"]
       ]
     },
     "manifest_identity": {
@@ -36,8 +35,8 @@
       "commands": [
         ["python", "scripts/validate_schema_set.py"],
         ["python", "scripts/validate_immutable_ethics_migration.py"],
-        ["python", "scripts/validate_aequitas_binding.py"],
-        ["python", "scripts/generate_contract_manifest.py", "--check"]
+        ["python", "scripts/generate_contract_manifest.py", "--check"],
+        ["python", "-m", "unittest", "discover", "-s", "tests", "-v"]
       ]
     }
   }

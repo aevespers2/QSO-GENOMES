@@ -1,5 +1,5 @@
 {
-  "agent_version": 2,
+  "agent_version": 3,
   "agent_id": "michael_aaron_redmond",
   "display_name": "Michael Aaron Redmond",
   "deprecated_aliases": ["michael_redmond"],
@@ -20,11 +20,18 @@
     "may_modify_immutable_ethics": false
   },
   "governance": {
-    "review_authority_id": "jacob_elias_redmond",
-    "deprecated_review_aliases": ["jacob_redmond", "aequitas"],
+    "review_authority_id": "jacob_thomas_redmond",
     "human_review_required": true,
     "default_on_conflict": "block_pending_review",
     "external_commit_authorized": false
   },
-  "required_outputs": ["merge-base","base-head-sha","candidate-head-sha","conflict-file-list","merge-attempt-exit-code","conformance-results","rollback-instructions"]
+  "required_outputs": [
+    "merge-base",
+    "base-head-sha",
+    "candidate-head-sha",
+    "conflict-file-list",
+    "merge-attempt-exit-code",
+    "conformance-results",
+    "rollback-instructions"
+  ]
 }

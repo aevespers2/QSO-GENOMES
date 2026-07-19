@@ -1,34 +1,31 @@
-name: Automatic Non-Merge Reconciliation
+name: Non-Merge Reconciliation Assessment
 
 on:
-  pull_request_target:
+  pull_request:
     types: [opened, reopened, synchronize, ready_for_review, edited]
-  schedule:
-    - cron: '17 * * * *'
   workflow_dispatch:
     inputs:
       pull_request_number:
-        description: Optional pull request number to reconcile
+        description: Optional pull request number to assess
         required: false
         type: string
 
 permissions:
-  contents: write
-  pull-requests: write
-  issues: write
+  contents: read
+  pull-requests: read
 
 concurrency:
-  group: nonmerge-reconciliation-${{ github.event.pull_request.number || inputs.pull_request_number || github.run_id }}
-  cancel-in-progress: false
+  group: nonmerge-assessment-${{ github.event.pull_request.number || inputs.pull_request_number || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
-  detect-and-reconcile:
+  assess:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     env:
       GH_TOKEN: ${{ github.token }}
       AGENT_ID: michael_aaron_redmond
-      REVIEW_AUTHORITY_ID: jacob_elias_redmond
+      REVIEW_AUTHORITY_ID: jacob_thomas_redmond
     steps:
       - name: Resolve pull request set
         id: prs
@@ -37,14 +34,14 @@ jobs:
           set -euo pipefail
           if [ -n "${{ inputs.pull_request_number || '' }}" ]; then
             printf '%s\n' "${{ inputs.pull_request_number }}" > /tmp/prs.txt
-          elif [ "${{ github.event_name }}" = "pull_request_target" ]; then
+          elif [ "${{ github.event_name }}" = "pull_request" ]; then
             printf '%s\n' "${{ github.event.pull_request.number }}" > /tmp/prs.txt
           else
-            gh pr list --repo "$GITHUB_REPOSITORY" --state open --json number --jq '.[].number' > /tmp/prs.txt
+            : > /tmp/prs.txt
           fi
           echo "count=$(wc -l < /tmp/prs.txt | tr -d ' ')" >> "$GITHUB_OUTPUT"
 
-      - name: Inspect mergeability and prepare reconciliation
+      - name: Assess mergeability without repository mutation
         shell: bash
         run: |
           set -euo pipefail
@@ -57,49 +54,53 @@ jobs:
               [ "$STATE" != "UNKNOWN" ] && break
               sleep 6
             done
-            if [ "$STATE" != "DIRTY" ]; then
-              printf '{"pr":%s,"merge_state":"%s","action":"none"}\n' "$PR_NUMBER" "$STATE" > "reports/pr-${PR_NUMBER}.json"
-              continue
-            fi
             BASE_REF="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json baseRefName --jq '.baseRefName')"
             HEAD_REF="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRefName --jq '.headRefName')"
             HEAD_REPO="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRepository --jq '.headRepository.nameWithOwner')"
             HEAD_SHA="$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json headRefOid --jq '.headRefOid')"
             BASE_SHA="$(gh api "repos/$GITHUB_REPOSITORY/commits/$BASE_REF" --jq '.sha')"
-            BRANCH="agent/michael-aaron-redmond/pr-${PR_NUMBER}-${HEAD_SHA:0:12}"
+            ACTION="none"
+            REASON="mergeable_or_pending"
+            if [ "$STATE" = "DIRTY" ]; then
+              ACTION="human_reconciliation_required"
+              REASON="merge_conflicts"
+            fi
             if [ "$HEAD_REPO" != "$GITHUB_REPOSITORY" ]; then
-              printf '{"pr":%s,"merge_state":"DIRTY","action":"human_review","reason":"fork_head"}\n' "$PR_NUMBER" > "reports/pr-${PR_NUMBER}.json"
-              gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "Michael Aaron Redmond detected a non-mergeable fork-based pull request. The workflow will not write to or execute code from an external fork. Human reconciliation under Jacob Elias Redmond is required."
-              continue
+              ACTION="human_reconciliation_required"
+              REASON="external_fork_head"
             fi
-            rm -rf worktree
-            git clone --no-checkout "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" worktree
-            cd worktree
-            git config user.name "Michael Aaron Redmond"
-            git config user.email "michael-aaron-redmond-agent@users.noreply.github.com"
-            git fetch origin "$BASE_REF" "$HEAD_SHA"
-            git switch --create "$BRANCH" "$HEAD_SHA"
-            set +e
-            git merge --no-ff --no-commit "$BASE_SHA" > "../reports/pr-${PR_NUMBER}-merge.stdout" 2> "../reports/pr-${PR_NUMBER}-merge.stderr"
-            STATUS=$?
-            set -e
-            if [ "$STATUS" -ne 0 ]; then
-              git diff --name-only --diff-filter=U > "../reports/pr-${PR_NUMBER}-conflicts.txt"
-              git merge --abort || true
-              cd ..
-              gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "Michael Aaron Redmond attempted a non-destructive reconciliation with \`$BASE_REF\`, but conflicts remain. No history was rewritten and no merge was performed. Human review under Jacob Elias Redmond is required."
-              continue
-            fi
-            git commit -m "Michael Aaron Redmond: reconcile PR #${PR_NUMBER} with ${BASE_REF}"
-            git push origin "$BRANCH"
-            cd ..
+            python - <<PY
+          import json
+          from pathlib import Path
+          report = {
+              "report_version": 1,
+              "agent_id": "${AGENT_ID}",
+              "review_authority_id": "${REVIEW_AUTHORITY_ID}",
+              "pull_request_number": int("$PR_NUMBER"),
+              "merge_state": "$STATE",
+              "base_ref": "$BASE_REF",
+              "base_sha": "$BASE_SHA",
+              "head_ref": "$HEAD_REF",
+              "head_repo": "$HEAD_REPO",
+              "head_sha": "$HEAD_SHA",
+              "action": "$ACTION",
+              "reason": "$REASON",
+              "repository_write_authorized": False,
+              "automatic_merge_authorized": False,
+              "human_review_required": "$ACTION" != "none",
+          }
+          Path("reports/pr-$PR_NUMBER.json").write_text(
+              json.dumps(report, sort_keys=True, separators=(",", ":")) + "\n",
+              encoding="utf-8",
+          )
+          PY
           done < /tmp/prs.txt
 
-      - name: Upload reconciliation evidence
+      - name: Upload reconciliation assessment
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: automatic-nonmerge-reconciliation-${{ github.run_id }}
+          name: nonmerge-assessment-${{ github.run_id }}
           if-no-files-found: warn
           retention-days: 30
           path: reports/

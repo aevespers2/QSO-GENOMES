@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Generate and verify the deterministic QSO-GENOMES compatibility manifest."""
-
 from __future__ import annotations
 
 import argparse
@@ -28,15 +27,10 @@ ARTIFACT_DESCRIPTOR_FIELDS = (
     "sha256",
 )
 
-# kind, declared artifact id, relative path, source identity selector, source version selector
+# kind, declared artifact id, relative path, source identity selector, version selector
+# Active Aequitas/Socrates contracts, sprite schema, and sprite records are intentionally
+# absent. Historical reports remain outside the compatibility identity.
 ARTIFACT_SPECS = (
-    (
-        "contract",
-        "aequitas-external-review-v1",
-        "contracts/aequitas-review-binding.json",
-        "binding_id",
-        "contract_version",
-    ),
     (
         "contract",
         "immutable-baseline-v1",
@@ -69,14 +63,6 @@ ARTIFACT_SPECS = (
         IDENTITY_FROM_SCHEMA_ID,
         "properties.schema_version.const",
     ),
-    (
-        "schema",
-        "qso-sprite",
-        "schema/qso-sprite.schema.json",
-        IDENTITY_FROM_SCHEMA_ID,
-        "properties.schema_version.const",
-    ),
-    ("sprite", "aequitas", "sprites/aequitas.json", "sprite_id", "schema_version"),
 )
 
 
@@ -98,7 +84,6 @@ def _reject_nonfinite(value: str) -> None:
 
 
 def load_json(path: Path) -> Any:
-    """Load strict JSON while rejecting duplicate keys and non-finite numbers."""
     return json.loads(
         path.read_text(encoding="utf-8"),
         object_pairs_hook=_reject_duplicate_keys,
@@ -107,12 +92,6 @@ def load_json(path: Path) -> Any:
 
 
 def canonical_bytes(value: Any) -> bytes:
-    """Encode QSO Canonical JSON v1.
-
-    The profile uses UTF-8, lexicographically sorted object keys, preserved array
-    order, no insignificant whitespace, JSON-native finite numbers, and one
-    trailing LF. Input JSON is parsed with duplicate-key rejection.
-    """
     return (
         json.dumps(
             value,
@@ -130,7 +109,6 @@ def sha256_hex(payload: bytes) -> str:
 
 
 def build_digest_semantics() -> dict[str, Any]:
-    """Return the normative digest contract embedded in the manifest identity."""
     return {
         "algorithm": "SHA-256",
         "artifact_sha256": {
@@ -150,40 +128,28 @@ def build_digest_semantics() -> dict[str, Any]:
 
 
 def manifest_identity_payload(manifest: dict[str, Any]) -> dict[str, Any]:
-    """Return the complete compatibility identity covered by ``set_sha256``.
-
-    Artifact ``sha256`` values identify canonical artifact bytes only. The set
-    digest identifies every manifest field except lifecycle ``status`` and the
-    recursive ``set_sha256`` field. Artifact descriptors are closed-world so a
-    new consumer-relevant field cannot be silently omitted from the digest.
-    """
-    expected_semantics = build_digest_semantics()
-    if manifest.get("digest_semantics") != expected_semantics:
+    if manifest.get("digest_semantics") != build_digest_semantics():
         raise ValueError("manifest digest semantics are missing or unsupported")
-
     artifacts = manifest.get("artifacts")
     if not isinstance(artifacts, list):
         raise ValueError("manifest artifacts must be a list")
-
-    expected_descriptor_fields = set(ARTIFACT_DESCRIPTOR_FIELDS)
+    expected_fields = set(ARTIFACT_DESCRIPTOR_FIELDS)
     for index, item in enumerate(artifacts):
         if not isinstance(item, dict):
             raise ValueError(f"artifact descriptor {index} must be an object")
         actual_fields = set(item)
-        if actual_fields != expected_descriptor_fields:
-            missing = sorted(expected_descriptor_fields - actual_fields)
-            unexpected = sorted(actual_fields - expected_descriptor_fields)
+        if actual_fields != expected_fields:
+            missing = sorted(expected_fields - actual_fields)
+            unexpected = sorted(actual_fields - expected_fields)
             raise ValueError(
                 f"artifact descriptor {index} fields do not match digest scope; "
                 f"missing={missing}, unexpected={unexpected}"
             )
-
     excluded = set(SET_DIGEST_EXCLUDED_TOP_LEVEL_FIELDS)
     return {key: value for key, value in manifest.items() if key not in excluded}
 
 
 def set_sha256_for_manifest(manifest: dict[str, Any]) -> str:
-    """Hash the complete canonical manifest identity using declared semantics."""
     return sha256_hex(canonical_bytes(manifest_identity_payload(manifest)))
 
 
@@ -202,10 +168,8 @@ def _resolve_version(document: Any, version_source: str | int) -> int:
         if version_source < 1:
             raise ValueError("literal artifact version must be positive")
         return version_source
-
     if not isinstance(version_source, str):
         raise TypeError("version source must be a dotted document path or integer")
-
     if version_source.startswith(VERSION_FROM_ID_PREFIX):
         identity_source = version_source.removeprefix(VERSION_FROM_ID_PREFIX)
         identity = _resolve_document_value(document, identity_source)
@@ -217,7 +181,6 @@ def _resolve_version(document: Any, version_source: str | int) -> int:
                 f"{identity_source} must end with a positive '-vN' version suffix"
             )
         return int(match.group(1))
-
     value = _resolve_document_value(document, version_source)
     if not isinstance(value, int) or isinstance(value, bool) or value < 1:
         raise ValueError(f"{version_source} must resolve to a positive integer")
@@ -231,9 +194,7 @@ def _resolve_artifact_id(
     version: int,
 ) -> str:
     if identity_source == IDENTITY_FROM_PATH_VERSION:
-        source_stem = Path(relative_path).stem
-        return f"{source_stem}-v{version}"
-
+        return f"{Path(relative_path).stem}-v{version}"
     if identity_source == IDENTITY_FROM_SCHEMA_ID:
         schema_id = _resolve_document_value(document, "$id")
         if not isinstance(schema_id, str) or not schema_id:
@@ -249,7 +210,6 @@ def _resolve_artifact_id(
         if not filename.endswith(suffix):
             raise ValueError("schema $id filename must end with '.schema.json'")
         return filename[: -len(suffix)]
-
     artifact_id = _resolve_document_value(document, identity_source)
     if not isinstance(artifact_id, str) or not artifact_id.strip():
         raise ValueError(f"{identity_source} must resolve to a non-empty string")
@@ -261,37 +221,24 @@ def _resolve_artifact_id(
 def build_manifest(root: Path = ROOT) -> dict[str, Any]:
     artifacts: list[dict[str, Any]] = []
     seen_paths: set[str] = set()
-    seen_artifact_ids: set[str] = set()
-
-    for (
-        kind,
-        declared_artifact_id,
-        relative_path,
-        identity_source,
-        version_source,
-    ) in ARTIFACT_SPECS:
+    seen_ids: set[str] = set()
+    for kind, declared_id, relative_path, identity_source, version_source in ARTIFACT_SPECS:
         if relative_path in seen_paths:
             raise ValueError(f"duplicate manifest artifact path: {relative_path}")
         seen_paths.add(relative_path)
-
-        path = root / relative_path
-        document = load_json(path)
+        document = load_json(root / relative_path)
         version = _resolve_version(document, version_source)
         artifact_id = _resolve_artifact_id(
-            document,
-            relative_path,
-            identity_source,
-            version,
+            document, relative_path, identity_source, version
         )
-        if artifact_id != declared_artifact_id:
+        if artifact_id != declared_id:
             raise ValueError(
                 f"{relative_path}: source-derived artifact_id {artifact_id!r} "
-                f"does not match declared artifact_id {declared_artifact_id!r}"
+                f"does not match declared artifact_id {declared_id!r}"
             )
-        if artifact_id in seen_artifact_ids:
+        if artifact_id in seen_ids:
             raise ValueError(f"duplicate manifest artifact_id: {artifact_id}")
-        seen_artifact_ids.add(artifact_id)
-
+        seen_ids.add(artifact_id)
         encoded = canonical_bytes(document)
         artifacts.append(
             {
@@ -303,7 +250,6 @@ def build_manifest(root: Path = ROOT) -> dict[str, Any]:
                 "sha256": sha256_hex(encoded),
             }
         )
-
     artifacts.sort(key=lambda item: item["path"])
     manifest = {
         "manifest_version": 1,
@@ -338,32 +284,23 @@ def write_manifest(root: Path = ROOT) -> None:
 
 def check_manifest(root: Path = ROOT) -> bool:
     path = root / MANIFEST_PATH.relative_to(ROOT)
-    if not path.exists():
-        return False
-    return path.read_text(encoding="utf-8") == rendered_manifest(root)
+    return path.exists() and path.read_text(encoding="utf-8") == rendered_manifest(root)
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--check",
-        action="store_true",
-        help="verify the committed manifest instead of rewriting it",
-    )
+    parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
-
     if args.check:
         if not check_manifest(ROOT):
             print(f"FAIL: {MANIFEST_PATH.relative_to(ROOT)} is missing or stale")
             return 1
         manifest = build_manifest(ROOT)
         print(
-            "PASS: "
-            f"{len(manifest['artifacts'])} artifacts; "
+            f"PASS: {len(manifest['artifacts'])} artifacts; "
             f"set_sha256={manifest['set_sha256']}"
         )
         return 0
-
     write_manifest(ROOT)
     manifest = build_manifest(ROOT)
     print(

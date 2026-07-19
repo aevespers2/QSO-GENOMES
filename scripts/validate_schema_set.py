@@ -16,19 +16,14 @@ REQUIRED_GENOME_FILENAMES = (
     "nova.json",
     "orion.json",
 )
-REQUIRED_SPRITE_FILENAMES = (
-    "aequitas.json",
-    "socrates.json",
-)
+# Aequitas and Socrates are disengaged from the active candidate. Historical
+# reports may retain their names, but no active sprite JSON artifact is allowed.
+REQUIRED_SPRITE_FILENAMES: tuple[str, ...] = ()
 
 VALIDATION_SETS = (
     (
         ROOT / "schema" / "qso-genome.schema.json",
         tuple(ROOT / "genomes" / name for name in REQUIRED_GENOME_FILENAMES),
-    ),
-    (
-        ROOT / "schema" / "qso-sprite.schema.json",
-        tuple(ROOT / "sprites" / name for name in REQUIRED_SPRITE_FILENAMES),
     ),
 )
 
@@ -69,8 +64,16 @@ def assert_exact_json_artifact_set(
     label: str,
 ) -> None:
     """Fail closed unless ``directory`` contains exactly the required JSON files."""
-
     required = frozenset(required_filenames)
+    if not directory.exists():
+        if not required:
+            return
+        raise ArtifactSetError(
+            f"missing required {label} artifacts: {', '.join(sorted(required))}"
+        )
+    if not directory.is_dir():
+        raise ArtifactSetError(f"{label} artifact path is not a directory")
+
     actual = frozenset(
         path.name
         for path in directory.iterdir()
@@ -94,7 +97,7 @@ def main() -> int:
 
     for directory, required, label in (
         (ROOT / "genomes", REQUIRED_GENOME_FILENAMES, "genome"),
-        (ROOT / "sprites", REQUIRED_SPRITE_FILENAMES, "sprite"),
+        (ROOT / "sprites", REQUIRED_SPRITE_FILENAMES, "active sprite"),
     ):
         try:
             assert_exact_json_artifact_set(directory, required, label=label)
@@ -112,15 +115,19 @@ def main() -> int:
 
         for document_path in documents:
             if not document_path.is_file():
+                failures.append(
+                    f"{document_path.relative_to(ROOT)}: missing schema-bound artifact"
+                )
                 continue
-
             try:
                 document = load_json(document_path)
             except (OSError, ValueError) as error:
                 failures.append(f"{document_path.relative_to(ROOT)}: {error}")
                 continue
 
-            errors = sorted(validator.iter_errors(document), key=lambda error: list(error.path))
+            errors = sorted(
+                validator.iter_errors(document), key=lambda error: list(error.path)
+            )
             if errors:
                 for error in errors:
                     location = ".".join(str(part) for part in error.absolute_path) or "<root>"

@@ -38,14 +38,6 @@
   },
   "artifacts": [
     {
-      "artifact_id": "aequitas-external-review-v1",
-      "canonical_bytes": 1909,
-      "kind": "contract",
-      "path": "contracts/aequitas-review-binding.json",
-      "schema_version": 1,
-      "sha256": "f5673c24159098312a7c173048d4b6abf2f13cbb91530b863d484f91655d1843"
-    },
-    {
       "artifact_id": "immutable-baseline-v1",
       "canonical_bytes": 1549,
       "kind": "contract",
@@ -108,23 +100,7 @@
       "path": "schema/qso-genome.schema.json",
       "schema_version": 1,
       "sha256": "a2cb601d6d284f411903c972ae5e3574ca8faf6db28848e43cb91a697dbcb54b"
-    },
-    {
-      "artifact_id": "qso-sprite",
-      "canonical_bytes": 2775,
-      "kind": "schema",
-      "path": "schema/qso-sprite.schema.json",
-      "schema_version": 1,
-      "sha256": "16ca71249869c46e0e184c14b98bb0eada17d34774a361b38aba6efaddba12ba"
-    },
-    {
-      "artifact_id": "aequitas",
-      "canonical_bytes": 1327,
-      "kind": "sprite",
-      "path": "sprites/aequitas.json",
-      "schema_version": 1,
-      "sha256": "32752ebfa1ff1e9d60d9a94cd505bfcbc3a27724991e48a238e5261af9ac3d2a"
     }
   ],
-  "set_sha256": "2b59fe7c865409f9112eb3d21bb1954abb7c8195eaa7758da6602fec8410ba6e"
+  "set_sha256": "e7ae0d480f33b9534c2b21977ec8cb3072fdab04d33d7965629476028741144a"
 }
