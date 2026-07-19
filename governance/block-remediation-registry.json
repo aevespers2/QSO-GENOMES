@@ -1,5 +1,5 @@
 {
-  "registry_version": 2,
+  "registry_version": 3,
   "authority": {
     "canonical_id": "jacob_thomas_redmond",
     "display_name": "Jacob Thomas Redmond"
@@ -21,7 +21,7 @@
     "active_identity_migration": {
       "description": "Verify retired review identifiers cannot resolve through active governance surfaces.",
       "commands": [
-        ["python", "-m", "unittest", "tests.test_disengaged_identity_migration", "-v"]
+        ["python", "-m", "unittest", "discover", "-s", "tests", "-p", "test_disengaged_identity_migration.py", "-v"]
       ]
     },
     "manifest_identity": {
