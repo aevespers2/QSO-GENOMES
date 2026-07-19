@@ -28,7 +28,7 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       AGENT_ID: michael_aaron_redmond
-      REVIEW_AUTHORITY_ID: jacob_elias_redmond
+      REVIEW_AUTHORITY_ID: jacob_thomas_redmond
     steps:
       - name: Resolve pull request set
         id: prs
@@ -40,8 +40,9 @@ jobs:
           elif [ "${{ github.event_name }}" = "pull_request_target" ]; then
             printf '%s\n' "${{ github.event.pull_request.number }}" > /tmp/prs.txt
           else
-            gh pr list --repo "$GITHUB_REPOSITORY" --state open --json number --jq '.[].number' > /tmp/prs.txt
+            gh pr list --repo "$GITHUB_REPOSITORY" --state open --limit 100 --json number --jq '.[].number' > /tmp/prs.txt
           fi
+          sort -n -u /tmp/prs.txt -o /tmp/prs.txt
           echo "count=$(wc -l < /tmp/prs.txt | tr -d ' ')" >> "$GITHUB_OUTPUT"
 
       - name: Inspect mergeability and prepare reconciliation
@@ -49,6 +50,19 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p reports
+
+          comment_once() {
+            local pr_number="$1"
+            local marker="$2"
+            local body="$3"
+            if gh api --paginate "repos/$GITHUB_REPOSITORY/issues/$pr_number/comments?per_page=100" --jq '.[].body' | grep -Fq "$marker"; then
+              return 0
+            fi
+            gh pr comment "$pr_number" --repo "$GITHUB_REPOSITORY" --body "$body
+
+          $marker"
+          }
+
           while IFS= read -r PR_NUMBER; do
             [ -n "$PR_NUMBER" ] || continue
 
@@ -73,7 +87,7 @@ jobs:
 
             if [ "$HEAD_REPO" != "$GITHUB_REPOSITORY" ]; then
               printf '{"pr":%s,"merge_state":"DIRTY","action":"human_review","reason":"fork_head"}\n' "$PR_NUMBER" > "reports/pr-${PR_NUMBER}.json"
-              gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "Michael Aaron Redmond detected a non-mergeable fork-based pull request. The workflow will not write to or execute code from an external fork. Human reconciliation under Jacob Elias Redmond is required."
+              comment_once "$PR_NUMBER" "<!-- nonmerge-reconciliation:fork-head:$HEAD_SHA -->" "Michael Aaron Redmond detected a non-mergeable fork-based pull request. The workflow will not write to or execute code from an external fork. Human reconciliation under Jacob Thomas Redmond is required."
               continue
             fi
 
@@ -101,7 +115,7 @@ jobs:
           conflicts = Path(f"reports/pr-{pr}-conflicts.txt").read_text().splitlines()
           Path(f"reports/pr-{pr}.json").write_text(json.dumps({
               "agent_id": "michael_aaron_redmond",
-              "review_authority_id": "jacob_elias_redmond",
+              "review_authority_id": "jacob_thomas_redmond",
               "pr": int(pr),
               "base_ref": base_ref,
               "head_ref": head_ref,
@@ -113,7 +127,7 @@ jobs:
               "automatic_merge_authorized": False
           }, sort_keys=True, separators=(",", ":")) + "\n")
           PY
-              gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "Michael Aaron Redmond attempted a non-destructive reconciliation with \`$BASE_REF\`, but conflicts remain. No history was rewritten and no merge was performed. Human review under Jacob Elias Redmond is required. Evidence is retained in workflow run $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID."
+              comment_once "$PR_NUMBER" "<!-- nonmerge-reconciliation:conflicts:$HEAD_SHA:$BASE_SHA -->" "Michael Aaron Redmond attempted a non-destructive reconciliation with \`$BASE_REF\`, but conflicts remain. No history was rewritten and no merge was performed. Human review under Jacob Thomas Redmond is required. Evidence is retained in workflow run $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID."
               continue
             fi
 
@@ -122,14 +136,14 @@ jobs:
             RECONCILIATION_SHA="$(git rev-parse HEAD)"
             cd ..
 
-            EXISTING="$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --head "$BRANCH" --json number --jq '.[0].number // empty')"
+            EXISTING="$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --head "$BRANCH" --limit 1 --json number --jq '.[0].number // empty')"
             if [ -z "$EXISTING" ]; then
               gh pr create --repo "$GITHUB_REPOSITORY" \
                 --draft \
                 --head "$BRANCH" \
                 --base "$HEAD_REF" \
                 --title "Michael Aaron Redmond: reconcile PR #${PR_NUMBER}" \
-                --body "Automated non-destructive reconciliation of \`$BASE_REF\` into the exact current head of PR #${PR_NUMBER}. This draft PR does not authorize merge, publication, or release. Normal CI and Jacob Elias Redmond plus human review remain required."
+                --body "Automated non-destructive reconciliation of \`$BASE_REF\` into the exact current head of PR #${PR_NUMBER}. This draft PR does not authorize merge, publication, or release. Normal CI and Jacob Thomas Redmond plus human review remain required."
             fi
 
             python - "$PR_NUMBER" "$BASE_REF" "$HEAD_REF" "$HEAD_SHA" "$BASE_SHA" "$RECONCILIATION_SHA" <<'PY'
@@ -138,7 +152,7 @@ jobs:
           pr, base_ref, head_ref, head_sha, base_sha, reconciliation_sha = sys.argv[1:]
           Path(f"reports/pr-{pr}.json").write_text(json.dumps({
               "agent_id": "michael_aaron_redmond",
-              "review_authority_id": "jacob_elias_redmond",
+              "review_authority_id": "jacob_thomas_redmond",
               "pr": int(pr),
               "base_ref": base_ref,
               "head_ref": head_ref,
@@ -154,7 +168,7 @@ jobs:
 
       - name: Upload reconciliation evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: automatic-nonmerge-reconciliation-${{ github.run_id }}
           if-no-files-found: warn
