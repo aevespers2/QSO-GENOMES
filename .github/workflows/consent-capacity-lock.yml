@@ -1,0 +1,52 @@
+name: Consent Capacity Lock
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-consent-lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out submitted source
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+
+      - name: Verify exact source
+        run: test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.13'
+
+      - name: Validate consent capacity and fail-closed lock
+        run: python scripts/validate_consent_lock.py
+
+      - name: Record exact-head evidence
+        if: always()
+        run: |
+          printf '%s\n' "${{ github.event.pull_request.head.sha || github.sha }}" > reports/exact-head.txt
+          python --version > reports/python-version.txt 2>&1
+          sha256sum reports/consent-lock-validation.json > reports/consent-lock-validation.sha256
+
+      - name: Upload lock evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: consent-lock-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            reports/consent-lock-validation.json
+            reports/consent-lock-validation.sha256
+            reports/exact-head.txt
+            reports/python-version.txt
+          if-no-files-found: error
+          retention-days: 90
