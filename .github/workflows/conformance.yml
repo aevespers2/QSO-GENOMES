@@ -30,12 +30,13 @@ jobs:
 
     steps:
       - name: Check out reviewed commit
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
@@ -46,18 +47,49 @@ jobs:
 
       - name: Record environment and exact source state
         run: |
-          echo "checked_out_sha=$(git rev-parse HEAD)"
-          echo "event_head_sha=${{ github.event.pull_request.head.sha || github.sha }}"
+          mkdir -p reports/ci/${{ matrix.python-version }}
+          printf '%s\n' "$(git rev-parse HEAD)" | tee reports/ci/${{ matrix.python-version }}/checked-out-sha.txt
+          printf '%s\n' "${{ github.event.pull_request.head.sha || github.sha }}" > reports/ci/${{ matrix.python-version }}/event-head-sha.txt
           test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
-          python --version
-          python -m pip --version
-          python -c "import jsonschema; print('jsonschema', jsonschema.__version__)"
+          python --version 2>&1 | tee reports/ci/${{ matrix.python-version }}/python-version.txt
+          python -m pip --version | tee reports/ci/${{ matrix.python-version }}/pip-version.txt
+          python -c "import jsonschema; print('jsonschema', jsonschema.__version__)" | tee reports/ci/${{ matrix.python-version }}/jsonschema-version.txt
 
-      - name: Validate genomes and sprites against Draft 2020-12 schemas
-        run: python scripts/validate_schema_set.py
+      - name: Run all conformance gates and retain diagnostics
+        shell: bash
+        run: |
+          set +e
+          output="reports/ci/${{ matrix.python-version }}"
 
-      - name: Run deterministic contract suite
-        run: python -m unittest discover -s tests -v
+          python scripts/validate_schema_set.py 2>&1 | tee "$output/schema-validation.log"
+          schema_status=${PIPESTATUS[0]}
+          printf '%s\n' "$schema_status" > "$output/schema-validation.exit-code"
 
-      - name: Replay compatibility manifest
-        run: python scripts/generate_contract_manifest.py --check
+          python -m unittest discover -s tests -v 2>&1 | tee "$output/unittest.log"
+          test_status=${PIPESTATUS[0]}
+          printf '%s\n' "$test_status" > "$output/unittest.exit-code"
+
+          python scripts/generate_contract_manifest.py --check 2>&1 | tee "$output/manifest-check.log"
+          manifest_status=${PIPESTATUS[0]}
+          printf '%s\n' "$manifest_status" > "$output/manifest-check.exit-code"
+
+          sha256sum "$output"/* > "$output/SHA256SUMS"
+          printf 'schema=%s tests=%s manifest=%s\n' "$schema_status" "$test_status" "$manifest_status" | tee "$output/gate-summary.txt"
+          exit 0
+
+      - name: Upload exact-head conformance evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: qso-genomes-conformance-${{ github.event.pull_request.head.sha || github.sha }}-py${{ matrix.python-version }}
+          path: reports/ci/${{ matrix.python-version }}
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Enforce conformance gate results
+        shell: bash
+        run: |
+          output="reports/ci/${{ matrix.python-version }}"
+          test "$(cat "$output/schema-validation.exit-code")" -eq 0
+          test "$(cat "$output/unittest.exit-code")" -eq 0
+          test "$(cat "$output/manifest-check.exit-code")" -eq 0
