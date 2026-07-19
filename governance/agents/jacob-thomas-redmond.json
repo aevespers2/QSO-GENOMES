@@ -1,5 +1,5 @@
 {
-  "agent_version": 2,
+  "agent_version": 3,
   "agent_id": "jacob_thomas_redmond",
   "display_name": "Jacob Thomas Redmond",
   "role": "SEEKER_AND_REVIEW_AUTHORITY",
@@ -41,8 +41,7 @@
   },
   "governance": {
     "review_authority_id": "jacob_thomas_redmond",
-    "legacy_review_identities_disengaged": ["jacob_elias_redmond", "aequitas", "socrates"],
-    "merge_retry_agent_id": "michael_redmond",
+    "merge_retry_agent_id": "michael_aaron_redmond",
     "immutable_ethics_protocol_id": "QSO-IMMUTABLE-ETHICS-v1"
   },
   "required_outputs": [
