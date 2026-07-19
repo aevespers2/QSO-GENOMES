@@ -73,8 +73,14 @@ jobs:
           manifest_status=${PIPESTATUS[0]}
           printf '%s\n' "$manifest_status" > "$output/manifest-check.exit-code"
 
+          cp manifests/qso-genomes-compatibility-v1.json "$output/committed-manifest.json"
+          python scripts/generate_contract_manifest.py 2>&1 | tee "$output/manifest-generation.log"
+          generation_status=${PIPESTATUS[0]}
+          printf '%s\n' "$generation_status" > "$output/manifest-generation.exit-code"
+          cp manifests/qso-genomes-compatibility-v1.json "$output/generated-manifest.json"
+
           sha256sum "$output"/* > "$output/SHA256SUMS"
-          printf 'schema=%s tests=%s manifest=%s\n' "$schema_status" "$test_status" "$manifest_status" | tee "$output/gate-summary.txt"
+          printf 'schema=%s tests=%s manifest=%s generation=%s\n' "$schema_status" "$test_status" "$manifest_status" "$generation_status" | tee "$output/gate-summary.txt"
           exit 0
 
       - name: Upload exact-head conformance evidence
@@ -93,3 +99,4 @@ jobs:
           test "$(cat "$output/schema-validation.exit-code")" -eq 0
           test "$(cat "$output/unittest.exit-code")" -eq 0
           test "$(cat "$output/manifest-check.exit-code")" -eq 0
+          test "$(cat "$output/manifest-generation.exit-code")" -eq 0
