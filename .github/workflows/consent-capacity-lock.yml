@@ -28,6 +28,9 @@ jobs:
         with:
           python-version: '3.13'
 
+      - name: Run consent lock regression tests
+        run: python -m unittest tests.test_consent_lock -v
+
       - name: Validate consent capacity and fail-closed lock
         run: python scripts/validate_consent_lock.py
 
