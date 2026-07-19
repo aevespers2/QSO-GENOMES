@@ -49,6 +49,19 @@ class ExactArtifactSetTests(unittest.TestCase):
                     label="genome",
                 )
 
+    def test_missing_genome_directory_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            missing = Path(temporary_directory) / "genomes"
+            with self.assertRaisesRegex(
+                schema_tool.ArtifactSetError,
+                r"missing required genome artifacts: atlas\.json, lyra\.json, nova\.json, orion\.json",
+            ):
+                schema_tool.assert_exact_json_artifact_set(
+                    missing,
+                    schema_tool.REQUIRED_GENOME_FILENAMES,
+                    label="genome",
+                )
+
     def test_unexpected_genome_fails_closed(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             directory = Path(temporary_directory)
@@ -71,6 +84,15 @@ class ExactArtifactSetTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary_directory:
             schema_tool.assert_exact_json_artifact_set(
                 Path(temporary_directory),
+                schema_tool.REQUIRED_SPRITE_FILENAMES,
+                label="active sprite",
+            )
+
+    def test_absent_active_sprite_directory_passes(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            missing = Path(temporary_directory) / "sprites"
+            schema_tool.assert_exact_json_artifact_set(
+                missing,
                 schema_tool.REQUIRED_SPRITE_FILENAMES,
                 label="active sprite",
             )
