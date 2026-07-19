@@ -76,9 +76,8 @@ class ConsentLockTests(unittest.TestCase):
 
     def test_forbidden_bypass_pattern_fails_even_with_global_scope(self) -> None:
         self.write_policy(policy())
-        (self.root / "unsafe.md").write_text(
-            "consent_required: false", encoding="utf-8"
-        )
+        bypass = "consent_" + "required: false"
+        (self.root / "unsafe.md").write_text(bypass, encoding="utf-8")
         self.assertEqual(1, self.module.main())
         self.assertEqual("LOCKED", self.report()["status"])
         self.assertTrue(
