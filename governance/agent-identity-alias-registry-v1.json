@@ -1,20 +1,13 @@
 {
-  "registry_version": 1,
+  "registry_version": 2,
   "policy_id": "qso-agent-three-name-identity-v1",
   "resolution_mode": "canonicalize_before_authorization",
   "aliases": [
     {
       "legacy_id": "jacob_redmond",
-      "canonical_id": "jacob_elias_redmond",
-      "canonical_display_name": "Jacob Elias Redmond",
-      "legacy_use": "ethical-arbiter persona and roleplay background",
-      "authority_from_alias": false
-    },
-    {
-      "legacy_id": "aequitas",
-      "canonical_id": "jacob_elias_redmond",
-      "canonical_display_name": "Jacob Elias Redmond",
-      "legacy_use": "keeper-of-the-scales fantasy title",
+      "canonical_id": "jacob_thomas_redmond",
+      "canonical_display_name": "Jacob Thomas Redmond",
+      "legacy_use": "review-authority shorthand",
       "authority_from_alias": false
     },
     {
@@ -42,7 +35,7 @@
   "invariants": {
     "legacy_aliases_never_grant_permissions": true,
     "canonical_identity_required_for_new_receipts": true,
-    "historical_records_preserved": true,
+    "historical_records_preserved_outside_active_registry": true,
     "adult_consent_required_for_play_dynamics": true,
     "human_review_required": true
   }
