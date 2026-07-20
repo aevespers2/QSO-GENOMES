@@ -19,10 +19,20 @@ def test_comment_history_is_paginated_before_deduplication() -> None:
     assert 'grep -Fq "$marker"' in source
 
 
-def test_reconciliation_notices_are_keyed_to_exact_state() -> None:
+def test_conflict_notices_use_semantic_fingerprints_not_volatile_heads() -> None:
     source = text()
-    assert '<!-- nonmerge-reconciliation:fork-head:$HEAD_SHA -->' in source
-    assert '<!-- nonmerge-reconciliation:conflicts:$HEAD_SHA:$BASE_SHA -->' in source
+    assert 'CONFLICT_FINGERPRINT="$(python - "$BASE_SHA" "reports/pr-${PR_NUMBER}-conflicts.txt"' in source
+    assert 'conflicts = sorted({' in source
+    assert 'payload = (base_sha + "\\n" + "\\n".join(conflicts) + "\\n").encode("utf-8")' in source
+    assert '<!-- nonmerge-reconciliation:conflicts:$BASE_SHA:$CONFLICT_FINGERPRINT -->' in source
+    assert '<!-- nonmerge-reconciliation:conflicts:$HEAD_SHA:$BASE_SHA -->' not in source
+
+
+def test_conflict_evidence_records_exact_head_and_semantic_fingerprint() -> None:
+    source = text()
+    assert '"head_sha": head_sha' in source
+    assert '"conflict_fingerprint": conflict_fingerprint' in source
+    assert 'the same unresolved conflict set remains' in source
 
 
 def test_workflow_remains_fail_closed() -> None:
