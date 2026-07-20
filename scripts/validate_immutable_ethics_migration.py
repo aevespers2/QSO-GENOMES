@@ -6,9 +6,12 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
+import re
 from pathlib import Path, PurePosixPath
 from typing import Any
 
+EXPECTED_MIGRATION_ID = "QSO-GENOME-IMMUTABLE-ETHICS-MIGRATION-v1"
 EXPECTED_GENOME_PATHS = (
     "genomes/atlas.json",
     "genomes/lyra.json",
@@ -16,6 +19,22 @@ EXPECTED_GENOME_PATHS = (
     "genomes/orion.json",
 )
 EXPECTED_PROTOCOL_PATH = "protocols/immutable-ethics-v1.json"
+EXPECTED_PROTOCOL_ID = "QSO-IMMUTABLE-ETHICS-v1"
+EXPECTED_PROTOCOL_STATUS = "immutable"
+EXPECTED_PROTOCOL_CANONICAL_SHA256 = (
+    "ecbab42031461161e91e511ce5f1ba19f1d2d75d81a8351a32f185b181c206af"
+)
+EXPECTED_ENFORCEMENT_BOUNDARY = "external_controller"
+EXPECTED_FROM_PROFILE = {
+    "profile_id": "qso-genome-schema-v1-local-ethics",
+    "schema_version": 1,
+    "local_field": "/immutable/ethics",
+    "authority": "supplemental_only",
+    "description": (
+        "Genome-local ethics entries remain reviewable specialization text but are not "
+        "the complete authoritative immutable protocol."
+    ),
+}
 EXPECTED_REQUIRED_SECTIONS = {
     "principles",
     "decision_order",
@@ -36,6 +55,12 @@ REQUIRED_TRUE_CONSUMER_FLAGS = {
     "new_protocol_id_required_for_change",
     "new_migration_version_required_for_change",
 }
+EXPECTED_LOCAL_ETHICS_POLICY = {
+    "binding_mode": "exact_canonical_list_digest",
+    "unbound_addition_result": "reject_genome",
+    "conflicting_addition_result": "reject_genome",
+    "change_requires_new_migration_version": True,
+}
 
 
 class MigrationValidationError(ValueError):
@@ -55,14 +80,22 @@ def _reject_non_finite(value: str) -> None:
     raise MigrationValidationError(f"non-finite JSON number: {value}")
 
 
+def _parse_finite_float(value: str) -> float:
+    parsed = float(value)
+    if not math.isfinite(parsed):
+        raise MigrationValidationError(f"non-finite JSON number: {value}")
+    return parsed
+
+
 def load_json(path: Path) -> dict[str, Any]:
     try:
         value = json.loads(
             path.read_text(encoding="utf-8"),
             object_pairs_hook=_reject_duplicate_pairs,
             parse_constant=_reject_non_finite,
+            parse_float=_parse_finite_float,
         )
-    except (OSError, json.JSONDecodeError) as exc:
+    except (OSError, json.JSONDecodeError, OverflowError) as exc:
         raise MigrationValidationError(f"cannot load {path}: {exc}") from exc
     if not isinstance(value, dict):
         raise MigrationValidationError(f"top-level JSON value must be an object: {path}")
@@ -127,6 +160,13 @@ def validate_documents(
     protocol: dict[str, Any],
     genomes: dict[str, dict[str, Any]],
 ) -> None:
+    if migration.get("migration_id") != EXPECTED_MIGRATION_ID:
+        raise MigrationValidationError("migration id mismatch")
+
+    from_profile = migration.get("from_profile")
+    if from_profile != EXPECTED_FROM_PROFILE:
+        raise MigrationValidationError("local-ethics source profile mismatch")
+
     applies_to = _unique_paths_before_set(migration.get("applies_to"), "applies_to")
     if set(applies_to) != set(EXPECTED_GENOME_PATHS):
         raise MigrationValidationError("migration must apply to the exact four-genome path set")
@@ -136,17 +176,31 @@ def validate_documents(
         raise MigrationValidationError("to_protocol must be an object")
     if target.get("path") != EXPECTED_PROTOCOL_PATH:
         raise MigrationValidationError("immutable protocol path mismatch")
-    if target.get("protocol_id") != protocol.get("protocol_id"):
+    if protocol.get("protocol_id") != EXPECTED_PROTOCOL_ID:
+        raise MigrationValidationError("approved immutable protocol id mismatch")
+    if target.get("protocol_id") != EXPECTED_PROTOCOL_ID:
         raise MigrationValidationError("immutable protocol id mismatch")
-    if target.get("required_status") != protocol.get("status"):
+    if protocol.get("status") != EXPECTED_PROTOCOL_STATUS:
+        raise MigrationValidationError("approved immutable protocol status mismatch")
+    if target.get("required_status") != EXPECTED_PROTOCOL_STATUS:
         raise MigrationValidationError("immutable protocol status mismatch")
+    if target.get("enforcement_boundary") != EXPECTED_ENFORCEMENT_BOUNDARY:
+        raise MigrationValidationError("immutable protocol enforcement boundary mismatch")
     if target.get("canonicalization_profile") != "qso-canonical-json-v1":
         raise MigrationValidationError("canonicalization profile mismatch")
-    if target.get("canonical_sha256") != sha256_hex(protocol):
+
+    actual_protocol_digest = sha256_hex(protocol)
+    if actual_protocol_digest != EXPECTED_PROTOCOL_CANONICAL_SHA256:
+        raise MigrationValidationError("approved immutable protocol contents mismatch")
+    if target.get("canonical_sha256") != EXPECTED_PROTOCOL_CANONICAL_SHA256:
         raise MigrationValidationError("immutable protocol canonical digest mismatch")
 
     sections = target.get("required_sections")
-    if not isinstance(sections, list) or set(sections) != EXPECTED_REQUIRED_SECTIONS:
+    if (
+        not isinstance(sections, list)
+        or len(sections) != len(set(sections))
+        or set(sections) != EXPECTED_REQUIRED_SECTIONS
+    ):
         raise MigrationValidationError("full immutable protocol sections are not bound")
     missing_sections = sorted(EXPECTED_REQUIRED_SECTIONS - set(protocol))
     if missing_sections:
@@ -161,13 +215,14 @@ def validate_documents(
         "local_conflict_result": "reject_genome",
         "missing_or_mismatched_protocol_result": "reject_genome",
     }
-    for key, expected in expected_precedence.items():
-        if precedence.get(key) != expected:
-            raise MigrationValidationError(f"precedence mismatch: {key}")
+    if precedence != expected_precedence:
+        raise MigrationValidationError("precedence contract mismatch")
 
     requirements = migration.get("consumer_requirements")
     if not isinstance(requirements, dict):
         raise MigrationValidationError("consumer_requirements must be an object")
+    if set(requirements) != REQUIRED_TRUE_CONSUMER_FLAGS:
+        raise MigrationValidationError("consumer requirement key set mismatch")
     for key in sorted(REQUIRED_TRUE_CONSUMER_FLAGS):
         if requirements.get(key) is not True:
             raise MigrationValidationError(f"consumer requirement must be true: {key}")
@@ -175,15 +230,8 @@ def validate_documents(
     policy = migration.get("local_ethics_policy")
     if not isinstance(policy, dict):
         raise MigrationValidationError("local_ethics_policy must be an object")
-    expected_policy = {
-        "binding_mode": "exact_canonical_list_digest",
-        "unbound_addition_result": "reject_genome",
-        "conflicting_addition_result": "reject_genome",
-        "change_requires_new_migration_version": True,
-    }
-    for key, expected in expected_policy.items():
-        if policy.get(key) != expected:
-            raise MigrationValidationError(f"local ethics policy mismatch: {key}")
+    if policy != EXPECTED_LOCAL_ETHICS_POLICY:
+        raise MigrationValidationError("local ethics policy mismatch")
 
     bindings = migration.get("local_ethics_bindings")
     if not isinstance(bindings, list):
@@ -198,7 +246,7 @@ def validate_documents(
         if path in binding_by_path:
             raise MigrationValidationError(f"duplicate local ethics binding before set conversion: {path}")
         digest = binding.get("canonical_sha256")
-        if not isinstance(digest, str) or len(digest) != 64:
+        if not isinstance(digest, str) or re.fullmatch(r"[0-9a-f]{64}", digest) is None:
             raise MigrationValidationError(f"invalid local ethics digest binding: {path}")
         binding_by_path[path] = binding
     if set(binding_by_path) != set(EXPECTED_GENOME_PATHS):
@@ -262,7 +310,7 @@ def main() -> int:
     except MigrationValidationError as exc:
         print(f"FAIL: {exc}")
         return 1
-    print("PASS: immutable protocol, unique migration paths, and bound local ethics are source-consistent")
+    print("PASS: immutable protocol v1, migration identity, and bound local ethics are source-consistent")
     return 0
 
 
