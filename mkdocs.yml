@@ -10,6 +10,7 @@ nav:
   - Project overview: project-overview.md
   - Architecture: architecture.md
   - Contracts and invariants: contracts-and-invariants.md
+  - Genome admission and runtime projection: genome-admission-and-runtime-projection-profile.md
   - Obstruction and gluing: obstruction-and-gluing.md
   - Diagrams: diagrams.md
   - Developer guide: developer-guide.md
