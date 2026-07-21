@@ -1,6 +1,6 @@
 # QSO-GENOMES Punch List
 
-This list converts the current compatibility, identity, format, authority, and gluing obstructions into bounded review work. A checked item means documentation or candidate evidence exists; it does not mean the item is accepted, released, or downstream-authoritative.
+This list converts the current compatibility, identity, format, authority, admission, projection, and gluing obstructions into bounded review work. A checked item means documentation or candidate evidence exists; it does not mean the item is accepted, released, or downstream-authoritative.
 
 ## P0 — Candidate inventory and review order
 
@@ -35,47 +35,61 @@ This list converts the current compatibility, identity, format, authority, and g
 - [ ] Add golden vectors for JSON/other approved encodings, round trips, domain-separated hashes, unknown versions, protected fields, and tampering.
 - [ ] Reject adapter-specific fields that are absent from the genome contract.
 
-## P3 — Pairwise gluing fixtures
+## P3 — Admission and projection boundary
 
-- [ ] `genome-runtime-profile/v0`: QuantumStateObjects accepts the exact approved set and rejects missing, stale, mutated, duplicate, conflicting, or unsupported artifacts.
-- [ ] `genome-fabric-profile/v0`: QSO-FABRIC consumes the same identity and policy without redefining genome or mutation authority.
-- [ ] `genome-qsio-adapter/v0`: the approved kernel or format owner and QSO-GENOMES produce byte-stable compatible records.
-- [ ] `genome-authority-admission/v0`: Repository `1` or a successor distinguishes local validity from operational admission, activation, expiry, revocation, and recovery.
-- [ ] `genome-public-projection/v0`: QSO-STUDIO and AionUi expose only approved projections with provenance, redaction, correction, and revocation state.
+- [ ] Approve or revise `docs/genome-admission-and-runtime-projection-profile.md`.
+- [ ] Assign Repository `1` or an approved successor as genome admission, capability, revocation, reconciliation, and recovery authority.
+- [ ] Keep `genome_artifact_id`, manifest, admission request, quarantine, admission, capability, runtime admission, execution receipt, reconciliation, correction, revocation, and recovery-checkpoint identities distinct.
+- [ ] Define and version `genome-admission-request/v0`, `genome-authority-admission/v0`, `genome-runtime-projection/v0`, and `genome-fabric-projection/v0`.
+- [ ] Prove local validity and neutral conformance never imply operational admission.
+- [ ] Prove runtime or Fabric success never implies Repository `1` reconciliation or portfolio acceptance.
+- [ ] Bind every admitted set to exact repository, commit, manifest, digest, schema, policy, runtime/Fabric heads, device or environment, workspace, capability, expiry, rollback, and recovery references.
+- [ ] Fail closed on unsupported, stale, replayed, revoked, superseded, corrected, wrong-device, wrong-workspace, wrong-runtime, or ambiguous state.
 
-## P4 — Triple-overlap witnesses
+## P4 — Pairwise gluing fixtures
 
-- [ ] Genome → runtime → Fabric.
+- [ ] QSO-GENOMES → Repository `1`: exact source evidence enters quarantine and receives an explicit admission or rejection without genome-issued authority.
+- [ ] QSO-GENOMES → QuantumStateObjects: the runtime accepts the exact admitted set and rejects missing, stale, mutated, duplicate, conflicting, unsupported, or unauthorized artifacts.
+- [ ] QSO-GENOMES → QSO-FABRIC: Fabric consumes the same admitted identity and policy without redefining genome, migration, capability, or canonical-state authority.
+- [ ] QSO-GENOMES → `qsio-kernel`: the approved conformance implementation produces byte-stable compatible records without becoming operational authority.
+- [ ] QSO-GENOMES → QSO-STUDIO/AionUi: interfaces expose only approved projections with provenance, redaction, uncertainty, admission, correction, and revocation state.
+
+## P5 — Triple-overlap witnesses
+
 - [ ] Genome → Repository `1` → runtime.
-- [ ] Genome → QSIO/kernel → runtime.
-- [ ] Identity migration → alias resolver → downstream cache.
-- [ ] Immutable policy → freeze/revocation → recovery.
-- [ ] Public projection → interface → correction.
+- [ ] Genome → runtime → Fabric.
+- [ ] Genome → neutral contract → conformance implementation.
+- [ ] Identity migration → admission → downstream cache.
+- [ ] Immutable policy → capability → execution.
+- [ ] Correction/revocation → runtime/Fabric → interface.
+- [ ] Freeze → evidence preservation → recovery.
+- [ ] Replacement environment → re-admission → bounded restart.
 
-Each witness must include positive, negative, stale, replay, unsupported-version, wrong-identity, partial-failure, correction, revocation, and rollback cases where applicable.
+Each witness must include positive, negative, stale, replay, unsupported-version, wrong-identity, wrong-device, wrong-workspace, broadened-capability, partial-failure, correction, revocation, freeze, recovery, and rollback cases where applicable.
 
-## P5 — Security, privacy, and recovery
+## P6 — Security, privacy, and recovery
 
 - [ ] Classify public projections, protected commitments, private evidence, stable identifiers, and correlatable metadata.
 - [ ] Define retention, deletion, correction, publication, and cache invalidation policy.
-- [ ] Assign signing-key, capability, privacy, incident, emergency-stop, recovery, and publication owners.
+- [ ] Assign signing-key, capability, admission, privacy, incident, emergency-stop, recovery, and publication owners.
 - [ ] Prove emergency stop does not depend on the component being stopped.
-- [ ] Prove recovery restores a consistent manifest, capability state, runtime state, Fabric state, interface state, and evidence chain with no automatic unlock.
+- [ ] Prove recovery restores a consistent manifest, admission and capability state, runtime state, Fabric state, interface state, and evidence chain with no automatic unlock.
+- [ ] Prove a valid genome does not automatically transfer operational authority to a replacement device, workspace, runtime head, or environment.
 
-## P6 — Release evidence
+## P7 — Release evidence
 
 - [ ] Run complete conformance from a clean checkout at the exact frozen head on supported environments.
 - [ ] Retain commands, versions, logs, reports, artifacts, checksums, source archive, SBOM or dependency record, review dispositions, and rollback instructions.
-- [ ] Validate identical read-only downstream results in QuantumStateObjects and QSO-FABRIC.
-- [ ] Record Repository `1` or successor admission evidence without treating it as a genome-issued capability.
-- [ ] Obtain explicit approval before tag, manifest publication, Pages publication, package publication, or downstream compatibility claims.
+- [ ] Validate identical admitted projections and hostile-fixture results in QuantumStateObjects and QSO-FABRIC.
+- [ ] Record Repository `1` or successor admission, revocation, reconciliation, and recovery evidence without treating any of it as genome-issued authority.
+- [ ] Obtain explicit approval before tag, manifest publication, Pages publication, package publication, runtime compatibility claim, or downstream-authoritative admission profile.
 
 ## Quality invariants
 
 - [ ] Genomes, Sprites, manifests, policies, and migrations remain declarative data only.
 - [ ] No network, credential, repository-write, repair-PR, payment, deployment, infrastructure, or self-replication authority enters an accepted genome set.
-- [ ] Candidate, implemented, validated, accepted, published, released, deployed, superseded, and revoked remain distinct states.
-- [ ] Unknown or conflicting identity, policy, version, digest, capability, or correction state fails closed.
+- [ ] Proposed, implemented, locally valid, conformant, admitted, runtime-eligible, executed, reconciled, accepted, published, released, deployed, superseded, frozen, and revoked remain distinct states.
+- [ ] Unknown or conflicting identity, policy, version, digest, capability, admission, correction, reconciliation, or recovery state fails closed.
 - [ ] Every claim is tied to an immutable commit and reproducible evidence.
 
 <!-- QSO-CONSENT-CAPACITY-LOCK-v1 -->
