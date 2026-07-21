@@ -2,58 +2,116 @@
 
 ## Repository role
 
-Canonical declarative genomes, immutable ethics, and supervisory Sprite definitions. This repository is an upstream dependency of `QuantumStateObjects` and `QSO-FABRIC` and must not contain executable behavior.
+QSO-GENOMES is the declarative contract authority for QSO identity, purpose, immutable policy, lineage, migration, compatibility manifests, and genome-specific canonicalization. It is an upstream dependency of `QuantumStateObjects`, `QSO-FABRIC`, `qsio-kernel` or another approved generic format package, Repository `1` or another approved capability authority, and read-only interfaces.
+
+A genome is data. This repository does not own runtime execution, capability issuance, credentials, deployment, payment execution, repository mutation, or canonical operational state.
 
 States: `PROPOSED` · `READY` · `IN PROGRESS` · `BLOCKED` · `REVIEW` · `DONE`
 
 ## Product directive
 
-- **Next objective:** Reconcile canonical PR #2 with current `main` without losing review provenance, exclude the unapproved Socrates identity and repair-authority additions from the current four-genome release scope, keep draft PR #3's governance control plane separate and unmerged, freeze one immutable mergeable submitted head, and only then resume exact-head conformance and review disposition.
-- **User outcome:** A consuming runtime can retrieve one reviewed Atlas/Nova/Orion/Lyra contract set, verify exact paths, schema versions, immutable ethics, migration, the approved Aequitas identity and references, canonical bytes, complete manifest identity metadata, and hashes, and fail closed without importing repository code or relying on an ambiguous branch, supervisory identity, or unapproved governance workflow.
-- **MVP scope:** preserve PR #2 as the sole compatibility-set review path; keep PR #3 draft and excluded from the compatibility release; integrate current `main` and every intended in-scope candidate remediation without force-rewriting reviewed history; retain Socrates files and their history as non-authoritative follow-on evidence or remove them from the reconciled release candidate, but do not include Socrates, Aequitas compatibility aliases, or repair-pull-request authority in the `0.1.0-alpha.1` compatibility set; record old base, old head, reconciliation method, conflicts, retained and excluded paths, governance merge order, and resulting head; freeze that head; re-enumerate findings; validate the deterministic four-genome and Aequitas contract set; accept or reject the candidate dependency and workflow corrections through exact-head replay; complete adversarial fixtures; disposition review threads; and validate the accepted manifest read-only in `QuantumStateObjects` and `QSO-FABRIC`. After PR #2 is frozen, refresh PR #3 against the resulting `main` and evaluate it as a separate governance adoption candidate.
-- **Priority:** QSO-GENOMES remains the highest portfolio unblocker. Portfolio priority has not changed. Reconciliation, scope containment, and governance isolation remain first because the PR is materially diverged from `main`, and further remediation or an intervening PR #3 merge would invalidate exact-head evidence. Ahead/behind counts are review snapshots, not durable task identifiers.
-- **Success criteria:** PR #2 remains the single compatibility-set review path and becomes mergeable; PR #3 remains draft and excluded until PR #2 is reconciled and frozen; one frozen reconciled head contains every intended in-scope candidate change; reviewed history is preserved; Socrates, compatibility aliases, repair authority, and governance automation are absent from the accepted compatibility artifacts unless separately approved; the deterministic suite passes at that head; every material finding is resolved or explicitly dispositioned; CI certifies the submitted head; dependencies are reproducible; exact artifacts and source identities are validated; digest scopes are unambiguous; negative fixtures fail closed; and both downstream consumers validate the same accepted commit and identities. Any later PR #3 adoption must be refreshed, independently reviewed, and certified at its own exact head.
-- **Non-goals:** opening a competing release PR; merging PR #3 before PR #2 reconciliation and freeze; enabling scheduled Inspector automation or portfolio-wide PR ontology adoption as part of the compatibility release; force-pushing or rebasing away review provenance without explicit approval; continuing acceptance-remediation commits on an unfrozen diverged head without an Architect exception; adding Socrates or repair authority to the current alpha candidate; executable agent behavior; network access; credentials; mutation activation; autonomous policy changes; payment authority; runtime implementation; or treating configured workflows, candidate reports, focused tests, or unresolved review findings as accepted release evidence.
-- **Release rationale:** QSO-GENOMES is the narrowest upstream contract needed by the runtime repositories. Keeping the first accepted candidate limited to four genomes and the already reviewed Aequitas boundary reduces authority and migration risk; keeping PR #3 separate prevents a governance-control-plane proposal from moving the reconciliation target or being mistaken for compatibility-set acceptance.
+### Next objective
+
+Reconcile the compatibility-set, identity-migration, workflow-repair, QSIO-adapter, and documentation candidates into one explicitly ordered review plan without force-rewriting history or allowing any branch to become authoritative by existence alone.
+
+### Intended user outcome
+
+A downstream consumer can retrieve one reviewed Atlas/Nova/Orion/Lyra contract set; verify exact paths, schema versions, canonical bytes, digest scopes, immutable policy, lineage, migrations, references, public/protected projections, and manifest identity; distinguish declarative identity from operational authority; and fail closed when any artifact, alias, version, capability, or acceptance receipt is missing or inconsistent.
+
+### Current candidate map
+
+| Candidate | Purpose | Observed state | Authority boundary |
+|---|---|---|---|
+| PR #2 | Four-genome compatibility-set review path | Draft, non-mergeable, exact head `1259693433814129f44d0255b5e0ecf741d9a79b`; no surfaced exact-head workflow evidence for that head | Candidate artifacts only; not accepted, published, or downstream-authoritative |
+| PR #12 | Remove active Aequitas and Socrates governance identities and transfer review responsibility to Jacob Thomas Redmond | Draft, non-mergeable, exact head `622530232248a8df8c24c91ed09ce58f66988e63`; bounded conformance and reconciliation checks reported successful | Identity-migration candidate only; historical provenance remains reachable |
+| PR #13 | Reconciliation and Consent Capacity Lock repair path | Draft, non-mergeable, exact head `4a638f064d0d4e11cbc94eb14b23ad60586e8a60`; later focused repairs merged through PRs #16 and #18 | No automatic final merge, publication, or runtime authority |
+| PR #14 | QSIO cross-repository adapter | Draft, mergeable, exact head `992d8263bf62666fd6a05152cc0f6ad16791706c`; contract and replay fixtures remain | Disabled integration candidate; generic QSIO ownership remains unresolved |
+| PR #15 | Pages, architecture, onboarding, gluing, and lifecycle documentation | Draft, mergeable; documentation-only | No genome, schema, alias, runtime, capability, release, or publication approval |
+
+These snapshots are review evidence, not durable release identifiers. Reconfirm exact states before any acceptance action.
+
+### Priority
+
+**P0 — BLOCKED on identity, ownership, and canonical-head decisions.**
+
+The portfolio must not accept PR #2 while PR #12 proposes a conflicting active identity model, must not activate PR #14 while generic QSO format ownership is unresolved, and must not treat PR #15 documentation success as compatibility-set or Pages publication approval.
+
+## Success criteria
+
+- One explicit merge and supersession order is approved for PRs #2, #12, #13, #14, and #15.
+- One active supervisory and human-review identity model is approved, including historical aliases, retirement, cache invalidation, and rollback.
+- One immutable compatibility-set head becomes mergeable and passes exact-head conformance with retained evidence.
+- QSO-GENOMES remains declarative and non-executing.
+- Generic QSO envelope, registry, serialization, and capability ownership are assigned outside or explicitly shared with genome-specific profiles.
+- Artifact-byte and complete-manifest digest scopes are versioned and domain-separated.
+- QuantumStateObjects and QSO-FABRIC validate the same accepted commit and reject the same hostile fixtures.
+- Repository `1` or another approved authority distinguishes local genome validity from operational admission, activation, revocation, and recovery.
+- Public interfaces expose only approved projections and preserve provenance, correction, revocation, and redaction state.
+- Release evidence distinguishes proposed, implemented, validated, accepted, published, released, deployed, superseded, and revoked states.
+
+## Non-goals
+
+- Executable agent behavior or unrestricted autonomous mutation.
+- Treating a genome, Sprite, alias, reviewer record, workflow, passing test, or successful runtime execution as a credential or approval.
+- Adding network, repository-write, payment, deployment, infrastructure, or secret authority.
+- Force-pushing or rebasing away reviewed provenance without explicit approval.
+- Merging competing candidates merely to make the repository appear consistent.
+- Publishing Pages, packages, manifests, or compatibility claims before their own approval gates pass.
 
 ## Active chain
 
 | Priority | Task | Owner | Depends on | Status | Acceptance criteria |
 |---|---|---|---|---|---|
-| P0-control | Preserve merge order and governance isolation | Architect | — | READY | PR #3 remains draft, unmerged, and excluded from compatibility-set acceptance until PR #2 is reconciled and frozen. Any alternate sequence has an explicit approval record covering provenance, base drift, conflicts, exact-head evidence, migration, and rollback. |
-| P0a | Reconcile PR #2, contain Socrates scope, and freeze a canonical head | Architect | P0-control | READY | Existing PR #2 remains the sole compatibility path; current `main` and all intended in-scope candidate commits are integrated without force-rewriting reviewed history; Socrates, aliases, repair authority, and PR #3 governance artifacts are removed from or explicitly quarantined outside the release candidate; conflicts and retained/excluded changes are documented; the resulting head is mergeable and immutable for review. |
-| P0b | Repair and replay the deterministic suite and resolve exact-head findings | QSOBuilder | P0a | BLOCKED | Every intended in-scope remediation is present on the frozen head; dependency and workflow corrections are accepted through exact-head evidence; all current and material outdated findings are fixed or dispositioned; and evidence is tied to the immutable submitted head. |
-| P1 | Run independent clean-checkout and CI conformance replay | Architect | P0b | BLOCKED | Supported Python environments install from checked-in instructions; schema, immutable, migration, Aequitas, manifest, canonicalization, duplicate/conflict, overflow, activation-rule, scope-exclusion, and negative tests pass at the exact reviewed head with retained logs and hashes. |
-| P2 | Accept and publish the versioned compatibility manifest | Architect | P1 | BLOCKED | One immutable candidate commit and complete manifest identity are approved; source archive, reports, checksums, provenance, rollback notes, scope exclusions, and compatibility status are published without executable, repair, or governance-automation authority. |
-| P3 | Verify read-only downstream consumption | Builder | P2 | BLOCKED | `QuantumStateObjects` and `QSO-FABRIC` reject missing, stale, mutated, duplicate, conflicting, overflowed, unapproved-supervisor, governance-coupled, or incompatible artifacts and accept the exact published version/hash set. |
-| P4 | Evaluate Socrates as a separately versioned supervisory migration | Architect | P2 and explicit product/security approval | BLOCKED | A follow-on proposal defines identity migration, alias semantics, authority limits, security review, compatibility impact, tests, and rollback without altering the accepted four-genome alpha. |
-| P5 | Evaluate PR #3 as a separate governance control-plane release | Architect | P0a and explicit governance approval | BLOCKED | PR #3 is refreshed against the post-reconciliation `main`, its exact head has retained status/workflow evidence, legacy-PR migration and zero/one/three-finding fixtures pass, domain-control limits are documented, and rollout/rollback are approved without changing compatibility-set priority or authority. |
+| P0A | Freeze candidate inventory and review order | Architect | — | READY | Exact heads, bases, mergeability, workflows, review threads, supersession relationships, and protected history are recorded for PRs #2, #12, #13, #14, and #15. |
+| P0B | Approve active identity and authority model | Architect + human authority | P0A | BLOCKED | Aequitas, Socrates, Jacob Thomas Redmond, historical aliases, declarative role records, human authority, and operational principals have distinct approved treatment with migration and rollback. |
+| P0C | Reconcile one canonical compatibility-set head | Architect | P0A, P0B | BLOCKED | Existing review provenance is preserved; intended artifacts are integrated; retired or excluded identities and workflow authority are absent or explicitly quarantined; the resulting PR #2 head is mergeable and frozen. |
+| P1 | Replay deterministic conformance at the frozen head | QSOBuilder | P0C | BLOCKED | Schemas, canonicalization, digest scopes, immutable policy, migrations, references, manifests, duplicates, conflicts, non-finite numbers, aliases, unknown fields, and hostile fixtures pass or fail closed as required. |
+| P2 | Approve declarative identity versus operational authority ADR | Architect | P0B, P1 | REVIEW | ADR-0003 is accepted or revised; a valid genome cannot issue capabilities, credentials, approvals, or canonical state. |
+| P3 | Assign format and adapter ownership | Architect | P1, portfolio format decision | BLOCKED | Generic QSO envelope/registry owner, genome-specific profile owner, QSIO adapter namespace, versions, round-trip rules, and golden vectors are approved. |
+| P4 | Validate pairwise and triple-overlap gluing | Builders + independent verifier | P1, P2, P3 | BLOCKED | Genome→runtime→Fabric, genome→Repository `1`→runtime, genome→QSIO→runtime, identity migration→cache, immutable policy→freeze→recovery, and public projection→interface→correction fixtures pass at immutable commits. |
+| P5 | Accept and publish compatibility release | Architect + human authority | P4 | BLOCKED | One approved manifest, source archive, checksums, provenance, review dispositions, security/privacy report, downstream replay, rollback plan, and explicit publication approval exist. |
+| P6 | Evaluate follow-on identities, experimenters, and governance automation | Architect | P5 and separate approvals | BLOCKED | Follow-on scope is independently versioned and cannot mutate the accepted compatibility set or grant runtime authority. |
 
-## Current repository health and candidate evidence
+## Cross-repository contract edges
 
-At the start of this review, GitHub reported PR #2 open and non-mergeable at head `e51a814cd329c55e45a1599b205ef234859e4848`. Comparison against then-current default head `20efbbf2f869b48a921519943580d2b491c686eb` showed the PR 86 commits ahead and 28 commits behind, with merge base `c6c6ccdd61391da5fae5a268022c510069016b33`. Subsequent governance-document commits on `main` intentionally make those counts historical; the Architect must recapture the complete state immediately before reconciliation.
+The following contracts remain proposals until versioned and approved:
 
-The branch contains candidate corrections for a declared `jsonschema==4.26.0` dependency, cache-key input, exact submitted-head checkout/verification, and validation of both `aequitas.json` and `socrates.json`. These are implemented candidate changes, not accepted capabilities: no exact-head workflow run is attached, mergeability is unresolved, and validating Socrates does not approve it for the current release.
+- `genome-runtime-profile/v0` — QSO-GENOMES to QuantumStateObjects;
+- `genome-fabric-profile/v0` — QSO-GENOMES to QSO-FABRIC;
+- `genome-qsio-adapter/v0` — QSO-GENOMES to the approved generic format/kernel owner;
+- `genome-authority-admission/v0` — QSO-GENOMES to Repository `1` or a successor;
+- `genome-public-projection/v0` — QSO-GENOMES to QSO-STUDIO and AionUi.
 
-The branch also contains `sprites/socrates.json` and `contracts/socrates-review-binding.json`, including Aequitas compatibility aliases and declarative repair-pull-request authority. They are outside the eleven-artifact manifest and current approved release scope. Product disposition for the first alpha is exclusion/quarantine; inclusion requires a separate versioned migration and explicit approval.
-
-Draft PR #3 is a separate governance-control-plane candidate at head `91db1a9176e8274140a48a9fcfc8ba08af40ac43`. Its retained workflow claim applies to earlier head `8ba56bccd241db1e2b01c910065584a10af230e5`; GitHub currently reports no combined status checks or pull-request workflow runs for the current head. It must remain draft and excluded until PR #2 reconciliation and freeze are complete, unless the Architect approves and records an alternate merge sequence.
-
-## Cross-repository gate
-
-`QuantumStateObjects` and `QSO-FABRIC` may not claim a verified four-object integration until P0-control through P3 are complete and both consumers validate the same accepted commit, manifest version, canonicalization profile, digest scopes, and approved Aequitas identity. Socrates and PR #3 governance automation must not become implicit downstream dependencies.
+See `docs/obstruction-and-gluing.md` for the obstruction ledger and required witnesses.
 
 ## Builder rules
 
-Do not add unrelated runtime or product scope. Keep PR #3 draft and do not merge or activate its scheduled governance automation before PR #2 reconciliation and freeze. Pause additional acceptance-remediation commits until P0a is complete unless the Architect records an explicit exception, rationale, bounded scope, and evidence-preservation plan. Preserve the PR branches, review threads, default-branch governance commits, and excluded Socrates and PR #3 evidence; do not force-push, publish, tag, or claim acceptance. After reconciliation, work only on the highest-priority unresolved acceptance finding and attach every claim to the frozen submitted head.
+- Work only on the highest-priority `READY` task.
+- Preserve every candidate branch, review thread, workflow result, artifact digest, and supersession record.
+- Do not execute candidate repository code in a privileged workflow.
+- Do not add runtime, credential, deployment, payment, or repository-write authority to genome artifacts.
+- Do not infer active authority from aliases, persona names, workflow labels, or successful validation.
+- Any change after a frozen review head requires an explicit exception, new exact-head evidence, and renewed downstream replay.
+
+## Evidence rules
+
+For every task, record:
+
+- exact repository, branch, base, head, merge base, and review path;
+- observed facts versus proposals and approvals;
+- commands, environments, tool and dependency versions;
+- schema, profile, fixture, and reason-code versions;
+- canonical bytes and domain-separated digest scopes;
+- workflow URLs, logs, artifacts, hashes, and retention;
+- identity migration, alias, correction, revocation, cache, and recovery effects;
+- downstream acceptance and rejection results;
+- limitations, residual risks, supersession, and rollback.
 
 ## Builder log
 
-Record old and new bases/heads, reconciliation method, conflict resolutions, retained and excluded paths, Socrates disposition, governance merge-order decision, review-thread mapping, validation commands/results, Python/tool versions, schema and fixture versions, canonical hashes, workflow URLs, residual risks, downstream replay results, and rollback evidence.
+- 2026-07-20 — Added a portfolio obstruction and gluing ledger covering identity, authority, format, digest, lifecycle, mutation, freeze, manifest, downstream, QSIO, privacy, correction, freshness, governance, evidence, and recovery conflicts.
+- 2026-07-20 — Added ADR-0003 proposing separation of declarative identity and policy from operational capability and canonical-state authority.
+- 2026-07-20 — Reframed the active chain around explicit reconciliation of PRs #2, #12, #13, #14, and #15 before compatibility acceptance.
+- 2026-07-16 to 2026-07-19 — Preserved PR #2 as the compatibility-set review path, identified default-branch divergence and identity scope conflict, and developed bounded validation and reconciliation repairs without authorizing release.
 
-- 2026-07-16 — Advanced P0 from compatibility-set creation to independent acceptance of PR #2 after the candidate added the missing artifacts but remained blocked by integrity, provenance, dependency, workflow, and downstream-verification findings.
-- 2026-07-16 — Consolidated the initial remediation lineage onto existing PR #2, preserving the original review path and eliminating a competing-head decision.
-- 2026-07-16 — Detected that PR #2 had diverged from `main`, remained non-mergeable, and had no status checks on the observed head. Portfolio priority remained unchanged; provenance-preserving reconciliation became P0a because continuing remediation before reconciliation invalidates exact-head evidence and increases review churn.
-- 2026-07-17 — Recorded candidate dependency, cache, submitted-head workflow, and two-Sprite validation changes at PR head `e51a814…`. These narrow several implementation gaps but remain unaccepted until reconciliation and exact-head replay.
-- 2026-07-17 — Product scope decision: keep the first alpha limited to the four-genome set and approved Aequitas boundary. Socrates, Aequitas aliases, and repair-pull-request authority are quarantined as a follow-on proposal unless explicit product and security approval authorizes a versioned migration.
-- 2026-07-17 — Product merge-order decision: keep draft PR #3 separate and unmerged until PR #2 is reconciled and frozen. Its current head lacks exact-head status/workflow evidence, and merging it first would move `main`, invalidate reconciliation evidence, and require a new review cycle.
+<!-- QSO-CONSENT-CAPACITY-LOCK-v1 -->
