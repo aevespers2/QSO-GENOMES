@@ -97,13 +97,10 @@ class CapabilityEvidenceReviewTests(unittest.TestCase):
         self.assertIn("### Prose equivalent", text)
 
     def test_coordination_route_fails_when_boundary_is_removed(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            path = Path(directory) / "taskchain.md"
-            path.write_text("A genome is data.\n", encoding="utf-8")
-            errors = validate_coordination_routes(
-                {path: ("A genome is data.", "operational admission")}
-            )
-            self.assertTrue(errors)
+        errors = validate_coordination_routes(
+            {GUIDE_PATH: ("A declaration is not a demonstration", "missing-boundary-marker")}
+        )
+        self.assertTrue(errors)
 
 
 if __name__ == "__main__":
