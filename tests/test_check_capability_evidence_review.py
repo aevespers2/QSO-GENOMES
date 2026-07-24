@@ -8,6 +8,7 @@ from pathlib import Path
 from scripts.check_capability_evidence_review import (
     EXPECTED_STATUS,
     GUIDE_PATH,
+    ROOT,
     load_profile,
     validate_coordination_routes,
     validate_guide,
@@ -28,6 +29,11 @@ class CapabilityEvidenceReviewTests(unittest.TestCase):
         self.assertEqual([], validate_profile(self.profile))
         self.assertEqual([], validate_guide())
         self.assertEqual([], validate_coordination_routes())
+
+    def test_controlled_routes_share_unadmitted_status(self) -> None:
+        for relative_path in ("taskchain.md", "punchlist.md", "release.md", "changelog.md"):
+            text = (ROOT / relative_path).read_text(encoding="utf-8")
+            self.assertIn(EXPECTED_STATUS, text, relative_path)
 
     def test_rejects_admitted_status(self) -> None:
         self.assert_rejected(lambda value: value.__setitem__("status", "OPERATIONALLY_ADMITTED"))
