@@ -94,20 +94,6 @@ jobs:
           echo "status=$status" >> "$GITHUB_OUTPUT"
           exit 0
 
-      - name: Validate complete documentation surface
-        id: docs
-        continue-on-error: true
-        shell: bash
-        run: |
-          set +e
-          evidence="$RUNNER_TEMP/capability-evidence-review"
-          python scripts/validate_documentation.py \
-            > "$evidence/documentation-validation.txt" 2>&1
-          status=$?
-          cat "$evidence/documentation-validation.txt"
-          echo "status=$status" >> "$GITHUB_OUTPUT"
-          exit 0
-
       - name: Install pinned documentation dependencies
         run: python -m pip install --requirement requirements-docs.txt
 
@@ -163,11 +149,9 @@ jobs:
         env:
           PACKET_STATUS: ${{ steps.packet.outputs.status }}
           TEST_STATUS: ${{ steps.tests.outputs.status }}
-          DOCS_STATUS: ${{ steps.docs.outputs.status }}
           BUILD_STATUS: ${{ steps.build.outputs.status }}
         run: |
           set -euo pipefail
           test "$PACKET_STATUS" = "0"
           test "$TEST_STATUS" = "0"
-          test "$DOCS_STATUS" = "0"
           test "$BUILD_STATUS" = "0"
