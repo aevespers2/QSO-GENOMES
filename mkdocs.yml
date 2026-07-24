@@ -1,0 +1,41 @@
+site_name: QSO-GENOMES
+site_description: Canonical, reviewable genome contracts for bounded Quantum State Objects
+repo_url: https://github.com/aevespers2/QSO-GENOMES
+repo_name: aevespers2/QSO-GENOMES
+docs_dir: docs
+strict: true
+
+nav:
+  - Home: index.md
+  - Project overview: project-overview.md
+  - Architecture: architecture.md
+  - Contracts and invariants: contracts-and-invariants.md
+  - Genome admission and runtime projection: genome-admission-and-runtime-projection-profile.md
+  - Capability evidence and self-edit review: capability-evidence-and-self-edit-review.md
+  - Accessibility and review evidence: accessibility-and-review-evidence.md
+  - Obstruction and gluing: obstruction-and-gluing.md
+  - Diagrams: diagrams.md
+  - Developer guide: developer-guide.md
+  - Security and governance: security-and-governance.md
+  - Release and evidence: release-and-evidence.md
+  - Operations and rollback: operations-and-rollback.md
+  - Decisions:
+      - Data-only authority: adr/0001-data-only-authority.md
+      - Canonical review path: adr/0002-canonical-review-path.md
+      - Declarative identity vs operational authority: adr/0003-separate-declarative-identity-from-operational-authority.md
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - tables
+  - toc:
+      permalink: true
+
+theme:
+  name: mkdocs
+  navigation_depth: 4
+
+extra:
+  lifecycle_notice: Documentation describes repository contracts and review boundaries; it does not authorize a release or runtime capability.

@@ -5,62 +5,107 @@ All notable product, architecture, implementation, release, and deployment chang
 ## Unreleased
 
 ### Product
-- 2026-07-16 — Defined the MVP as a complete, deterministic Atlas/Nova/Orion/Lyra compatibility set with immutable ethics, Aequitas references, canonical hashes, and an independent consumer manifest.
+
+- 2026-07-24 — Added an exact-artifact accessibility and review-evidence surface with status `DOCUMENTED_NOT_CERTIFIED`, separating source review, strict construction, automated checks, rendered-artifact review, manual keyboard and visual review, assistive-technology review, certification, publication, and release.
+- 2026-07-24 — Defined review states `NOT_REVIEWED`, `PARTIAL`, `PASS`, `FAIL`, `BLOCKED`, `UNKNOWN`, `SUPERSEDED`, `WITHDRAWN`, and `CORRECTED`, with every result limited to its exact artifact, environment, scope, and reviewer record.
+- 2026-07-23 — Added a capability-evidence and bounded self-edit review surface with status `DOCUMENTED_NOT_ADMITTED`, separating declaration, structural validity, fixture demonstration, benchmark demonstration, independent reproduction, admission eligibility, operational admission, and resulting-state verification.
+- 2026-07-23 — Defined ordinary mutable-field adjustments, versioned migrations, immutable-policy changes, and prohibited authority-bearing changes as distinct review classes with exact-field delta, cumulative drift, external disposition, rollback, and restored-state requirements.
+- 2026-07-23 — Recorded closed PR #14 as historical unmerged adapter evidence rather than an active QSIO integration or format-ownership path.
+- 2026-07-21 — Added a genome admission and runtime projection profile that separates declarative validity, neutral conformance, Repository `1` operational admission, runtime/Fabric projection, bounded execution, canonical reconciliation, correction, revocation, and recovery.
+- 2026-07-21 — Defined distinct identities for genome artifacts, revisions, manifests, policy commitments, admission requests, quarantine records, admission decisions, capabilities, runtime admissions, runtime instances, Fabric experiments, conformance runs, execution receipts, reconciliations, corrections, revocations, and recovery checkpoints.
+- 2026-07-20 — Added a portfolio obstruction and gluing analysis for QSO-GENOMES, covering declarative identity, operational authority, generic QSO formats, digest scopes, lifecycle, mutation, freeze, manifest acceptance, downstream interpretation, QSIO adapters, public projections, correction, freshness, governance artifacts, evidence vocabulary, and recovery.
+- 2026-07-20 — Added ADR-0003 proposing that genome and Sprite records remain declarative policy and identity data and cannot themselves grant credentials, capabilities, approvals, repository writes, releases, deployments, payments, or canonical operational state.
+- 2026-07-20 — Reconciled documentation planning around the interacting PR #2 compatibility set, PR #12 identity migration, PR #13 repair path, historical PR #14 QSIO adapter, and PR #15 documentation candidate without approving a merge order or changing implementation scope.
+- 2026-07-19 — Added a GitHub Pages-ready documentation candidate covering repository purpose, lifecycle vocabulary, architecture, contracts, diagrams, onboarding, security/governance, release evidence, operations/rollback, and architecture decisions. The change is documentation-only and does not alter the canonical review path, release scope, runtime behavior, or gate status.
+- 2026-07-16 — Defined the MVP as a complete, deterministic Atlas/Nova/Orion/Lyra compatibility set with immutable policy, approved supervisory treatment, canonical hashes, and an independent consumer manifest.
 - 2026-07-16 — Confirmed this repository remains declarative and data-only; executable behavior and payment authority are out of scope.
 - 2026-07-16 — Advanced the objective from candidate creation to independent acceptance of PR #2, preserving QSO-GENOMES as the highest portfolio unblocker while requiring exact-head evidence.
-- 2026-07-16 — Selected existing PR #2 as the single canonical submission path and consolidated remediation there rather than opening a competing release PR.
-- 2026-07-16 — Changed the local execution order after GitHub reported PR #2 non-mergeable and diverged from `main`: provenance-preserving branch reconciliation and one frozen submitted head now precede further exact-head remediation.
-- 2026-07-17 — Kept portfolio priority unchanged after PR #2 advanced to head `e51a814cd329c55e45a1599b205ef234859e4848`; reconciliation remains P0 because the branch is materially diverged and exact-head evidence cannot stabilize while either side continues moving.
-- 2026-07-17 — Scoped the first eligible alpha to the four genomes and the approved Aequitas boundary. Socrates, Aequitas compatibility aliases, and repair-pull-request authority are quarantined from the current release candidate and require a separately versioned migration plus explicit product and security approval.
-- 2026-07-17 — Classified draft PR #3 as a separate governance-control-plane candidate rather than part of compatibility-set acceptance. Recommended merge order is PR #2 reconciliation and freeze first, followed by PR #3 refresh and independent governance review; an alternate order requires explicit Architect approval and a provenance-preserving migration record.
+- 2026-07-16 — Selected existing PR #2 as the single compatibility-set submission path and consolidated remediation there rather than opening a competing release PR.
 
 ### Architecture
-- QSO-GENOMES is the highest upstream contract blocker for the four-QSO portfolio and must publish schema/version/hash boundaries before runtime integration proceeds.
-- PR #2 remains the sole compatibility-set review path; reconciliation must integrate current `main` and every intended in-scope candidate commit without force-rewriting reviewed history unless the Architect explicitly approves and documents an alternative.
-- Draft PR #3 must remain isolated from the compatibility set and scheduled governance automation must remain inactive until the governance candidate is refreshed against the post-reconciliation default branch, independently certified at its exact head, and separately approved.
-- The accepted set identity must bind all consumer-relevant manifest metadata, including the authoritative immutable protocol and migration, or explicitly distinguish separate digest scopes.
-- Immutable protections must be pinned to the approved protocol identity and contents; local additions must fail closed when conflicting or duplicated.
-- Migration validation must bind the expected migration identity, source profile, protocol identity, immutable status, enforcement boundary, exact consumer requirements, and unique paths.
-- Manifest identity-bearing fields must be validated against source documents rather than trusted from hard-coded generator metadata.
-- Aequitas references, review surfaces, activation rules, and per-surface oversight mappings must be unique, approved, and source-consistent before normalization.
-- JSON loading used for contract replay must reject non-finite constants and numeric overflow.
-- Socrates is not an alias-level replacement for Aequitas in the current compatibility set. Any future transition requires explicit identity, authority, migration, compatibility, and rollback semantics.
+
+- 2026-07-24 — Added an accessibility evidence flow from exact source to pinned build, exact rendered artifact, automated and human review, bounded disposition, correction, and renewed exact-head evidence, with a complete prose equivalent to the Mermaid graph.
+- 2026-07-24 — Defined accessibility requirements for diagrams, tables, code and data examples, keyboard and focus, 200%/400% zoom and reflow, contrast and non-color meaning, screen readers, cognitive and epistemic comprehension, remote-asset failure, privacy, correction, supersession, and low-bandwidth use.
+- 2026-07-23 — Added a documentation-only `qso-genome-self-edit-review/v1` packet joining exact genome source, mutable-field scope, evidence level, independent review, consumer impact, ethics/privacy/security checks, rollback, and external admission review without creating authority.
+- 2026-07-23 — Added Atlas, Nova, Orion, and Lyra declared-versus-demonstrated review prompts: assumption tracking, calibrated anomaly analysis, contract and rollback witnesses, and consent/manipulation-resistance evaluation.
+- 2026-07-23 — Added capability-evidence pairwise and triple-overlap requirements so declaration→evidence→admission and self-edit→immutable-policy review→restored state cannot be collapsed into local validation.
+- 2026-07-21 — Added `genome-admission-request/v0`, `genome-authority-admission/v0`, `genome-runtime-projection/v0`, and `genome-fabric-projection/v0` as documentation-only contract candidates.
+- 2026-07-21 — Added an admission state machine that forbids automatic promotion from local validity or conformance to admission, from execution to reconciliation, or from freeze to active state.
+- 2026-07-21 — Defined eight triple-overlap witnesses spanning Repository `1` admission, runtime/Fabric projection, neutral conformance, identity migration and caches, immutable policy and capabilities, correction/revocation propagation, emergency recovery, and replacement-environment re-admission.
+- 2026-07-21 — Required wrong-device, wrong-workspace, wrong-runtime, stale, replayed, broadened-capability, partial-execution, failed-rollback, privacy-leak, and incomplete-recovery fixtures.
+- 2026-07-20 — Defined pairwise contract candidates for genome→runtime, genome→Fabric, genome→QSIO/kernel, genome→Repository `1`, and genome→QSO-STUDIO/AionUi.
+- 2026-07-20 — Defined six original triple-overlap witnesses: genome→runtime→Fabric; genome→Repository `1`→runtime; genome→QSIO/kernel→runtime; identity migration→alias resolver→cache; immutable policy→freeze/revocation→recovery; and public projection→interface→correction.
+- 2026-07-20 — Proposed the lowest-coupling ownership split: QSO-GENOMES owns declarative genome contracts and genome-specific canonicalization; an approved kernel/package owns generic formats; QuantumStateObjects owns runtime interpretation; QSO-FABRIC owns collaboration; Repository `1` owns operational admission and capabilities; `ALISTAIRE-` owns constitutional governance; and interfaces own read-only presentation.
+- 2026-07-20 — Documented that repository location, file names, passing tests, conformance, projection, display, and successful execution do not establish canonical ownership or authority.
+- QSO-GENOMES remains an upstream contract dependency and must publish schema, version, digest, identity, migration, compatibility, admission, and projection boundaries before runtime integration claims proceed.
+- The accepted set identity must bind all consumer-relevant manifest metadata or explicitly distinguish domain-separated digest scopes.
+- Immutable protections must be pinned to approved protocol identity and contents; local additions fail closed when conflicting or duplicated.
+- Manifest identity-bearing fields must be validated against source documents rather than trusted from generator metadata.
+- JSON loading used for contract replay must reject duplicate keys, invalid UTF-8, non-finite constants, unsupported critical fields, and numeric overflow.
+
+### Governance and identity
+
+- 2026-07-24 — Required accessibility evidence to bind the exact source, rendered artifact, workflow, toolchain, environment, reviewer, scope, limitations, corrections, supersession, and denied authority; a source or automated pass cannot create certification or publication approval.
+- 2026-07-24 — Required accessibility records to minimize personal information and preserve a bounded public summary when complete review evidence must remain protected.
+- 2026-07-23 — Required immutable ethics and forbidden capabilities to remain outside genome-writable state; passing schema, digest, fixture, benchmark, workflow, runtime, or interface checks cannot authorize self-approval, self-commit, self-admission, activation, or canonical acceptance.
+- 2026-07-23 — Required emotional understanding, attachment, distress, vulnerability, roleplay, or relationship framing never to substitute for consent or authorize influence, coercion, or manipulation.
+- 2026-07-23 — Required missing, conflicting, stale, replayed, unsupported, privacy-restricted, corrected, revoked, or failed-rollback evidence to remain explicit and fail closed.
+- 2026-07-21 — Required Repository `1` or an approved successor to own operational admission, capability issuance, revocation, reconciliation, and recovery while QSO-GENOMES remains non-executing.
+- 2026-07-21 — Required a valid genome to be re-admitted when device, workspace, runtime head, Fabric head, environment, capability, or recovery binding changes.
+- 2026-07-20 — Recorded a material conflict between PR #2 Aequitas-oriented compatibility semantics and PR #12’s proposed removal of active Aequitas and Socrates governance surfaces with review responsibility transferred to Jacob Thomas Redmond.
+- 2026-07-20 — Required an approved migration to distinguish historical provenance identity, declarative contract identity, current human authority, compatibility aliases, retired aliases, and operational principals.
+- 2026-07-20 — Required correction, revocation, supersession, and downstream cache-invalidation evidence before a retired identity can be considered fully inactive.
+- Candidate identity migrations remain proposals. Historical records remain reachable as provenance but do not grant active authority.
 
 ### Candidate implementation
-- PR #2 proposes the missing Atlas genome, immutable baseline, Aequitas review binding, deterministic canonicalization, compatibility manifest, conformance tests, reports, provenance, and workflow configuration.
-- Candidate remediation includes exact four-genome enforcement, a versioned immutable-ethics migration, Aequitas reference/invariant validation, immutable protocol and migration inclusion in an eleven-artifact manifest, local-ethics conflict checks, source-derived manifest identities, and reachable provenance work.
-- 2026-07-17 — Candidate changes added `requirements.txt` pinning `jsonschema==4.26.0`, keyed setup-python caching to that file, checked out and verified the submitted PR head, and extended schema-set validation to both `aequitas.json` and `socrates.json`.
-- Those changes are implemented candidate evidence, not accepted capability. No exact-head workflow run, mergeable reconciled head, independent clean replay, downstream verification, or publication approval exists.
-- Validation of `socrates.json` establishes only schema conformance; it does not authorize Socrates, compatibility aliases, or repair authority for the current release.
-- Draft PR #3 implements a candidate PR ontology, lifecycle validator, Inspector sampling workflow, escalation behavior, and governance-agent definitions. Those files are proposal evidence only: they do not resolve PR #2 findings, authorize issue mutation, activate scheduled automation, or establish portfolio-wide governance adoption.
 
-### Repository health
-- Historical snapshot: PR #2 head `46f3248d8f67b7f0cc734159d2fa0a27e6051ea7` was 74 commits ahead and 24 behind default head `0ac8960db20dba6ef083d928a44f4ca756d44713` at the earlier review point.
-- Review-start snapshot: PR #2 was open and non-mergeable at `e51a814cd329c55e45a1599b205ef234859e4848`; then-current `main` was `20efbbf2f869b48a921519943580d2b491c686eb`; the branch was 86 commits ahead and 28 behind with merge base `c6c6ccdd61391da5fae5a268022c510069016b33`.
-- Governance-document commits made during this review intentionally advance `main`, so the review-start counts are historical evidence rather than current reconciliation inputs.
-- Reconciliation must recapture base, head, ahead/behind state, workflow state, and review-thread state immediately before work begins, then record method, conflict resolutions, retained and excluded changes, Socrates disposition, governance merge order, resulting immutable head, and renewed evidence.
-- Draft PR #3 is open, non-mergeable, and draft at current head `91db1a9176e8274140a48a9fcfc8ba08af40ac43`. Its retained ontology-workflow evidence is tied to earlier head `8ba56bccd241db1e2b01c910065584a10af230e5`; no combined status checks or pull-request workflow runs currently certify `91db1a9…`.
+- PR #2 proposes Atlas, Nova, Orion, and Lyra artifacts, immutable policy, supervisory bindings, deterministic canonicalization, a compatibility manifest, conformance tests, reports, provenance, and workflow configuration.
+- PR #12 proposes removal of active Aequitas and Socrates governance identities and migration of review responsibility to Jacob Thomas Redmond.
+- PR #13 proposes reconciliation and Consent Capacity Lock repairs; focused deduplication repairs later merged through PRs #16 and #18.
+- Closed PR #14 preserves a disabled QSIO adapter proposal as historical evidence only; it is not an active integration candidate.
+- PR #15 proposes documentation and exact-head documentation validation only, now including genome admission/runtime projection, capability-evidence/self-edit review, and accessibility review profiles.
+- These changes are candidate evidence, not accepted capability, admission, accessibility certification, publication, release, deployment, or downstream authority.
 
 ### Review findings
-- Material findings include complete immutable-statement enforcement; approved protocol-content pinning; migration source-profile, contract-ID, protocol-ID, status, boundary, exact-key, and unique-path checks; Aequitas identity, activation, per-surface oversight, duplicate-reference, duplicate-surface, and source-integrity checks; overflowed-number rejection; digest-scope semantics; exact-head provenance; and review-thread disposition.
-- Candidate dependency and workflow changes may address earlier declared-dependency, cache-input, and submitted-head-checkout findings, but they are not accepted until they survive reconciliation, exact-head CI, and review disposition.
-- Socrates introduces a separate scope finding because it adds a new supervisory identity, aliases, and repair authority outside the eleven-artifact manifest.
-- PR #3 has separate governance findings: current-head evidence is absent; legacy PR ontology migration remains undefined; zero/one/three-finding escalation fixtures are incomplete; domain-specific control execution is partial; and merge order can invalidate PR #2 reconciliation evidence.
-- Every current and still-material outdated finding must be resolved or explicitly dispositioned against the final frozen reconciled head before acceptance.
+
+- Material findings now include active identity disposition, historical aliases, generic format ownership, genome-specific canonicalization, digest scopes, lifecycle mapping, mutation vocabulary, declared-versus-demonstrated capability evidence, benchmark scope, immutable-policy review, exact-field drift, external disposition, freeze and recovery semantics, manifest acceptance, Repository `1` admission, record-identity collapse, runtime/Fabric projection equivalence, downstream interpretation, QSIO package ownership, public/protected data boundaries, accessibility standard and environment coverage, correction, revocation, freshness, evidence reason codes, replacement-environment re-admission, and portfolio recovery.
+- Every current and still-material outdated finding must be resolved or explicitly dispositioned against one frozen reconciled head before compatibility acceptance.
+- Shared positive, negative, stale, replay, unsupported-version, wrong-identity, wrong-device, wrong-workspace, wrong-runtime, tamper, broadened-capability, partial-failure, correction, revocation, freeze, recovery, and rollback fixtures remain required.
+
+### Documentation
+
+- 2026-07-24 — Added `docs/accessibility-and-review-evidence.md` with `DOCUMENTED_NOT_CERTIFIED` status, exact-artifact evidence bindings, separate review surfaces and states, accessible Mermaid/prose flow, rendered review procedures, privacy controls, a non-authorizing YAML record template, fail-closed stop conditions, and reviewer onboarding.
+- 2026-07-24 — Synchronized README, Pages home and navigation, `taskchain.md`, `punchlist.md`, `release.md`, and `changelog.md` so source validation, rendered review, accessibility certification, publication, contract acceptance, admission, release, and deployment cannot be conflated.
+- 2026-07-24 — Proposed non-authoritative FYSA-120 subdivision `019-R — Exact-artifact accessibility evidence for declarative contract and machine-readable governance documentation`.
+- 2026-07-23 — Added `docs/capability-evidence-and-self-edit-review.md`, its machine-readable profile, accessible Mermaid/prose graph, strict validator, sixteen hostile regressions, exact-head read-only workflow, retained artifacts, and fail-closed evidence gate.
+- 2026-07-23 — Synchronized `taskchain.md`, `punchlist.md`, `release.md`, `changelog.md`, and Pages navigation with status `DOCUMENTED_NOT_ADMITTED`, historical PR #14 disposition, evidence levels, self-edit classes, external review, and rollback boundaries.
+- 2026-07-23 — Proposed non-authoritative FYSA-120 subdivision `031-T — Declared-versus-demonstrated capability evidence and bounded self-edit conformance`.
+- 2026-07-21 — Added `docs/genome-admission-and-runtime-projection-profile.md` and linked it from Pages navigation.
+- 2026-07-21 — Updated `taskchain.md`, `punchlist.md`, `release.md`, `changelog.md`, and `mkdocs.yml` to align admission and projection boundaries with the portfolio contract graph.
+- 2026-07-20 — Added `docs/obstruction-and-gluing.md` and linked it from Pages navigation and the landing page.
+- 2026-07-20 — Added `docs/adr/0003-separate-declarative-identity-from-operational-authority.md`.
+- 2026-07-20 — Updated planning and release documents to align with the current portfolio contract graph and unresolved decisions.
+- Documentation remains explanatory and review-oriented; it does not activate Pages publication or alter genome artifacts, schemas, migrations, aliases, runtime behavior, credentials, capabilities, admissions, or canonical state.
 
 ### Release
-- The candidate remains blocked until reconciliation produces one mergeable immutable head; Socrates is removed or quarantined from the alpha scope; the deterministic suite passes; exact-head CI or independent clean replay succeeds; all blocking findings and adversarial fixtures pass; downstream consumers validate the accepted set; and provenance, checksums, rollback, review, and approval evidence is retained.
-- PR #3 remains excluded from this release. Merging it before PR #2 reconciliation and freeze is not authorized because it would move the default branch and require a new compatibility-set conflict and exact-head evidence cycle.
-- Consolidation, reconciliation, scope containment, governance isolation, documentation synchronization, and candidate remediation are review corrections, not release promotions.
-- No release, tag, deployment, governance rollout, scheduled Inspector activation, or downstream compatibility claim is authorized from current candidate evidence alone.
+
+- 2026-07-24 — Added accessibility protocol as a `REVIEW / BLOCKED` release gate: the documentation exists, while exact rendered evidence, standard and environment decisions, approved reviewers, assistive-technology review, correction ownership, certification authority, and publication approval remain absent.
+- 2026-07-23 — Added capability-evidence and self-edit review as a `REVIEW / BLOCKED` release gate: the packet and exact-head validation exist, while frozen-head behavioral evidence, independent reproduction, external disposition, admission authority, rollback rehearsal, and resulting-state verification remain required.
+- 2026-07-23 — Recorded historical PR #14 as `WITHDRAWN / HISTORICAL`; no adapter activation or compatibility authority survives closure.
+- The candidate remains blocked until one merge and supersession order is approved, identity scope is settled, one mergeable immutable compatibility head exists, conformance and gluing fixtures pass, Repository `1` admission is approved, downstream consumers derive compatible projections, privacy, accessibility, and recovery controls are approved, and explicit publication approval is recorded.
+- No release, tag, Pages publication, package publication, adapter activation, runtime integration claim, accessibility certification, capability certification, admission profile activation, or downstream-authoritative manifest is authorized from current candidate evidence.
 
 ### Deployment
-- No deployment surface is authorized; consumers retrieve only an approved, versioned declarative artifact set.
-- Governance workflows, scheduled Inspector execution, and automated issue mutation remain undeployed and must not be enabled through the compatibility-set release path.
 
-## Entry Format
+- No deployment surface is authorized; consumers may retrieve only an explicitly approved, versioned declarative artifact set.
+- Governance workflows, scheduled review automation, capability issuance, admission services, remote writes, and runtime activation remain outside this documentation milestone.
+
+## Entry format
+
 - Date
 - Category: Product / Architecture / Added / Changed / Fixed / Security / Release / Deployment
 - Summary
 - Evidence: issue, PR, commit, workflow, artifact, or deployment record
 - Impact and migration notes where applicable
+
+<!-- QSO-CONSENT-CAPACITY-LOCK-v1 -->

@@ -1,0 +1,199 @@
+{
+  "profile_id": "QSO-GENOMES-CAPABILITY-EVIDENCE-SELF-EDIT-REVIEW-001",
+  "version": 1,
+  "status": "DOCUMENTED_NOT_ADMITTED",
+  "authority_effect": "none",
+  "repository_role": "declarative_genome_contract_and_review_evidence",
+  "observed_generations": [
+    {
+      "repository": "aevespers2/QSO-GENOMES",
+      "surface": "compatibility_set_candidate",
+      "pull_request": 2,
+      "head": "1259693433814129f44d0255b5e0ecf741d9a79b",
+      "evidence_class": "candidate_declaration"
+    },
+    {
+      "repository": "aevespers2/QSO-GENOMES",
+      "surface": "identity_migration_candidate",
+      "pull_request": 12,
+      "head": "622530232248a8df8c24c91ed09ce58f66988e63",
+      "evidence_class": "candidate_migration"
+    },
+    {
+      "repository": "aevespers2/QSO-GENOMES",
+      "surface": "qsio_adapter_candidate",
+      "pull_request": 14,
+      "head": "992d8263bf62666fd6a05152cc0f6ad16791706c",
+      "evidence_class": "disabled_adapter_candidate"
+    },
+    {
+      "repository": "aevespers2/QSO-GENOMES",
+      "surface": "documentation_candidate",
+      "pull_request": 15,
+      "head": "73f481bb5bd6cd55a681a047a0c571bce048d033",
+      "evidence_class": "documentation_and_validation"
+    }
+  ],
+  "evidence_levels": [
+    "DECLARED",
+    "STRUCTURALLY_VALID",
+    "FIXTURE_DEMONSTRATED",
+    "BENCHMARK_DEMONSTRATED",
+    "INDEPENDENTLY_REPRODUCED",
+    "ADMISSION_ELIGIBLE",
+    "OPERATIONALLY_ADMITTED",
+    "RESULTING_STATE_VERIFIED"
+  ],
+  "genome_review_prompts": {
+    "atlas": [
+      "assumption_tracking",
+      "formal_and_dimensional_checks",
+      "held_out_problem_evaluation",
+      "independent_reproduction"
+    ],
+    "nova": [
+      "false_positive_analysis",
+      "false_negative_analysis",
+      "ambiguous_case_handling",
+      "anomaly_is_not_proof"
+    ],
+    "orion": [
+      "contract_fixtures",
+      "failure_injection",
+      "migration_and_rollback_witnesses",
+      "architecture_is_not_implementation_authority"
+    ],
+    "lyra": [
+      "ambiguity_evaluation",
+      "consent_and_manipulation_resistance",
+      "cultural_and_accessibility_review",
+      "understanding_is_not_permission_to_influence"
+    ]
+  },
+  "self_edit_classes": {
+    "A": "ordinary_bounded_mutable_field_adjustment",
+    "B": "versioned_migration",
+    "C": "immutable_policy_or_forbidden_capability_change_requires_separate_policy_migration",
+    "D": "authority_bearing_or_operational_change_rejected_from_genome_packet"
+  },
+  "required_change_fields": [
+    "path",
+    "classification",
+    "old_value",
+    "proposed_value",
+    "per_freeze_delta",
+    "cumulative_drift",
+    "schema_authority",
+    "rationale"
+  ],
+  "required_packet_sections": [
+    "source",
+    "changes",
+    "evidence",
+    "impact",
+    "rollback",
+    "disposition"
+  ],
+  "immutable_review_boundaries": [
+    "immutable_policy_not_genome_writable",
+    "forbidden_capabilities_not_genome_writable",
+    "no_self_approval",
+    "no_self_admission",
+    "no_self_activation",
+    "no_credential_or_secret_material",
+    "no_repository_write_authority",
+    "no_release_or_deployment_authority",
+    "no_payment_or_signing_authority",
+    "no_emotional_vulnerability_exploitation",
+    "unknown_conflicting_stale_or_replayed_evidence_fails_closed"
+  ],
+  "dispositions": [
+    "approved_for_external_admission_review",
+    "revise",
+    "rejected",
+    "withdrawn",
+    "superseded"
+  ],
+  "controlled_routes": [
+    "docs/capability-evidence-and-self-edit-review.md",
+    "docs/capability-evidence-and-self-edit-review-v1.json",
+    "taskchain.md",
+    "punchlist.md",
+    "release.md",
+    "changelog.md",
+    "mkdocs.yml"
+  ],
+  "acceptance_gates": [
+    "CANONICAL_COMPATIBILITY_HEAD",
+    "APPROVED_IDENTITY_AND_ALIAS_MIGRATION",
+    "IMMUTABLE_POLICY_EXACT_BINDING",
+    "MUTABLE_FIELD_SCHEMA_AUTHORITY",
+    "COMPLETE_DELTA_AND_DRIFT_ACCOUNTING",
+    "HOSTILE_FIXTURES",
+    "INDEPENDENT_REPRODUCTION",
+    "SECURITY_PRIVACY_ETHICS_COMPATIBILITY_REVIEW",
+    "EXTERNAL_HUMAN_DISPOSITION",
+    "SEPARATE_OPERATIONAL_ADMISSION",
+    "ROLLBACK_TARGET_AND_REHEARSAL",
+    "RESULTING_STATE_VERIFICATION"
+  ],
+  "prohibited_promotions": [
+    "capability_certification",
+    "self_edit_commit",
+    "self_approval",
+    "operational_admission",
+    "capability_issuance",
+    "runtime_activation",
+    "canonical_acceptance",
+    "pages_publication",
+    "release",
+    "deployment",
+    "credential_change",
+    "infrastructure_apply",
+    "destructive_history_rewrite"
+  ],
+  "fysa_120": {
+    "categories": [
+      "CAT-011",
+      "CAT-012",
+      "CAT-013",
+      "CAT-017",
+      "CAT-018",
+      "CAT-019",
+      "CAT-031",
+      "CAT-040"
+    ],
+    "subdivisions": [
+      "011-B",
+      "011-E",
+      "012-A",
+      "012-B",
+      "012-D",
+      "012-E",
+      "013-A",
+      "013-C",
+      "013-D",
+      "013-E",
+      "017-C",
+      "017-D",
+      "017-E",
+      "018-B",
+      "018-D",
+      "018-E",
+      "019-B",
+      "019-C",
+      "019-D",
+      "031-A",
+      "031-D",
+      "031-E",
+      "040-B",
+      "040-D",
+      "040-E"
+    ],
+    "proposed_gap": {
+      "id": "031-T",
+      "name": "Declared-versus-demonstrated capability evidence and bounded self-edit conformance",
+      "authoritative": false
+    }
+  }
+}
