@@ -1,6 +1,6 @@
 # QSO-GENOMES Punch List
 
-This list converts the current compatibility, identity, format, authority, admission, projection, capability-evidence, self-edit, and gluing obstructions into bounded review work. A checked item means documentation or candidate evidence exists; it does not mean the item is accepted, released, or downstream-authoritative.
+This list converts the current compatibility, identity, format, authority, admission, projection, capability-evidence, self-edit, accessibility, and gluing obstructions into bounded review work. A checked item means documentation or candidate evidence exists; it does not mean the item is accepted, certified, released, or downstream-authoritative.
 
 ## P0 — Candidate inventory and review order
 
@@ -34,6 +34,21 @@ Current review status: `DOCUMENTED_NOT_ADMITTED`.
 - [ ] Obtain independent reproduction before any `ADMISSION_ELIGIBLE` claim.
 - [ ] Assign an external reviewer and admission authority; prohibit genome self-approval, self-commit, self-admission, and self-activation.
 - [ ] Rehearse rollback and independently verify restored state before any operational admission.
+
+## P0 — Accessibility and exact-artifact review
+
+Current review status: `DOCUMENTED_NOT_CERTIFIED`.
+
+- [x] Define separate source, rendered-site, diagram, table, code/data-example, generated-evidence, and downstream-interface review surfaces.
+- [x] Define `NOT_REVIEWED`, `PARTIAL`, `PASS`, `FAIL`, `BLOCKED`, `UNKNOWN`, `SUPERSEDED`, `WITHDRAWN`, and `CORRECTED` evidence states.
+- [x] Add an accessible review-flow diagram with complete prose equivalence.
+- [x] Define exact source, workflow, artifact, environment, reviewer, limitation, correction, supersession, and denied-authority bindings.
+- [x] Define keyboard, focus, 200%/400% zoom and reflow, contrast, non-color, screen-reader, cognitive-access, remote-asset, privacy, and low-bandwidth review procedures.
+- [x] Add a documentation-only review-record template and fail-closed stop conditions.
+- [ ] Approve the accessibility standard, conformance level, reviewer roles, supported browser and assistive-technology matrix, protected evidence policy, and correction ownership.
+- [ ] Retain and independently review an exact rendered artifact.
+- [ ] Complete manual keyboard, focus, zoom, reflow, contrast, screen-reader, diagram-fallback, table, code-example, and cognitive-comprehension evidence.
+- [ ] Keep accessibility certification separate from documentation build success, contract validity, compatibility acceptance, admission, publication, release, and deployment.
 
 ## P1 — Compatibility-set integrity
 
@@ -89,11 +104,11 @@ Current review status: `DOCUMENTED_NOT_ADMITTED`.
 
 Each witness must include positive, negative, stale, replay, unsupported-version, wrong-identity, wrong-device, wrong-workspace, broadened-capability, partial-failure, correction, revocation, freeze, recovery, and rollback cases where applicable.
 
-## P6 — Security, privacy, and recovery
+## P6 — Security, privacy, accessibility, and recovery
 
 - [ ] Classify public projections, protected commitments, private evidence, stable identifiers, and correlatable metadata.
 - [ ] Define retention, deletion, correction, publication, and cache invalidation policy.
-- [ ] Assign signing-key, capability, admission, privacy, incident, emergency-stop, recovery, and publication owners.
+- [ ] Assign signing-key, capability, admission, privacy, accessibility-review, incident, emergency-stop, recovery, and publication owners.
 - [ ] Prove emotional-context or vulnerability recognition cannot become manipulation, coercion, attachment exploitation, or consent substitution.
 - [ ] Prove emergency stop does not depend on the component being stopped.
 - [ ] Prove recovery restores a consistent manifest, admission and capability state, runtime state, Fabric state, interface state, and evidence chain with no automatic unlock.
@@ -105,15 +120,16 @@ Each witness must include positive, negative, stale, replay, unsupported-version
 - [ ] Retain commands, versions, logs, reports, artifacts, checksums, source archive, SBOM or dependency record, review dispositions, and rollback instructions.
 - [ ] Validate identical admitted projections and hostile-fixture results in QuantumStateObjects and QSO-FABRIC.
 - [ ] Record Repository `1` or successor admission, revocation, reconciliation, and recovery evidence without treating any of it as genome-issued authority.
-- [ ] Retain capability-evidence and self-edit dispositions separately from admission, execution, reconciliation, release, and publication records.
-- [ ] Obtain explicit approval before tag, manifest publication, Pages publication, package publication, runtime compatibility claim, capability certification, or downstream-authoritative admission profile.
+- [ ] Retain capability-evidence, self-edit, and accessibility dispositions separately from admission, execution, reconciliation, release, and publication records.
+- [ ] Obtain explicit approval before tag, manifest publication, Pages publication, package publication, runtime compatibility claim, accessibility certification, capability certification, or downstream-authoritative admission profile.
 
 ## Quality invariants
 
 - [ ] Genomes, Sprites, manifests, policies, migrations, and self-edit proposals remain declarative data only.
 - [ ] No network, credential, repository-write, repair-PR, payment, deployment, infrastructure, or self-replication authority enters an accepted genome set.
 - [ ] Proposed, declared, implemented, structurally valid, fixture-demonstrated, benchmark-demonstrated, independently reproduced, conformant, admitted, runtime-eligible, executed, reconciled, accepted, published, released, deployed, superseded, frozen, and revoked remain distinct states.
-- [ ] Unknown or conflicting identity, policy, version, digest, capability, admission, correction, reconciliation, or recovery state fails closed.
+- [ ] Documentation validation, rendered-artifact accessibility evidence, accessibility certification, Pages publication, and release approval remain distinct states.
+- [ ] Unknown or conflicting identity, policy, version, digest, capability, admission, correction, reconciliation, accessibility, or recovery state fails closed.
 - [ ] Every claim is tied to an immutable commit and reproducible evidence.
 
 <!-- QSO-CONSENT-CAPACITY-LOCK-v1 -->
