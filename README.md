@@ -42,6 +42,9 @@ The GitHub Pages-ready documentation package includes:
 - [Project overview](docs/project-overview.md)
 - [Architecture and trust boundaries](docs/architecture.md)
 - [Contracts, canonicalization, manifests, and invariants](docs/contracts-and-invariants.md)
+- [Genome admission and runtime projection](docs/genome-admission-and-runtime-projection-profile.md)
+- [Capability evidence and bounded self-edit review](docs/capability-evidence-and-self-edit-review.md)
+- [Accessibility and exact-artifact review evidence](docs/accessibility-and-review-evidence.md)
 - [Portfolio obstruction and gluing analysis](docs/obstruction-and-gluing.md)
 - [Architecture and lifecycle diagrams](docs/diagrams.md)
 - [Developer onboarding and contract-review workflow](docs/developer-guide.md)
@@ -62,7 +65,7 @@ mkdocs build --strict
 mkdocs serve
 ```
 
-A successful documentation build proves only that the site renders. It does not validate or approve a compatibility release, identity migration, capability route, or publication.
+A successful documentation build proves only that the site renders. It does not validate or approve a compatibility release, identity migration, capability route, accessibility certification, or publication.
 
 ## Consumption model
 
@@ -70,6 +73,6 @@ A downstream runtime resolves one approved compatibility manifest, verifies the 
 
 ## Contribution rule
 
-Before changing a contract, read [`taskchain.md`](taskchain.md), [`release.md`](release.md), [`punchlist.md`](punchlist.md), [`changelog.md`](changelog.md), the [developer guide](docs/developer-guide.md), and the [gluing analysis](docs/obstruction-and-gluing.md). Keep proposed, implemented, validated, accepted, published, released, deployed, superseded, and revoked states distinct; preserve review provenance; and attach every claim to an exact immutable head.
+Before changing a contract, read [`taskchain.md`](taskchain.md), [`release.md`](release.md), [`punchlist.md`](punchlist.md), [`changelog.md`](changelog.md), the [developer guide](docs/developer-guide.md), the [accessibility review protocol](docs/accessibility-and-review-evidence.md), and the [gluing analysis](docs/obstruction-and-gluing.md). Keep proposed, implemented, validated, accepted, published, released, deployed, superseded, and revoked states distinct; preserve review provenance; and attach every claim to an exact immutable head.
 
 <!-- QSO-CONSENT-CAPACITY-LOCK-v1 -->

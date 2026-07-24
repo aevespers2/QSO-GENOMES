@@ -6,6 +6,8 @@ All notable product, architecture, implementation, release, and deployment chang
 
 ### Product
 
+- 2026-07-24 — Added an exact-artifact accessibility and review-evidence surface with status `DOCUMENTED_NOT_CERTIFIED`, separating source review, strict construction, automated checks, rendered-artifact review, manual keyboard and visual review, assistive-technology review, certification, publication, and release.
+- 2026-07-24 — Defined review states `NOT_REVIEWED`, `PARTIAL`, `PASS`, `FAIL`, `BLOCKED`, `UNKNOWN`, `SUPERSEDED`, `WITHDRAWN`, and `CORRECTED`, with every result limited to its exact artifact, environment, scope, and reviewer record.
 - 2026-07-23 — Added a capability-evidence and bounded self-edit review surface with status `DOCUMENTED_NOT_ADMITTED`, separating declaration, structural validity, fixture demonstration, benchmark demonstration, independent reproduction, admission eligibility, operational admission, and resulting-state verification.
 - 2026-07-23 — Defined ordinary mutable-field adjustments, versioned migrations, immutable-policy changes, and prohibited authority-bearing changes as distinct review classes with exact-field delta, cumulative drift, external disposition, rollback, and restored-state requirements.
 - 2026-07-23 — Recorded closed PR #14 as historical unmerged adapter evidence rather than an active QSIO integration or format-ownership path.
@@ -22,6 +24,8 @@ All notable product, architecture, implementation, release, and deployment chang
 
 ### Architecture
 
+- 2026-07-24 — Added an accessibility evidence flow from exact source to pinned build, exact rendered artifact, automated and human review, bounded disposition, correction, and renewed exact-head evidence, with a complete prose equivalent to the Mermaid graph.
+- 2026-07-24 — Defined accessibility requirements for diagrams, tables, code and data examples, keyboard and focus, 200%/400% zoom and reflow, contrast and non-color meaning, screen readers, cognitive and epistemic comprehension, remote-asset failure, privacy, correction, supersession, and low-bandwidth use.
 - 2026-07-23 — Added a documentation-only `qso-genome-self-edit-review/v1` packet joining exact genome source, mutable-field scope, evidence level, independent review, consumer impact, ethics/privacy/security checks, rollback, and external admission review without creating authority.
 - 2026-07-23 — Added Atlas, Nova, Orion, and Lyra declared-versus-demonstrated review prompts: assumption tracking, calibrated anomaly analysis, contract and rollback witnesses, and consent/manipulation-resistance evaluation.
 - 2026-07-23 — Added capability-evidence pairwise and triple-overlap requirements so declaration→evidence→admission and self-edit→immutable-policy review→restored state cannot be collapsed into local validation.
@@ -41,6 +45,8 @@ All notable product, architecture, implementation, release, and deployment chang
 
 ### Governance and identity
 
+- 2026-07-24 — Required accessibility evidence to bind the exact source, rendered artifact, workflow, toolchain, environment, reviewer, scope, limitations, corrections, supersession, and denied authority; a source or automated pass cannot create certification or publication approval.
+- 2026-07-24 — Required accessibility records to minimize personal information and preserve a bounded public summary when complete review evidence must remain protected.
 - 2026-07-23 — Required immutable ethics and forbidden capabilities to remain outside genome-writable state; passing schema, digest, fixture, benchmark, workflow, runtime, or interface checks cannot authorize self-approval, self-commit, self-admission, activation, or canonical acceptance.
 - 2026-07-23 — Required emotional understanding, attachment, distress, vulnerability, roleplay, or relationship framing never to substitute for consent or authorize influence, coercion, or manipulation.
 - 2026-07-23 — Required missing, conflicting, stale, replayed, unsupported, privacy-restricted, corrected, revoked, or failed-rollback evidence to remain explicit and fail closed.
@@ -57,17 +63,20 @@ All notable product, architecture, implementation, release, and deployment chang
 - PR #12 proposes removal of active Aequitas and Socrates governance identities and migration of review responsibility to Jacob Thomas Redmond.
 - PR #13 proposes reconciliation and Consent Capacity Lock repairs; focused deduplication repairs later merged through PRs #16 and #18.
 - Closed PR #14 preserves a disabled QSIO adapter proposal as historical evidence only; it is not an active integration candidate.
-- PR #15 proposes documentation and exact-head documentation validation only, now including the genome admission/runtime projection and capability-evidence/self-edit review profiles.
-- These changes are candidate evidence, not accepted capability, admission, publication, release, deployment, or downstream authority.
+- PR #15 proposes documentation and exact-head documentation validation only, now including genome admission/runtime projection, capability-evidence/self-edit review, and accessibility review profiles.
+- These changes are candidate evidence, not accepted capability, admission, accessibility certification, publication, release, deployment, or downstream authority.
 
 ### Review findings
 
-- Material findings now include active identity disposition, historical aliases, generic format ownership, genome-specific canonicalization, digest scopes, lifecycle mapping, mutation vocabulary, declared-versus-demonstrated capability evidence, benchmark scope, immutable-policy review, exact-field drift, external disposition, freeze and recovery semantics, manifest acceptance, Repository `1` admission, record-identity collapse, runtime/Fabric projection equivalence, downstream interpretation, QSIO package ownership, public/protected data boundaries, correction, revocation, freshness, evidence reason codes, replacement-environment re-admission, and portfolio recovery.
+- Material findings now include active identity disposition, historical aliases, generic format ownership, genome-specific canonicalization, digest scopes, lifecycle mapping, mutation vocabulary, declared-versus-demonstrated capability evidence, benchmark scope, immutable-policy review, exact-field drift, external disposition, freeze and recovery semantics, manifest acceptance, Repository `1` admission, record-identity collapse, runtime/Fabric projection equivalence, downstream interpretation, QSIO package ownership, public/protected data boundaries, accessibility standard and environment coverage, correction, revocation, freshness, evidence reason codes, replacement-environment re-admission, and portfolio recovery.
 - Every current and still-material outdated finding must be resolved or explicitly dispositioned against one frozen reconciled head before compatibility acceptance.
 - Shared positive, negative, stale, replay, unsupported-version, wrong-identity, wrong-device, wrong-workspace, wrong-runtime, tamper, broadened-capability, partial-failure, correction, revocation, freeze, recovery, and rollback fixtures remain required.
 
 ### Documentation
 
+- 2026-07-24 — Added `docs/accessibility-and-review-evidence.md` with `DOCUMENTED_NOT_CERTIFIED` status, exact-artifact evidence bindings, separate review surfaces and states, accessible Mermaid/prose flow, rendered review procedures, privacy controls, a non-authorizing YAML record template, fail-closed stop conditions, and reviewer onboarding.
+- 2026-07-24 — Synchronized README, Pages home and navigation, `taskchain.md`, `punchlist.md`, `release.md`, and `changelog.md` so source validation, rendered review, accessibility certification, publication, contract acceptance, admission, release, and deployment cannot be conflated.
+- 2026-07-24 — Proposed non-authoritative FYSA-120 subdivision `019-R — Exact-artifact accessibility evidence for declarative contract and machine-readable governance documentation`.
 - 2026-07-23 — Added `docs/capability-evidence-and-self-edit-review.md`, its machine-readable profile, accessible Mermaid/prose graph, strict validator, sixteen hostile regressions, exact-head read-only workflow, retained artifacts, and fail-closed evidence gate.
 - 2026-07-23 — Synchronized `taskchain.md`, `punchlist.md`, `release.md`, `changelog.md`, and Pages navigation with status `DOCUMENTED_NOT_ADMITTED`, historical PR #14 disposition, evidence levels, self-edit classes, external review, and rollback boundaries.
 - 2026-07-23 — Proposed non-authoritative FYSA-120 subdivision `031-T — Declared-versus-demonstrated capability evidence and bounded self-edit conformance`.
@@ -80,10 +89,11 @@ All notable product, architecture, implementation, release, and deployment chang
 
 ### Release
 
+- 2026-07-24 — Added accessibility protocol as a `REVIEW / BLOCKED` release gate: the documentation exists, while exact rendered evidence, standard and environment decisions, approved reviewers, assistive-technology review, correction ownership, certification authority, and publication approval remain absent.
 - 2026-07-23 — Added capability-evidence and self-edit review as a `REVIEW / BLOCKED` release gate: the packet and exact-head validation exist, while frozen-head behavioral evidence, independent reproduction, external disposition, admission authority, rollback rehearsal, and resulting-state verification remain required.
 - 2026-07-23 — Recorded historical PR #14 as `WITHDRAWN / HISTORICAL`; no adapter activation or compatibility authority survives closure.
-- The candidate remains blocked until one merge and supersession order is approved, identity scope is settled, one mergeable immutable compatibility head exists, conformance and gluing fixtures pass, Repository `1` admission is approved, downstream consumers derive compatible projections, privacy and recovery controls are approved, and explicit publication approval is recorded.
-- No release, tag, Pages publication, package publication, adapter activation, runtime integration claim, capability certification, admission profile activation, or downstream-authoritative manifest is authorized from current candidate evidence.
+- The candidate remains blocked until one merge and supersession order is approved, identity scope is settled, one mergeable immutable compatibility head exists, conformance and gluing fixtures pass, Repository `1` admission is approved, downstream consumers derive compatible projections, privacy, accessibility, and recovery controls are approved, and explicit publication approval is recorded.
+- No release, tag, Pages publication, package publication, adapter activation, runtime integration claim, accessibility certification, capability certification, admission profile activation, or downstream-authoritative manifest is authorized from current candidate evidence.
 
 ### Deployment
 

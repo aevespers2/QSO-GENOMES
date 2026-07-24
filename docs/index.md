@@ -10,6 +10,9 @@ QSO-GENOMES is the portfolio's upstream contract repository for declarative QSO 
 !!! note "Portfolio gluing state"
     QSO-GENOMES now documents the unresolved boundaries between declarative identity, generic QSO formats, runtime interpretation, Fabric orchestration, Repository `1` capability authority, public projections, correction, revocation, and recovery. The gluing analysis is a contract-design and verification plan; it does not approve any identity migration, adapter, compatibility set, release, or operational authority.
 
+!!! note "Accessibility review state"
+    The accessibility protocol is `DOCUMENTED_NOT_CERTIFIED`. Source review, strict MkDocs construction, automated checks, rendered-artifact review, and assistive-technology review are separate evidence classes. No accessibility certification or Pages publication follows from the documentation build.
+
 ## Repository responsibility
 
 QSO-GENOMES owns:
@@ -69,6 +72,9 @@ No consumer should import repository code to interpret the contracts. Consumers 
 - [Project overview](project-overview.md) — goals, users, lifecycle, ownership, and non-goals.
 - [Architecture](architecture.md) — repository boundaries, artifact pipeline, trust zones, and dependency direction.
 - [Contracts and invariants](contracts-and-invariants.md) — normative contract classes, canonicalization, manifests, migrations, and failure rules.
+- [Genome admission and runtime projection](genome-admission-and-runtime-projection-profile.md) — identities, envelopes, state transitions, pairwise contracts, and overlap witnesses.
+- [Capability evidence and self-edit review](capability-evidence-and-self-edit-review.md) — declared-versus-demonstrated evidence, bounded mutable changes, independent disposition, and rollback.
+- [Accessibility and review evidence](accessibility-and-review-evidence.md) — exact-artifact binding, diagrams, keyboard, zoom, reflow, screen-reader, cognitive-access, correction, and certification boundaries.
 - [Obstruction and gluing analysis](obstruction-and-gluing.md) — ownership conflicts, pairwise edges, triple-overlap witnesses, and lowest-coupling repair candidates.
 - [Diagrams](diagrams.md) — system, lifecycle, validation, and review-flow diagrams.
 - [Developer guide](developer-guide.md) — isolated setup, documentation build, contract-change workflow, testing expectations, and review evidence.
@@ -92,6 +98,6 @@ When prose and a lifecycle record disagree, stop and reconcile the contradiction
 
 ## Review principle
 
-A contract is not accepted merely because it exists, parses, or passes a focused test. Acceptance requires one immutable reviewed head, reproducible validation, complete negative fixtures, explicit artifact identity, retained evidence, downstream read-only replay, review-thread disposition, and human approval. Operational use additionally requires an independently authorized admission or capability decision where applicable.
+A contract is not accepted merely because it exists, parses, or passes a focused test. Acceptance requires one immutable reviewed head, reproducible validation, complete negative fixtures, explicit artifact identity, retained evidence, downstream read-only replay, review-thread disposition, and human approval. Operational use additionally requires an independently authorized admission or capability decision where applicable. Accessibility certification likewise requires exact rendered evidence and approved review; source documentation and strict build success are not enough.
 
 <!-- QSO-CONSENT-CAPACITY-LOCK-v1 -->
